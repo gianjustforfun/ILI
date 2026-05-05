@@ -1,0 +1,6 @@
+Variabile,Lag_ottimale_sett,r_media_max,Interpretazione
+HUMIDITY,0,0.42520772570484155,HUMIDITY alta precede ILI alto
+NO2,6,0.3445322909265014,NO2 alta precede ILI alto
+PM10,8,0.40765779320108153,PM10 alta precede ILI alto
+PM25,8,0.42220503004347437,PM25 alta precede ILI alto
+TEMPERATURE,3,0.4792722289660705,TEMPERATURE (segnale invertito: +r = freddo precede ILI)
