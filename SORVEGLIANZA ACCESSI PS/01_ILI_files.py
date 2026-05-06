@@ -35,20 +35,29 @@ PROBLEMA NEL FILE (e come lo risolviamo):
     Python ha letto "1.692" come il numero decimale 1,692 invece
     dell'intero 1692.
 
-    REGOLA UNICA per tutti i fogli con CONTEGGI ASSOLUTI:
+    REGOLA per tutti i fogli con dati in LOMBARDIA:
         Se il valore letto da Python è < 100 → moltiplica per 1000
         Se il valore è >= 100              → è già corretto
 
     Questo funziona perché:
-        - Valori con il punto (es. 1.692, 2.459) vengono letti come
-          1.692 e 2.459 → sono < 100 → x 1000 → 1692 e 2459  ✓
+        - Valori con il punto (es. 10.692, 20.459) vengono letti come
+          10.692 e 20.459 → sono < 100 → x 1000 → 10692 e 20459  ✓
         - Valori sotto il migliaia senza punto (es. 766, 958) vengono
           letti già correttamente come 766 e 958 → >= 100 → invariati ✓
 
-    ATTENZIONE — VALORI GIÀ CORRETTI (non richiedono moltiplicazione):
-        Alcuni fogli (es. ADMISSION AFTER ER) hanno già valori interi
-        nel range corretto (centinaia/migliaia), quindi la soglia di 100
-        li lascia invariati correttamente.
+    Questo non funziona per le singole ATS perchè valori come 82 sono
+    minori di 100 ma non presentano il . da correggere.
+
+    REGOLA per tutti i fogli con dati in ATS:
+        Se il valore letto da Python è < 10 → moltiplica per 1000
+        Se il valore è >= 10              → è già corretto
+
+    Questo funziona perché:
+        - Valori con il punto (es. 1.692, 2.459) vengono letti come
+          1.692 e 2.459 → sono < 10 → x 1000 → 1692 e 2459  ✓
+        - Valori sotto il centinaio senza punto (es. 82, 95) vengono
+          letti già correttamente come 82 e 95 → >= 10 → invariati ✓
+
 
 STRUTTURA OUTPUT (sottocartelle CSV):
     output/
@@ -73,7 +82,6 @@ BIAS E LIMITAZIONI DA TENERE PRESENTI:
     - Finestra temporale breve (4-5 stagioni): aumenta il rischio di
       spurious correlations nelle analisi successive. Interpretare con cautela.
     - La stagione 21-22 è incompleta (mancano sett. 48-52 del 2021).
-    - I dati 25-26 sono parziali (stagione in corso).
 
 REQUISITI:
     pip install pandas openpyxl matplotlib
@@ -108,7 +116,7 @@ os.makedirs("output/grafici", exist_ok=True)
 # FUNZIONI
 # -------------------------------------------------------
 
-def correggi_separatore_migliaia(val):
+def correggi_separatore_migliaia_lom(val):
     """
     Corregge i valori in cui il punto separatore delle migliaia è stato
     letto da Python come separatore decimale.
@@ -133,6 +141,38 @@ def correggi_separatore_migliaia(val):
         except ValueError:
             return float('nan')
     return num * 1000 if num < 100 else num
+
+
+def applica_correzione_lom(df, colonne_anni):
+    """Applica correggi_separatore_migliaia su tutte le colonne anno."""
+    for col in colonne_anni:
+        df[col] = df[col].apply(correggi_separatore_migliaia_lom)
+        df[col] = pd.to_numeric(df[col], errors='coerce').round().astype('Int64')
+    return df
+
+def correggi_separatore_migliaia(val):
+    """
+    Corregge i valori in cui il punto separatore delle migliaia è stato
+    letto da Python come separatore decimale.
+
+    Regola: se il valore letto è < 10, era originalmente un numero con
+    il punto delle migliaia → moltiplica per 1000.
+
+    Serve una differenziazione perchè i valori in Lombardia sono
+    necessariamente più corposi rispetto alle singole ATS.
+    """
+
+    if pd.isna(val):
+        return val
+    if isinstance(val, (int, float)):
+        num = float(val)
+    else:
+        pulito = str(val).replace('.', '').replace(' ', '')
+        try:
+            num = float(pulito)
+        except ValueError:
+            return float('nan')
+    return num * 1000 if num < 10 else num
 
 
 def applica_correzione(df, colonne_anni):
@@ -285,7 +325,7 @@ print(f"Fogli trovati: {list(tutti_fogli_lom.keys())}")
 print("\n[1/6] TOTAL ACCESS IN ER (REGION)")
 df = tutti_fogli_lom["TOTAL ACCESS IN ER (REGION)"].copy()
 anni = [c for c in df.columns if c != 'WEEK']
-df = applica_correzione(df, anni)
+df = applica_correzione_lom(df, anni)
 df_s = trasforma_in_stagionale(df, anni, 'ACCESSI_TOTALI_ER')
 salva_csv(df_s, "LOMBARDIA", "access_tot_stagionale.csv")
 grafico_stagionale(df_s, 'ACCESSI_TOTALI_ER',
@@ -296,7 +336,7 @@ grafico_stagionale(df_s, 'ACCESSI_TOTALI_ER',
 print("\n[2/6] ACCESS IN ER (ILI)")
 df = tutti_fogli_lom["ACCESS IN ER (ILI)"].copy()
 anni = [c for c in df.columns if c != 'WEEK']
-df = applica_correzione(df, anni)
+df = applica_correzione_lom(df, anni)
 df_s = trasforma_in_stagionale(df, anni, 'ACCESSI_ILI_ER')
 salva_csv(df_s, "LOMBARDIA", "access_er_ili_stagionale.csv")
 grafico_stagionale(df_s, 'ACCESSI_ILI_ER',
@@ -307,7 +347,7 @@ grafico_stagionale(df_s, 'ACCESSI_ILI_ER',
 print("\n[3/6] ADMISSION AFTER ER (ILI)")
 df = tutti_fogli_lom["ADMISSION AFTER ER (ILI)"].copy()
 anni = [c for c in df.columns if c != 'WEEK']
-df = applica_correzione(df, anni)
+df = applica_correzione_lom(df, anni)
 df_s = trasforma_in_stagionale(df, anni, 'RICOVERI_DOPO_ER')
 salva_csv(df_s, "LOMBARDIA", "admission_after_er_stagionale.csv")
 grafico_stagionale(df_s, 'RICOVERI_DOPO_ER',
@@ -318,7 +358,7 @@ grafico_stagionale(df_s, 'RICOVERI_DOPO_ER',
 print("\n[4/6] ACCESS IN ER PER AGE (ILI)")
 df = tutti_fogli_lom["ACCESS IN ER PER AGE (ILI)"].copy()
 anni = [c for c in df.columns if c not in ['AGE GROUP', 'WEEK']]
-df = applica_correzione(df, anni)
+df = applica_correzione_lom(df, anni)
 df_s = trasforma_in_stagionale(df, anni, 'ACCESSI_ILI_ER', col_gruppo='AGE GROUP')
 salva_csv(df_s, "LOMBARDIA", "ili_er_per_age_stagionale.csv")
 grafico_stagionale(df_s, 'ACCESSI_ILI_ER',
