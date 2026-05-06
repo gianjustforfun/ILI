@@ -358,11 +358,9 @@ print("=" * 65)
 tutti_fogli_bg = pd.read_excel(FILE_BERGAMO, sheet_name=None)
 print(f"Fogli trovati: {list(tutti_fogli_bg.keys())}")
 
-# --- TOTAL ACCESS IN ER (MONTAGNA) — nel file Bergamo questo è Bergamo ---
-# NOTA: il file Bergamo usa il nome foglio 'TOTAL ACCESS IN ER (MONTAGNA)'
-# ma i dati contenuti corrispondono all'ATS Bergamo (verificato dai valori).
+# --- TOTAL ACCESS IN ER (BERGAMO) ---
 print("\n[1/2] TOTAL ACCESS IN ER — ATS Bergamo")
-df = tutti_fogli_bg["TOTAL ACCESS IN ER (MONTAGNA)"].copy()
+df = tutti_fogli_bg["TOTAL ACCESS IN ER (BERGAMO)"].copy()
 anni = [c for c in df.columns if c != 'WEEK']
 df = applica_correzione(df, anni)
 df_s = trasforma_in_stagionale(df, anni, 'ACCESSI_TOTALI_ER_BERGAMO')
@@ -371,13 +369,12 @@ grafico_stagionale(df_s, 'ACCESSI_TOTALI_ER_BERGAMO',
                    "Accessi Totali ER — ATS Bergamo",
                    "access_tot_bergamo")
 
-# --- ACCESS IN ATS MONTAGNA (ILI) — nel file Bergamo: ILI Bergamo ---
+# --- ACCESS IN ATS BERGAMO (ILI) ---
 print("\n[2/2] ACCESS ILI — ATS Bergamo")
-df = tutti_fogli_bg["ACCESS IN ATS MONTAGNA (ILI)"].copy()
+df = tutti_fogli_bg["ACCESS IN ATS BERGAMO (ILI)"].copy()
 anni = [c for c in df.columns if c != 'WEEK']
 df = applica_correzione(df, anni)
 df_s = trasforma_in_stagionale(df, anni, 'ACCESSI_ILI_ATS_BERGAMO')
-# Rimuovi righe tutte NaN (foglio vuoto per questa ATS)
 if not df_s.empty and 'ACCESSI_ILI_ATS_BERGAMO' in df_s.columns:
     df_s = df_s.dropna(subset=['ACCESSI_ILI_ATS_BERGAMO'])
 if df_s.empty:
@@ -387,6 +384,7 @@ else:
     grafico_stagionale(df_s, 'ACCESSI_ILI_ATS_BERGAMO',
                        "Accessi ILI — ATS Bergamo",
                        "ili_ats_bergamo")
+
 
 # -------------------------------------------------------
 # PASSO 3: FILE ATS MONTAGNA (Data_ILI_ATS_Montagna.xlsx)
