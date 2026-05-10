@@ -120,6 +120,7 @@ ISTAT_DIR = "."  # lo script gira da dentro ISTAT/, quindi "." è la root corret
 # Output directories
 OUT_STAGIONI_BG = "output/istat_ats_bergamo"
 OUT_STAGIONI_MT = "output/istat_ats_montagna"
+OUT_MONTAGNA_ALL = "output/istat_ats_montagna/whole"   # un CSV per anno, tutti i comuni ATS Montagna
 OUT_GRAFICI     = "output/grafici"
 
 # Script 1 CSV outputs (read as ILI input)
@@ -176,20 +177,14 @@ COMUNI_COMO = [
 
 def get_population_total(filepath):
     """
-    Reads an ISTAT population CSV and returns the total resident
-    population as an integer.
+    Reads an ISTAT per-comune CSV (one row per comune, columns include
+    'Comune' and 'Totale') and returns the sum of 'Totale' across all
+    comuni — i.e. the total population of the entire territory covered
+    by the file.
 
-    Handles TWO formats automatically:
-
-    Format A — per-comune (new format):
-        Each row = one comune. Columns include 'Comune' and 'Totale'.
-        No aggregate row. Total = sum of all 'Totale' values.
-        Used for: ATS Bergamo (all comuni of the province),
-                  Sondrio (all comuni of the province).
-
-    Format B — per-età (old format):
-        Each row = one age band. Last row has Età = 'Totale'.
-        Total = value in the 'Totale' column of that last row.
+    Used for:
+        ATS Bergamo  — all 243 comuni of the province
+        Sondrio      — all comuni of the province (= entire ATS Montagna)
 
     Parameters:
         filepath (str): path to the ISTAT CSV file
@@ -201,14 +196,10 @@ def get_population_total(filepath):
         return None
     try:
         df = pd.read_csv(filepath)
-        # Detect format: if there is a 'Comune' column → per-comune format
-        if 'Comune' in df.columns and 'Totale' in df.columns:
-            return int(df['Totale'].sum())
-        # Otherwise: per-età format — find the 'Totale' summary row
-        totale_row = df[df['Età'].astype(str).str.strip() == 'Totale']
-        if totale_row.empty:
-            totale_row = df.tail(1)
-        return int(totale_row['Totale'].values[0])
+        if 'Totale' not in df.columns:
+            print(f"  ⚠ Column 'Totale' not found in {filepath}")
+            return None
+        return int(df['Totale'].sum())
     except Exception as e:
         print(f"  ⚠ Error reading {filepath}: {e}")
         return None
@@ -271,6 +262,77 @@ def get_population_comuni(filepath, comuni_list):
         print(f"  ⚠ Error reading {filepath}: {e}")
         return 0
 
+
+
+def salva_csv_comuni_montagna(filepath_bs, filepath_co, filepath_so,
+                              anno, comuni_bs, comuni_co, output_dir):
+    """
+    Builds a single per-comune CSV for ATS Montagna for a given year,
+    combining:
+        - the selected comuni from the Brescia provincial file
+        - the selected comuni from the Como provincial file
+        - ALL comuni from the Sondrio provincial file
+
+    Each row in the output is one comune with its total population.
+    The file is saved as:
+        <output_dir>/ats_montagna_comuni_<anno>.csv
+
+    Columns in the output:
+        PROVINCIA   : 'Brescia', 'Como', or 'Sondrio'
+        Comune      : comune name as in the ISTAT source file
+        Totale      : total resident population
+
+    WHY this CSV is useful:
+        It gives you the full per-comune breakdown of the ATS Montagna
+        population for each year. This is the granular dataset you need
+        if you later want to weight analyses by sub-territory or verify
+        that the total matches the aggregate figure used in the plots.
+
+    Parameters:
+        filepath_bs (str):  path to Brescia provincial CSV (or None)
+        filepath_co (str):  path to Como provincial CSV (or None)
+        filepath_so (str):  path to Sondrio provincial CSV (or None)
+        anno (int):         reference year (used in filename)
+        comuni_bs (list):   list of Brescia comuni to include
+        comuni_co (list):   list of Como comuni to include
+        output_dir (str):   where to save the output CSV
+    """
+    os.makedirs(output_dir, exist_ok=True)
+    parts = []
+
+    def _load_filter(filepath, comuni_list, provincia_label):
+        """Loads a provincial CSV, filters to comuni_list, adds PROVINCIA col."""
+        if filepath is None or not os.path.exists(filepath):
+            print(f"  ⚠ [{provincia_label}] file not found — skipped.")
+            return pd.DataFrame()
+        df = pd.read_csv(filepath)
+        if 'Comune' not in df.columns or 'Totale' not in df.columns:
+            print(f"  ⚠ [{provincia_label}] unexpected columns — skipped.")
+            return pd.DataFrame()
+        # Filter if a comuni_list is provided; otherwise take all rows
+        if comuni_list is not None:
+            norm = [c.strip() for c in comuni_list]
+            df['_norm'] = df['Comune'].astype(str).str.strip()
+            df = df[df['_norm'].isin(norm)].drop(columns='_norm')
+        df = df[['Comune', 'Totale']].copy()
+        df.insert(0, 'PROVINCIA', provincia_label)
+        return df
+
+    parts.append(_load_filter(filepath_bs, comuni_bs, 'Brescia'))
+    parts.append(_load_filter(filepath_co, comuni_co, 'Como'))
+    parts.append(_load_filter(filepath_so, None,      'Sondrio'))   # all comuni
+
+    result = pd.concat([p for p in parts if not p.empty], ignore_index=True)
+
+    if result.empty:
+        print(f"  ⚠ No data assembled for ATS Montagna {anno} — CSV not saved.")
+        return
+
+    fname = f"ats_montagna_comuni_{anno}.csv"
+    fpath = os.path.join(output_dir, fname)
+    result.to_csv(fpath, index=False)
+    tot   = result['Totale'].sum()
+    print(f"  ✓ Saved: {fpath}  ({len(result)} comuni, pop = {tot:,})")
 
 
 def _find_year_file(folder, anno):
@@ -500,6 +562,30 @@ for stagione, pop in pop_montagna.items():
     print(f"  ✓ Saved: {fpath}")
 
 
+# --- 3f: SAVE WHOLE ATS MONTAGNA PER-COMUNE CSV (one per year) ---
+print("\n[3f] ATS MONTAGNA — per-comune CSV (whole territory, one per year)")
+print("     Output folder: " + OUT_MONTAGNA_ALL)
+
+for anno in ANNI_DISPONIBILI:
+    # Find source files for this year (None if not available)
+    fp_bs = _find_year_file(folder_bs, anno)
+    fp_co = _find_year_file(folder_co, anno)
+    fp_so = _find_year_file(folder_so, anno)
+
+    if fp_bs is None and fp_co is None and fp_so is None:
+        print(f"  ⚠ No source files found for year {anno} — skipped.")
+        continue
+
+    salva_csv_comuni_montagna(
+        filepath_bs = fp_bs,
+        filepath_co = fp_co,
+        filepath_so = fp_so,
+        anno        = anno,
+        comuni_bs   = COMUNI_BRESCIA,
+        comuni_co   = COMUNI_COMO,
+        output_dir  = OUT_MONTAGNA_ALL,
+    )
+
 # -------------------------------------------------------
 # SECTION 4 — LOAD ILI DATA (from Script 1 output)
 # -------------------------------------------------------
@@ -593,8 +679,7 @@ WHAT WE PLOT:
 
     SCALE NOTE:
         Rates will be small numbers (e.g. 0.002 = 0.2% per week). The
-        Y-axis shows the rate as a decimal. If you prefer per-1000
-        inhabitants, multiply by 1000 and change the axis label.
+        Y-axis shows the rate as a decimal. 
 """
 
 os.makedirs(OUT_GRAFICI, exist_ok=True)
@@ -733,7 +818,7 @@ print("\n" + "=" * 65)
 print("✅ SCRIPT 6 COMPLETE!")
 print()
 print("CSV files produced:")
-for folder in [OUT_STAGIONI_BG, OUT_STAGIONI_MT]:
+for folder in [OUT_STAGIONI_BG, OUT_STAGIONI_MT, OUT_MONTAGNA_ALL]:
     if os.path.isdir(folder):
         files = sorted(os.listdir(folder))
         print(f"  {folder}/")
