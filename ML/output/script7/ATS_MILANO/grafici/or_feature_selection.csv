@@ -1,0 +1,6 @@
+Variabile,Soglia_env,OR,IC95_low,IC95_high,Significativo
+TEMP_lag2,10.18,0.053,0.003,0.935,Sì
+HUMIDITY_lag1,87.02,4.789,1.533,14.962,Sì
+PM25_lag1,34.75,0.867,0.257,2.924,No
+PM10_lag1,48.02,1.252,0.39,4.02,No
+NO2_lag1,49.86,1.768,0.566,5.52,No

@@ -1,106 +1,64 @@
 """
 =============================================================
 SCRIPT 7 — MODELLO MULTIVARIATO: FATTORI AMBIENTALI vs ILI
+        (ATS Milano, ATS Bergamo, ATS Montagna)
 =============================================================
 
 RESEARCH QUESTION:
     Quali fattori ambientali (temperatura, umidità, PM2.5, PM10, NO2)
     hanno un'associazione indipendente con gli accessi al Pronto Soccorso
-    per ILI ad ATS Milano, e qual è il loro peso relativo?
+    per ILI nelle tre ATS analizzate (Milano, Bergamo, Montagna)?
+    Il peso relativo dei fattori varia tra ATS con caratteristiche
+    geografiche diverse (pianura padana vs area alpina)?
 
-FRAMEWORK IPCC (riferimento al progetto):
-    Questo script si colloca nel componente HAZARD del framework IPCC:
-    stima l'associazione tra stressor ambientali (hazard) e outcome
-    sanitario (rischio osservato = accessi PS per ILI normalizzati).
+FRAMEWORK IPCC:
+    Componente HAZARD: stima l'associazione tra stressor ambientali
+    e outcome sanitario (accessi PS per ILI normalizzati).
+    La variabilità tra ATS permette un confronto del ruolo del contesto
+    geografico (componente EXPOSURE).
 
-CONTESTO METODOLOGICO:
-    Con ~80 osservazioni, i modelli statistici classici (OLS, Ridge)
-    sono preferibili ai modelli ML complessi, che soffrirebbero di
-    overfitting quasi garantito.
+LOGICA DELLO SCRIPT:
+    Lo script è parametrico: la stessa pipeline viene eseguita
+    in sequenza per ciascuna ATS definita in ATS_CONFIG.
+    Aggiungere una nuova ATS richiede solo di estendere ATS_CONFIG
+    con i path corretti — nessuna modifica al codice.
 
-    Per questo motivo lo script segue una gerarchia metodologica esplicita:
+GERARCHIA METODOLOGICA (Capitolo 7 del corso):
+    Il corso chiarisce che ML va scelto solo quando appropriato.
+    Con ~80 osservazioni per ATS, i modelli classici sono preferibili.
+        Livello 1 (sempre):      Correlazione predittori + Odds Ratio
+        Livello 2 (principale):  OLS multiplo + Ridge con LOGO-CV
+        Livello 3 (esplorativo): Random Forest + SHAP (con disclaimer)
 
-    LIVELLO 1 — Analisi esplorativa (sempre appropriata):
-        - Matrice di correlazione dei predittori (verifica multicollinearità)
-        - Odds Ratio (OR) con soglie di esposizione (feature selection)
+NOTE SUI DATI AMBIENTALI:
+    I dati ARPA (Script 3) sono gli stessi per tutte e tre le ATS:
+    si usa la media delle stazioni disponibili in Lombardia.
+    Idealmente si userebbero solo le stazioni dentro il territorio
+    di ciascuna ATS, ma con i dati disponibili questa è la scelta
+    più praticabile. Va dichiarato come limitazione nel report.
 
-    LIVELLO 2 — Modello principale (appropriato per n~80):
-        - OLS multiplo (statsmodels): coefficienti, p-value, IC 95%, R²
-        - Ridge Regression (sklearn): gestisce la multicollinearità
+    I lag ottimali (da Script 4) sono stimati su ATS Milano e applicati
+    anche alle altre ATS: semplificazione giustificata dal fatto che
+    con ~20 punti per stagione non è possibile stimare lag separati
+    per ciascuna ATS in modo affidabile.
 
-    LIVELLO 3 — Modello esplorativo (usare con cautela per n~80):
-        - Random Forest + SHAP values: cattura non-linearità, ma
-          con n piccolo i risultati sono instabili → solo esplorativo
+BIAS E LIMITAZIONI (da dichiarare nel report):
+    1. Bias ecologico: dati aggregati a livello ATS, non individuale
+    2. n piccolo (~80 obs, 4 stagioni): risultati esplorativi
+    3. Autocorrelazione temporale: mitigata con termine ILI_{t-1}
+    4. Dati ambientali non stratificati per ATS (stesse stazioni ARPA)
+    5. ATS Montagna: n ridotto per possibili dati ILI mancanti
+    6. Lag uniformi tra ATS (stimati su ATS Milano)
+    7. Confounding non misurato: vaccinazioni, varianti virali
 
-    CROSS-VALIDATION TEMPORALE (obbligatoria per serie temporali):
-        Il shuffling è vietato per serie temporali. Si usa LeaveOneGroupOut
-        con le stagioni come gruppi: addestra su 3 stagioni, testa sulla 4ª,
-        ripete 4 volte. Simula la previsione reale su stagioni mai viste.
-
-DATASET COSTRUITO DA QUESTO SCRIPT:
-    Il merge dei CSV prodotti dagli script precedenti crea un dataset
-    con una riga per settimana per stagione:
-
-        STAGIONE | WEEK | ILI_norm | TEMP_lag | HUM_lag | PM25_lag | ...
-
-    Il "lag" è quello ottimale stimato dallo Script 4: le variabili
-    ambientali della settimana t vengono usate per predire l'ILI
-    della settimana t + lag_ottimale. Questo rispetta la temporalità
-    causa-effetto e usa i risultati di Script 4 come input.
-
-BIAS E LIMITAZIONI (obbligatori da dichiarare nel report):
-    1. Bias ecologico: dati aggregati a livello ATS, non individuale.
-       Le associazioni stimate non implicano causalità individuale.
-    2. n piccolo (~80 osservazioni, 4 stagioni): le stime sono instabili.
-       Con LeaveOneGroupOut si hanno solo 4 fold → alta varianza della
-       stima di performance. I risultati sono ESPLORATIVI, non conclusivi.
-    3. Autocorrelazione temporale: settimane consecutive sono correlate.
-       OLS assume residui indipendenti — questa assunzione è violata.
-       Mitigazione parziale: aggiunta di ILI_{t-1} come predittore
-       (modello autoregressivo). Dichiarare il limite nel report.
-    4. Multicollinearità: temperatura e PM2.5 sono correlate in inverno.
-       Ridge corregge parzialmente; la matrice di correlazione lo documenta.
-    5. Confounding non misurato: vaccinazioni, varianti virali, festività.
-
-STRUTTURA FILE DI INPUT ATTESI:
-    Prodotti dagli script precedenti (paths configurabili in SEZIONE 1):
-
-    Script 1 output:
-        SORVEGLIANZA ACCESSI PS/output/ATS_MILANO/ili_ats_milano_stagionale.csv
-        SORVEGLIANZA ACCESSI PS/output/ATS_MILANO/access_tot_milano_stagionale.csv
-
-    Script 3 output (medie settimanali ambientali):
-        ARPA/SETTIMANE_DI_INTERESSE/TEMPERATURE/TEMPERATURE_<stagione>.csv
-        ARPA/SETTIMANE_DI_INTERESSE/HUMIDITY/HUMIDITY_<stagione>.csv
-        ARPA/SETTIMANE_DI_INTERESSE/PM25/PM25_<stagione>.csv
-        ARPA/SETTIMANE_DI_INTERESSE/PM10/PM10_<stagione>.csv
-        ARPA/SETTIMANE_DI_INTERESSE/NO2/NO2_<stagione>.csv
-
-    Script 4 output (lag ottimali):
-        CORRELATIONS/output/cross_correlazione_lag_ottimale.csv
-
-OUTPUT PRODOTTI (in output/script7/):
-    CSV:
-        dataset_unificato.csv           ← dataset finale usato per i modelli
-        ols_coefficienti.csv            ← coefficienti OLS con p-value e IC
-        ridge_coefficienti.csv          ← coefficienti Ridge standardizzati
-        or_feature_selection.csv        ← Odds Ratio per feature selection
-        performance_cv.csv              ← R² per stagione (cross-validation)
-
-    GRAFICI (output/script7/grafici/):
-        01_correlazione_predittori.png  ← matrice correlazione (multicollinearità)
-        02_ols_coefficienti.png         ← forest plot coefficienti OLS
-        03_ridge_coefficienti.png       ← importanza feature Ridge
-        04_shap_summary.png             ← SHAP summary plot (esplorativo)
-        05_predicted_vs_actual.png      ← fit del modello Ridge (CV)
-        06_or_feature_selection.png     ← Odds Ratio per soglia ILI elevato
+OUTPUT PRODOTTI:
+    output/script7/ATS_MILANO/     → risultati ATS Milano
+    output/script7/ATS_BERGAMO/    → risultati ATS Bergamo
+    output/script7/ATS_MONTAGNA/   → risultati ATS Montagna
+    output/script7/               → confronto comparativo tra ATS
 
 REQUISITI:
     pip install pandas numpy matplotlib seaborn scikit-learn statsmodels shap scipy
-
-COME ESEGUIRE:
-    Posizionarsi nella cartella del progetto (es. ILI/) e lanciare:
-        python CORRELATIONS/script7_modello_multivariato.py
 =============================================================
 """
 
@@ -114,14 +72,12 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import seaborn as sns
-
 from scipy.stats import pearsonr
-
 import statsmodels.api as sm
 from sklearn.linear_model import RidgeCV
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import LeaveOneGroupOut, cross_val_score
+from sklearn.model_selection import LeaveOneGroupOut
 from sklearn.metrics import r2_score
 
 try:
@@ -129,54 +85,53 @@ try:
     SHAP_DISPONIBILE = True
 except ImportError:
     SHAP_DISPONIBILE = False
-    print("  ⚠ shap non installato — grafico SHAP saltato. "
-          "  Installa con: pip install shap")
+    print("  ⚠ shap non installato — grafico SHAP saltato.")
+    print("    Installa con: pip install shap")
 
 warnings.filterwarnings("ignore")
 plt.style.use("seaborn-v0_8-whitegrid")
 
-# =============================================================================
-# SEZIONE 1 — CONFIGURAZIONE PERCORSI
-# =============================================================================
-# Modifica questi percorsi se la struttura delle cartelle è diversa.
-# Tutti i percorsi sono relativi alla root del progetto (es. ILI/).
-
-BASE_DIR     = Path(__file__).resolve().parent        # .../CORRELATIONS/
-PROJECT_ROOT = BASE_DIR.parent                        # .../ILI/
-
-# --- Input: dati ILI (Script 1) ---
-ILI_FILE  = PROJECT_ROOT / "SORVEGLIANZA ACCESSI PS" / "output" / "ATS_MILANO" / \
-            "ili_ats_milano_stagionale.csv"
-TOT_FILE  = PROJECT_ROOT / "SORVEGLIANZA ACCESSI PS" / "output" / "ATS_MILANO" / \
-            "access_tot_milano_stagionale.csv"
-
-# --- Input: dati ambientali settimanali (Script 3) ---
-ARPA_DIR  = PROJECT_ROOT / "ARPA" / "SETTIMANE_DI_INTERESSE"
-
-# --- Input: lag ottimali (Script 4) ---
-LAG_FILE  = BASE_DIR / "output" / "cross_correlazione_lag_ottimale.csv"
-
-# --- Output ---
-OUT_DIR   = BASE_DIR / "output" / "script7"
-PLOT_DIR  = OUT_DIR / "grafici"
-OUT_DIR.mkdir(parents=True, exist_ok=True)
-PLOT_DIR.mkdir(parents=True, exist_ok=True)
 
 # =============================================================================
-# SEZIONE 2 — CONFIGURAZIONE MODELLO
+# SEZIONE 1 — CONFIGURAZIONE PERCORSI E ATS
 # =============================================================================
 
-# Stagioni da includere nell'analisi
-# Formato ARPA (anno_inizio_anno_fine) → formato ILI (stagione breve)
-STAGIONI_MAP = {
-    "2022_2023": "22-23",
-    "2023_2024": "23-24",
-    "2024_2025": "24-25",
-    "2025_2026": "25-26",
+BASE_DIR     = Path(__file__).resolve().parent   # .../CORRELATIONS/
+PROJECT_ROOT = BASE_DIR.parent                   # .../ILI/
+ARPA_DIR     = PROJECT_ROOT / "ARPA" / "SETTIMANE_DI_INTERESSE"
+LAG_FILE     = BASE_DIR / "output" / "cross_correlazione_lag_ottimale.csv"
+OUT_BASE     = BASE_DIR / "output" / "script7"
+OUT_BASE.mkdir(parents=True, exist_ok=True)
+
+ILI_BASE = PROJECT_ROOT / "SORVEGLIANZA ACCESSI PS" / "output"
+
+# Configurazione delle tre ATS.
+# Per aggiungere una nuova ATS basta aggiungere una voce qui.
+ATS_CONFIG = {
+    "ATS_MILANO": {
+        "ili_file": ILI_BASE / "ATS_MILANO"   / "ili_ats_milano_stagionale.csv",
+        "tot_file": ILI_BASE / "ATS_MILANO"   / "access_tot_milano_stagionale.csv",
+        "col_ili":  "ACCESSI_ILI_ATS_MILANO",
+        "col_tot":  "ACCESSI_TOTALI_ER_MILANO",
+        "label":    "ATS Milano (pianura padana)",
+    },
+    "ATS_BERGAMO": {
+        "ili_file": ILI_BASE / "ATS_BERGAMO"  / "ili_ats_bergamo_stagionale.csv",
+        "tot_file": ILI_BASE / "ATS_BERGAMO"  / "access_tot_bergamo_stagionale.csv",
+        "col_ili":  "ACCESSI_ILI_ATS_BERGAMO",
+        "col_tot":  "ACCESSI_TOTALI_ER_BERGAMO",
+        "label":    "ATS Bergamo (pianura/colline)",
+    },
+    "ATS_MONTAGNA": {
+        "ili_file": ILI_BASE / "ATS_MONTAGNA" / "ili_ats_montagna_stagionale.csv",
+        "tot_file": ILI_BASE / "ATS_MONTAGNA" / "access_tot_montagna_stagionale.csv",
+        "col_ili":  "ACCESSI_ILI_ATS_MONTAGNA",
+        "col_tot":  "ACCESSI_TOTALI_ER_MONTAGNA",
+        "label":    "ATS Montagna (area alpina)",
+    },
 }
 
-# Variabili ambientali da includere come predittori
-# Chiave = nome visualizzato; Valore = sottocartella ARPA
+# Variabili ambientali: chiave = nome colonna nel dataset, valore = sottocartella ARPA
 VARIABILI_ENV = {
     "TEMP":     "TEMPERATURE",
     "HUMIDITY": "HUMIDITY",
@@ -185,12 +140,20 @@ VARIABILI_ENV = {
     "NO2":      "NO2",
 }
 
-# Variabili che hanno struttura _media/_min/_max → usare solo _media
+# Per TEMPERATURE e HUMIDITY si usano solo le colonne "_media" (non _min/_max)
+# per evitare di mischiare grandezze diverse nello stesso calcolo
 TIPOLOGIE_CON_SOTTOSTAT = {"TEMPERATURE", "HUMIDITY"}
 
-# Lag di default per ogni variabile (settimane).
-# Viene sovrascritto dai risultati di Script 4 se il file esiste.
-# Fonte letteratura: Shaman et al. 2010, Feng et al. 2016 → lag 1-3 sett.
+# Mapping stagione ARPA (anno_inizio_anno_fine) → stagione ILI (formato breve)
+STAGIONI_MAP = {
+    "2022_2023": "22-23",
+    "2023_2024": "23-24",
+    "2024_2025": "24-25",
+    "2025_2026": "25-26",
+}
+
+# Lag di default in settimane (sovrascritti da Script 4 se disponibile)
+# Basati sulla letteratura: Shaman et al. 2010, Feng et al. 2016
 LAG_DEFAULT = {
     "TEMP":     2,
     "HUMIDITY": 1,
@@ -199,45 +162,84 @@ LAG_DEFAULT = {
     "NO2":      1,
 }
 
-# Soglia per variabile target binarizzata (OR/RR):
-# settimane con ILI_norm > SOGLIA_ILI_ALTO sono "episodi ad alto ILI"
-# Usa il 75° percentile calcolato sui dati (definito dinamicamente sotto)
-SOGLIA_PERCENTILE_ILI = 75
+# Parametri modelli
+ALPHAS_RIDGE          = [0.01, 0.1, 1.0, 10.0, 100.0]
+RF_N_TREES            = 200
+RF_MAX_DEPTH          = 3   # basso deliberatamente: limita overfitting con n piccolo
+SOGLIA_PERCENTILE_ILI = 75  # soglia per binarizzare l'outcome nell'analisi OR
+SOGLIA_PERCENTILE_ENV = 75  # soglia per binarizzare l'esposizione nell'analisi OR
 
-# Parametri Ridge
-ALPHAS_RIDGE = [0.01, 0.1, 1.0, 10.0, 100.0]
-
-# Parametri Random Forest (volutamente conservativi per n piccolo)
-RF_N_TREES  = 200
-RF_MAX_DEPTH = 3   # profondità bassa: limita overfitting con n~80
-
-# Parametro per la soglia di esposizione nelle variabili ambientali (OR)
-SOGLIA_PERCENTILE_ENV = 75  # "esposto" = valore > 75° percentile
 
 # =============================================================================
-# SEZIONE 3 — FUNZIONI DI SUPPORTO
+# SEZIONE 2 — FUNZIONI CONDIVISE (usate per tutte e tre le ATS)
 # =============================================================================
 
 def ordine_settimana(s: int) -> int:
     """
     Mappa settimana ISO → posizione progressiva nella stagione influenzale.
     Sett. 48 → 1, sett. 52 → 5, sett. 1 → 6, sett. 15 → 20.
-    Necessario per ordinare correttamente le serie temporali stagionali.
+    Necessario per ordinare correttamente le serie temporali stagionali
+    senza che matplotlib metta le settimane 1-15 prima delle 48-52.
     """
     return s - 47 if s >= 48 else s + 5
 
 
+def carica_lag_ottimali() -> dict[str, int]:
+    """
+    Legge i lag ottimali stimati da Script 4 (cross-correlazione).
+
+    I lag vengono applicati uniformemente a tutte le ATS.
+    Questo è una semplificazione: idealmente si stimerebbero lag
+    separati per ogni ATS, ma con ~20 punti per stagione la stima
+    sarebbe troppo instabile. Dichiarare questa scelta nel report.
+
+    Se il file non esiste, usa i valori di default da LAG_DEFAULT.
+    """
+    nome_map = {
+        "TEMPERATURE": "TEMP",
+        "HUMIDITY":    "HUMIDITY",
+        "PM25":        "PM25",
+        "PM10":        "PM10",
+        "NO2":         "NO2",
+    }
+
+    if not LAG_FILE.exists():
+        print(f"  ⚠ File lag non trovato: {LAG_FILE}")
+        print(f"     Uso lag di default: {LAG_DEFAULT}")
+        return LAG_DEFAULT.copy()
+
+    df      = pd.read_csv(LAG_FILE)
+    lag_map = {}
+
+    for _, row in df.iterrows():
+        var_arpa   = str(row.get("Variabile", "")).upper()
+        var_script = nome_map.get(var_arpa, var_arpa)
+        lag_val    = int(row.get("Lag_ottimale_sett", LAG_DEFAULT.get(var_script, 1)))
+        lag_map[var_script] = lag_val
+
+    # Completa con default per variabili mancanti nel file
+    for var, default in LAG_DEFAULT.items():
+        if var not in lag_map:
+            lag_map[var] = default
+            print(f"  ℹ Lag per {var} non in Script 4 → default {default}")
+
+    print(f"  ✅ Lag ottimali caricati: {lag_map}")
+    return lag_map
+
+
 def carica_serie_ambientale(nome_var: str, sottocartella: str) -> pd.DataFrame:
     """
-    Legge tutti i CSV stagionali di una variabile ambientale (da Script 3)
-    e restituisce una serie long con colonne: Stagione_ARPA | Settimana | Valore.
+    Legge tutti i CSV stagionali di una variabile ambientale (output Script 3)
+    e restituisce un DataFrame long:
+        Stagione_ARPA | Settimana | <nome_var>
 
-    Per TEMPERATURE e HUMIDITY usa solo le colonne '_media' per evitare
-    di mischiare grandezze diverse (massimo, media, minimo).
+    Per TEMPERATURE e HUMIDITY usa solo le colonne '_media' per ogni sensore,
+    evitando di mediare insieme grandezze diverse (massimo, media, minimo).
+    Per PM25, PM10, NO2 usa tutte le colonne (struttura già piatta).
     """
     cartella = ARPA_DIR / sottocartella
     if not cartella.exists():
-        print(f"  ⚠ Cartella non trovata: {cartella}")
+        print(f"  ⚠ Cartella ARPA non trovata: {cartella}")
         return pd.DataFrame()
 
     dfs = []
@@ -246,8 +248,7 @@ def carica_serie_ambientale(nome_var: str, sottocartella: str) -> pd.DataFrame:
             df = pd.read_csv(f)
             if "Settimana" not in df.columns:
                 continue
-            # Estrai stagione dal nome file (es. TEMPERATURE_2022_2023 → 2022_2023)
-            parts = f.stem.split("_")
+            parts   = f.stem.split("_")
             stagione = "_".join(parts[-2:]) if len(parts) >= 3 else f.stem
             df["Stagione_ARPA"] = stagione
             dfs.append(df)
@@ -262,7 +263,7 @@ def carica_serie_ambientale(nome_var: str, sottocartella: str) -> pd.DataFrame:
     df_tot = df_tot.dropna(subset=["Settimana"])
     df_tot["Settimana"] = df_tot["Settimana"].astype(int)
 
-    # Selezione colonne dati in base alla tipologia
+    # Selezione colonne in base alla tipologia
     if sottocartella.upper() in TIPOLOGIE_CON_SOTTOSTAT:
         cols_dati = [c for c in df_tot.columns
                      if c not in ("Settimana", "Stagione_ARPA")
@@ -272,7 +273,7 @@ def carica_serie_ambientale(nome_var: str, sottocartella: str) -> pd.DataFrame:
                      if c not in ("Settimana", "Stagione_ARPA")]
 
     if not cols_dati:
-        print(f"  ⚠ Nessuna colonna dati per {nome_var}")
+        print(f"  ⚠ Nessuna colonna dati trovata per {nome_var}")
         return pd.DataFrame()
 
     # Converti a numerico e sostituisci -999 (codice ARPA per dato mancante)
@@ -280,7 +281,7 @@ def carica_serie_ambientale(nome_var: str, sottocartella: str) -> pd.DataFrame:
         df_tot[c] = pd.to_numeric(df_tot[c], errors="coerce")
         df_tot.loc[df_tot[c] == -999, c] = np.nan
 
-    # Media tra stazioni/sensori → un valore per settimana per stagione
+    # Media tra stazioni/sensori → un valore rappresentativo per settimana
     df_tot["Valore"] = df_tot[cols_dati].mean(axis=1, skipna=True)
 
     serie = (
@@ -289,186 +290,122 @@ def carica_serie_ambientale(nome_var: str, sottocartella: str) -> pd.DataFrame:
         .mean()
         .rename(columns={"Valore": nome_var})
     )
-
     return serie
-
-
-def carica_lag_ottimali() -> dict[str, int]:
-    """
-    Legge i lag ottimali stimati da Script 4.
-    Se il file non esiste, usa i valori di default da LAG_DEFAULT.
-
-    I lag ottimali sono il risultato della cross-correlazione: indicano
-    quante settimane dopo un picco ambientale si osserva un picco ILI.
-    Usarli qui è metodologicamente corretto: sfrutta i risultati di
-    Script 4 come input per il modello predittivo.
-    """
-    if not LAG_FILE.exists():
-        print(f"  ⚠ File lag non trovato: {LAG_FILE}")
-        print(f"     Uso lag di default: {LAG_DEFAULT}")
-        return LAG_DEFAULT.copy()
-
-    df = pd.read_csv(LAG_FILE)
-    lag_map = {}
-
-    # Il file di Script 4 usa nomi come "TEMPERATURE", "PM25", ecc.
-    # Li mappiamo ai nomi abbreviati usati in questo script
-    nome_map = {
-        "TEMPERATURE": "TEMP",
-        "HUMIDITY":    "HUMIDITY",
-        "PM25":        "PM25",
-        "PM10":        "PM10",
-        "NO2":         "NO2",
-    }
-
-    for _, row in df.iterrows():
-        var_arpa = str(row.get("Variabile", "")).upper()
-        var_script = nome_map.get(var_arpa, var_arpa)
-        lag_val = int(row.get("Lag_ottimale_sett", LAG_DEFAULT.get(var_script, 1)))
-        lag_map[var_script] = lag_val
-
-    # Completa con i default per variabili mancanti
-    for var, default in LAG_DEFAULT.items():
-        if var not in lag_map:
-            lag_map[var] = default
-            print(f"  ℹ Lag per {var} non trovato in Script 4 → uso default {default}")
-
-    print(f"  ✅ Lag ottimali caricati: {lag_map}")
-    return lag_map
 
 
 def applica_lag(df: pd.DataFrame, col: str, lag: int) -> pd.DataFrame:
     """
-    Applica un lag a una colonna ambientale all'interno di ogni stagione.
+    Applica un lag temporale a una colonna ambientale, separatamente
+    per ogni stagione (evita di connettere stagioni diverse).
 
-    Per ogni stagione:
-        - La colonna ambientale viene shiftata di `lag` posizioni
-          verso il basso (cioè il valore della settimana t viene
-          associato all'ILI della settimana t + lag).
-        - Le prime `lag` righe di ogni stagione diventano NaN
-          (non ci sono dati ambientali sufficientemente in anticipo).
+    Risultato: la riga t contiene il valore ambientale di t-lag,
+    cioè "l'ambiente lag settimane fa precede l'ILI di oggi".
 
-    Perché è importante:
-        La cross-correlazione di Script 4 ha mostrato che l'effetto
-        ambientale sull'ILI non è istantaneo ma ha un ritardo.
-        Applicare il lag allinea correttamente causa (ambiente) ed
-        effetto (ILI), riducendo il bias di stima dei coefficienti.
-
-    NOTA: lo shift avviene PER STAGIONE, non globalmente. Senza questo
-    accorgimento, il lag connetter ebbe le ultime settimane di una
-    stagione con le prime della successiva, introducendo un errore
-    sistematico.
+    Le prime `lag` righe di ogni stagione diventano NaN:
+    verranno rimosse nel dropna() finale.
     """
     if lag == 0:
-        return df  # nessun lag: niente da fare
+        return df
 
     col_lagged = f"{col}_lag{lag}"
-    df = df.copy()
+    df         = df.copy()
     df[col_lagged] = np.nan
 
     for stagione in df["STAGIONE"].unique():
         mask = df["STAGIONE"] == stagione
-        # shift(lag) sposta la colonna verso il basso di `lag` posizioni
-        # → la riga t contiene il valore ambientale di t-lag
-        # → equivale a dire: l'ambiente di t-lag precede l'ILI di t
         df.loc[mask, col_lagged] = df.loc[mask, col].shift(lag).values
 
-    # Rimuovi la colonna originale non laggata
     df = df.drop(columns=[col])
     return df
 
 
 # =============================================================================
-# SEZIONE 4 — COSTRUZIONE DEL DATASET UNIFICATO
+# SEZIONE 3 — COSTRUZIONE DATASET PER UNA SINGOLA ATS
 # =============================================================================
 
-def costruisci_dataset() -> tuple[pd.DataFrame, list[str]]:
+def costruisci_dataset_ats(ats_key: str, cfg: dict,
+                            lag_map: dict[str, int]) -> tuple[pd.DataFrame, list[str]]:
     """
-    Costruisce il dataset finale unificando dati ILI e ambientali.
+    Costruisce il dataset unificato per una singola ATS.
 
     Passi:
-        1. Carica ILI ATS Milano (da Script 1)
-        2. Calcola ILI normalizzato = accessi ILI / accessi totali * 100
-           (evita di usare conteggi assoluti che dipendono dal volume del PS)
+        1. Carica ILI e accessi totali (da Script 1)
+        2. Calcola %ILI = accessi ILI / accessi totali * 100
+           (normalizzazione per confronto tra ATS con volumi diversi)
         3. Carica ogni variabile ambientale (da Script 3)
-        4. Fa il merge per STAGIONE + SETTIMANA
-        5. Applica i lag ottimali (da Script 4)
-        6. Rimuove le righe con NaN residui
+        4. Merge su STAGIONE + SETTIMANA
+        5. Applica lag ottimali (da Script 4)
+        6. Aggiunge ILI_{t-1} come predittore autoregressivo
+           (mitiga la violazione dell'indipendenza dei residui in OLS)
+        7. Rimuove righe con NaN residui
+
+    Perché %ILI e non conteggi assoluti:
+        ATS Bergamo e ATS Montagna hanno popolazioni diverse da ATS Milano.
+        Usare i conteggi assoluti renderebbe i coefficienti non confrontabili
+        tra ATS. Il %ILI normalizza per il volume di attività del PS.
 
     Returns:
-        df_finale   : DataFrame con una riga per settimana per stagione
-        cols_pred   : lista dei nomi delle colonne predittore (con lag)
+        df_finale   : DataFrame una riga per settimana per stagione
+        cols_pred   : lista nomi colonne predittore (con lag applicato)
     """
-    print("\n" + "─" * 55)
-    print("📂 COSTRUZIONE DATASET UNIFICATO")
-    print("─" * 55)
+    print(f"\n  {'─'*50}")
+    print(f"  📂 {ats_key} — costruzione dataset")
+    print(f"  {'─'*50}")
 
-    # ── 1. Carica ILI ────────────────────────────────────────────────────────
-    if not ILI_FILE.exists():
-        raise FileNotFoundError(
-            f"File ILI non trovato: {ILI_FILE}\n"
-            f"Esegui prima Script 1."
-        )
+    # ── 1. Carica ILI ─────────────────────────────────────────────────────
+    if not cfg["ili_file"].exists():
+        print(f"  ❌ File ILI non trovato: {cfg['ili_file']}")
+        print(f"     Esegui prima Script 1.")
+        return pd.DataFrame(), []
 
-    df_ili = pd.read_csv(ILI_FILE)
-    print(f"  ✅ ILI caricato: {len(df_ili)} righe, "
+    df_ili = pd.read_csv(cfg["ili_file"])
+    print(f"  ILI caricato: {len(df_ili)} righe, "
           f"stagioni: {sorted(df_ili['STAGIONE'].unique())}")
 
-    # ── 2. Calcola ILI normalizzato (%ILI = ILI / totale * 100) ──────────────
-    # Usare %ILI invece dei conteggi assoluti è più robusto:
-    # il volume assoluto degli accessi varia per ragioni non legate
-    # all'influenza (apertura/chiusura PS, campagne, ecc.)
-    if TOT_FILE.exists():
-        df_tot = pd.read_csv(TOT_FILE)
-        df_merged_ili = pd.merge(
-            df_ili[["STAGIONE", "WEEK", "ORDINE", "ACCESSI_ILI_ATS_MILANO"]],
-            df_tot[["STAGIONE", "WEEK", "ACCESSI_TOTALI_ER_MILANO"]],
+    # ── 2. Calcola %ILI ───────────────────────────────────────────────────
+    if cfg["tot_file"].exists():
+        df_tot = pd.read_csv(cfg["tot_file"])
+        df_base = pd.merge(
+            df_ili[["STAGIONE", "WEEK", "ORDINE", cfg["col_ili"]]],
+            df_tot[["STAGIONE", "WEEK", cfg["col_tot"]]],
             on=["STAGIONE", "WEEK"],
             how="left"
         )
-        df_merged_ili["ILI_NORM"] = (
-            df_merged_ili["ACCESSI_ILI_ATS_MILANO"].astype(float) /
-            df_merged_ili["ACCESSI_TOTALI_ER_MILANO"].astype(float) * 100
-        ).where(df_merged_ili["ACCESSI_TOTALI_ER_MILANO"] > 0)
-        print(f"  ✅ ILI normalizzato calcolato (%ILI = ILI/totale*100)")
+        df_base["ILI_NORM"] = (
+            df_base[cfg["col_ili"]].astype(float) /
+            df_base[cfg["col_tot"]].astype(float) * 100
+        ).where(df_base[cfg["col_tot"]] > 0)
+        print(f"  %ILI calcolato (ILI/totale*100)")
     else:
-        # Fallback: usa i conteggi assoluti
-        print(f"  ⚠ File totali non trovato → uso conteggi ILI assoluti")
-        df_merged_ili = df_ili.copy()
-        df_merged_ili["ILI_NORM"] = df_merged_ili["ACCESSI_ILI_ATS_MILANO"].astype(float)
+        print(f"  ⚠ File totali non trovato → uso conteggi assoluti")
+        df_base            = df_ili.copy()
+        df_base["ILI_NORM"] = df_base[cfg["col_ili"]].astype(float)
 
-    df_base = df_merged_ili[["STAGIONE", "WEEK", "ORDINE", "ILI_NORM"]].copy()
+    df_base = df_base[["STAGIONE", "WEEK", "ORDINE", "ILI_NORM"]].copy()
     df_base = df_base.rename(columns={"WEEK": "SETTIMANA"})
     df_base["ORDINE"] = df_base["SETTIMANA"].apply(ordine_settimana)
 
-    # ── 3. Carica variabili ambientali e merge ────────────────────────────────
+    # ── 3. Carica e merge variabili ambientali ────────────────────────────
     for nome_var, sottocartella in VARIABILI_ENV.items():
-        print(f"\n  📁 Caricamento {nome_var}...")
         serie = carica_serie_ambientale(nome_var, sottocartella)
-
         if serie.empty:
-            print(f"     ⚠ Nessun dato per {nome_var} — variabile esclusa")
+            print(f"  ⚠ Nessun dato per {nome_var} — esclusa")
             continue
 
-        # Mappa stagione ARPA → stagione ILI per il merge
-        # Es. "2022_2023" → "22-23"
         serie["STAGIONE"] = serie["Stagione_ARPA"].map(STAGIONI_MAP)
         serie = serie.dropna(subset=["STAGIONE"])
         serie = serie.rename(columns={"Settimana": "SETTIMANA"})
         serie = serie[["STAGIONE", "SETTIMANA", nome_var]]
 
-        n_prima = len(df_base)
+        n_pre  = len(df_base)
         df_base = pd.merge(df_base, serie, on=["STAGIONE", "SETTIMANA"], how="left")
         n_match = df_base[nome_var].notna().sum()
-        print(f"     ✅ {n_match}/{n_prima} settimane con dati {nome_var}")
+        print(f"  {nome_var}: {n_match}/{n_pre} settimane con dato")
 
-    # ── 4. Applica lag ottimali ───────────────────────────────────────────────
-    print(f"\n  ⏱ Applicazione lag ottimali...")
-    lag_map = carica_lag_ottimali()
-
+    # ── 4. Applica lag ────────────────────────────────────────────────────
     df_base = df_base.sort_values(["STAGIONE", "ORDINE"]).reset_index(drop=True)
-
     cols_pred_lagged = []
+
     for nome_var in VARIABILI_ENV:
         if nome_var not in df_base.columns:
             continue
@@ -476,543 +413,413 @@ def costruisci_dataset() -> tuple[pd.DataFrame, list[str]]:
         df_base = applica_lag(df_base, nome_var, lag)
         col_lagged = f"{nome_var}_lag{lag}" if lag > 0 else nome_var
         cols_pred_lagged.append(col_lagged)
-        print(f"     {nome_var}: lag = {lag} settimane → colonna '{col_lagged}'")
 
-    # ── 5. Aggiungi ILI della settimana precedente (termine autoregressivo) ───
-    # Questo termine cattura l'autocorrelazione temporale: una settimana
-    # ad alto ILI tende ad essere preceduta da un'altra ad alto ILI.
-    # Includerlo come predittore mitiga la violazione dell'assunzione di
-    # indipendenza dei residui in OLS (dichiarare comunque il limite).
-    df_base = df_base.sort_values(["STAGIONE", "ORDINE"]).reset_index(drop=True)
+    # ── 5. Termine autoregressivo ILI_{t-1} ──────────────────────────────
+    # Mitiga la violazione dell'indipendenza dei residui in OLS:
+    # la settimana precedente di ILI è il predittore più forte
+    # dell'ILI corrente (l'epidemia non si azzera da una settimana all'altra).
     df_base["ILI_NORM_lag1"] = np.nan
     for stagione in df_base["STAGIONE"].unique():
         mask = df_base["STAGIONE"] == stagione
-        df_base.loc[mask, "ILI_NORM_lag1"] = df_base.loc[mask, "ILI_NORM"].shift(1).values
-
+        df_base.loc[mask, "ILI_NORM_lag1"] = \
+            df_base.loc[mask, "ILI_NORM"].shift(1).values
     cols_pred_lagged.append("ILI_NORM_lag1")
 
-    # ── 6. Rimuovi righe con NaN (dovute al lag e alle prime settimane) ───────
-    n_prima_drop = len(df_base)
-    df_finale = df_base.dropna(subset=["ILI_NORM"] + cols_pred_lagged).copy()
-    n_dopo_drop = len(df_finale)
-    print(f"\n  ℹ Righe dopo rimozione NaN: {n_dopo_drop}/{n_prima_drop} "
-          f"({n_prima_drop - n_dopo_drop} rimosse per lag/NaN ambientali)")
+    # ── 6. Rimuovi NaN ────────────────────────────────────────────────────
+    n_pre = len(df_base)
+    cols_valide = [c for c in cols_pred_lagged if c in df_base.columns]
+    df_finale = df_base.dropna(subset=["ILI_NORM"] + cols_valide).copy()
+    print(f"  Righe finali: {len(df_finale)}/{n_pre} "
+          f"({n_pre - len(df_finale)} rimosse per NaN/lag)")
+    print(f"  Predittori: {cols_valide}")
 
-    # Salva dataset per riproducibilità
-    path_ds = OUT_DIR / "dataset_unificato.csv"
-    df_finale.to_csv(path_ds, index=False)
-    print(f"  💾 Dataset salvato: {path_ds}")
-    print(f"  📊 Stagioni presenti: {sorted(df_finale['STAGIONE'].unique())}")
-    print(f"  📊 Predittori: {cols_pred_lagged}")
-    print(f"  📊 Osservazioni totali: {len(df_finale)}")
-
-    return df_finale, cols_pred_lagged
+    return df_finale, cols_valide
 
 
 # =============================================================================
-# SEZIONE 5 — ANALISI ESPLORATIVA: CORRELAZIONE E ODDS RATIO
+# SEZIONE 4 — LIVELLO 1: CORRELAZIONE E ODDS RATIO
 # =============================================================================
 
-def analisi_correlazione(df: pd.DataFrame, cols_pred: list[str]) -> None:
+def analisi_correlazione(df: pd.DataFrame, cols_pred: list[str],
+                          out_dir: Path, label: str) -> None:
     """
-    Produce la matrice di correlazione di Pearson tra tutti i predittori.
+    Matrice di correlazione di Pearson tra predittori.
 
-    PERCHÉ è importante prima del modello:
-        La multicollinearità (predittori molto correlati tra loro) distorce
-        i coefficienti OLS rendendoli instabili. Questo grafico la documenta
-        e giustifica la scelta di Ridge (che la gestisce) rispetto a OLS puro.
-
-    Il grafico mostra:
-        - Correlazione tra predittori ambientali (heatmap colorata)
-        - Valori numerici nelle celle per leggibilità
-        - Asterischi per correlazioni statisticamente significative (p<0.05)
+    Scopo: documentare la multicollinearità prima del modello.
+    Correlazioni elevate (|r| > 0.7) tra predittori giustificano
+    la scelta di Ridge rispetto a OLS puro.
     """
-    print("\n  📊 Matrice di correlazione predittori...")
-
-    # Usa solo le colonne disponibili nel dataset
     cols_disp = [c for c in cols_pred if c in df.columns]
-    df_corr = df[cols_disp].copy()
+    corr = df[cols_disp].corr(method="pearson")
 
-    corr_matrix = df_corr.corr(method="pearson")
-
-    # Calcola p-value per ogni coppia (per aggiungere asterischi)
-    n = len(df_corr)
-    pval_matrix = pd.DataFrame(np.ones_like(corr_matrix),
-                                index=corr_matrix.index,
-                                columns=corr_matrix.columns)
+    # Calcola p-value per aggiungere asterischi
+    annot = corr.round(2).astype(str)
     for c1 in cols_disp:
         for c2 in cols_disp:
             if c1 != c2:
-                valid = df_corr[[c1, c2]].dropna()
-                if len(valid) >= 5:
-                    _, p = pearsonr(valid[c1], valid[c2])
-                    pval_matrix.loc[c1, c2] = p
-
-    # Annota con asterisco se p < 0.05
-    annot = corr_matrix.round(2).astype(str)
-    for c1 in cols_disp:
-        for c2 in cols_disp:
-            if pval_matrix.loc[c1, c2] < 0.05 and c1 != c2:
-                annot.loc[c1, c2] = annot.loc[c1, c2] + "*"
+                vals = df[[c1, c2]].dropna()
+                if len(vals) >= 5:
+                    _, p = pearsonr(vals[c1], vals[c2])
+                    if p < 0.05:
+                        annot.loc[c1, c2] = annot.loc[c1, c2] + "*"
 
     fig, ax = plt.subplots(figsize=(9, 7))
-    sns.heatmap(corr_matrix, annot=annot, fmt="", cmap="coolwarm",
+    sns.heatmap(corr, annot=annot, fmt="", cmap="coolwarm",
                 vmin=-1, vmax=1, center=0, square=True, ax=ax,
                 linewidths=0.5, cbar_kws={"shrink": 0.8})
-
     ax.set_title(
-        "Correlazione di Pearson tra predittori\n"
-        "* = p < 0.05 | Alta correlazione tra variabili → giustifica Ridge",
+        f"Correlazione predittori — {label}\n"
+        f"* = p<0.05 | |r|>0.7 segnala multicollinearità",
         fontsize=11, fontweight="bold"
     )
     plt.tight_layout()
-    fig.savefig(PLOT_DIR / "01_correlazione_predittori.png", dpi=150)
+    fig.savefig(out_dir / "01_correlazione_predittori.png", dpi=150)
     plt.close(fig)
-    print(f"  ✅ Salvato: 01_correlazione_predittori.png")
 
-    # Segnala coppie ad alta correlazione (|r| > 0.7)
-    alta_corr = []
+    # Stampa coppie problematiche
     for i, c1 in enumerate(cols_disp):
         for c2 in cols_disp[i+1:]:
-            r = corr_matrix.loc[c1, c2]
+            r = corr.loc[c1, c2]
             if abs(r) > 0.7:
-                alta_corr.append((c1, c2, r))
-    if alta_corr:
-        print("  ⚠ Coppie ad alta correlazione (|r|>0.7) — multicollinearità rilevante:")
-        for c1, c2, r in alta_corr:
-            print(f"     {c1} vs {c2}: r = {r:.3f}")
-    else:
-        print("  ✅ Nessuna coppia con |r| > 0.7")
+                print(f"  ⚠ Alta correlazione: {c1} vs {c2}: r={r:.3f}")
 
 
 def calcola_odds_ratio(df: pd.DataFrame, cols_pred: list[str],
-                        target_col: str = "ILI_NORM") -> pd.DataFrame:
+                        out_dir: Path, label: str) -> pd.DataFrame:
     """
-    Calcola l'Odds Ratio (OR) per ogni variabile ambientale rispetto
-    all'outcome binario "ILI elevato" (> 75° percentile).
+    Calcola OR per ogni variabile ambientale rispetto all'outcome
+    binario "ILI elevato" (> 75° percentile).
 
-    Dal §7.4.1 del corso: OR è uno strumento di feature selection e può
-    essere usato come output standalone in studi epidemiologici descrittivi.
+    Dal §7.4.1 del corso: OR è uno strumento di feature selection
+    e può essere usato come output standalone in studi epidemiologici.
 
-    Come funziona:
-        - Binarizza il target: ILI_alto = 1 se ILI_NORM > soglia, 0 altrimenti
-        - Binarizza ogni predittore: esposto = 1 se valore > 75° percentile
-        - Costruisce la tabella di contingenza 2×2
-        - Calcola OR = (A*D) / (B*C) con IC 95% via log-normale
-
-    Interpretazione:
-        OR > 1: il predittore alto è associato a ILI alto
-        OR < 1: il predittore alto è associato a ILI basso (protettivo)
-        IC 95% include 1: evidenza inconcludente (dal corso §7.4.1)
-
-    LIMITAZIONE: OR è appropriato per studi caso-controllo (retrospettivi).
-    Il vostro dataset è una serie temporale, non un caso-controllo.
-    Usare l'OR qui è un'approssimazione per la feature selection, non
-    un'analisi epidemiologica formale. Dichiararlo nel report.
+    LIMITAZIONE: OR è formalmente corretto per studi caso-controllo.
+    Qui è usato come approssimazione per la feature selection su
+    serie temporali. Dichiararlo nel report.
     """
-    print("\n  📊 Calcolo Odds Ratio (feature selection)...")
-
-    soglia_ili = np.percentile(df[target_col].dropna(), SOGLIA_PERCENTILE_ILI)
+    soglia_ili = np.percentile(df["ILI_NORM"].dropna(), SOGLIA_PERCENTILE_ILI)
     df = df.copy()
-    df["ILI_alto"] = (df[target_col] > soglia_ili).astype(int)
+    df["ILI_alto"] = (df["ILI_NORM"] > soglia_ili).astype(int)
 
     risultati = []
-    cols_env = [c for c in cols_pred if c != "ILI_NORM_lag1" and c in df.columns]
+    cols_env  = [c for c in cols_pred if c != "ILI_NORM_lag1" and c in df.columns]
 
     for col in cols_env:
         soglia_env = np.percentile(df[col].dropna(), SOGLIA_PERCENTILE_ENV)
         df["esposto"] = (df[col] > soglia_env).astype(int)
 
-        # Tabella di contingenza 2×2
-        A = len(df[(df["esposto"] == 1) & (df["ILI_alto"] == 1)])  # esposto + outcome
-        B = len(df[(df["esposto"] == 1) & (df["ILI_alto"] == 0)])  # esposto + no outcome
-        C = len(df[(df["esposto"] == 0) & (df["ILI_alto"] == 1)])  # non esposto + outcome
-        D = len(df[(df["esposto"] == 0) & (df["ILI_alto"] == 0)])  # non esposto + no outcome
+        A = len(df[(df["esposto"]==1) & (df["ILI_alto"]==1)])
+        B = len(df[(df["esposto"]==1) & (df["ILI_alto"]==0)])
+        C = len(df[(df["esposto"]==0) & (df["ILI_alto"]==1)])
+        D = len(df[(df["esposto"]==0) & (df["ILI_alto"]==0)])
 
-        # OR con correzione di continuità (aggiunge 0.5 se una cella è 0)
-        A_, B_, C_, D_ = A + 0.5, B + 0.5, C + 0.5, D + 0.5
-        or_val = (A_ * D_) / (B_ * C_)
-
-        # IC 95% via approssimazione log-normale
-        se_log_or = np.sqrt(1/A_ + 1/B_ + 1/C_ + 1/D_)
-        ci_low  = np.exp(np.log(or_val) - 1.96 * se_log_or)
-        ci_high = np.exp(np.log(or_val) + 1.96 * se_log_or)
+        # Correzione di continuità (evita divisione per zero)
+        A_, B_, C_, D_ = A+0.5, B+0.5, C+0.5, D+0.5
+        or_val  = (A_ * D_) / (B_ * C_)
+        se_log  = np.sqrt(1/A_ + 1/B_ + 1/C_ + 1/D_)
+        ci_low  = np.exp(np.log(or_val) - 1.96 * se_log)
+        ci_high = np.exp(np.log(or_val) + 1.96 * se_log)
 
         risultati.append({
-            "Variabile":    col,
-            "Soglia_env":   round(soglia_env, 2),
-            "A_esp_out":    A,
-            "B_esp_no":     B,
-            "C_no_out":     C,
-            "D_no_no":      D,
-            "OR":           round(or_val, 3),
-            "IC95_low":     round(ci_low, 3),
-            "IC95_high":    round(ci_high, 3),
-            "Significativo": "Sì" if ci_low > 1 or ci_high < 1 else "No",
+            "Variabile":     col,
+            "Soglia_env":    round(soglia_env, 2),
+            "OR":            round(or_val, 3),
+            "IC95_low":      round(ci_low, 3),
+            "IC95_high":     round(ci_high, 3),
+            "Significativo": "Sì" if (ci_low > 1 or ci_high < 1) else "No",
         })
 
     df_or = pd.DataFrame(risultati)
-    df_or.to_csv(OUT_DIR / "or_feature_selection.csv", index=False)
-    print(f"  ✅ OR salvati: or_feature_selection.csv")
+    df_or.to_csv(out_dir / "or_feature_selection.csv", index=False)
 
-    # Grafico forest plot OR
+    # Forest plot OR
     fig, ax = plt.subplots(figsize=(8, max(4, len(df_or) * 0.7)))
-    y_pos = range(len(df_or))
-
     for i, row in df_or.iterrows():
         colore = "#c0392b" if row["Significativo"] == "Sì" else "#7f8c8d"
         ax.errorbar(
             x=row["OR"], y=i,
-            xerr=[[row["OR"] - row["IC95_low"]],
-                  [row["IC95_high"] - row["OR"]]],
+            xerr=[[row["OR"]-row["IC95_low"]], [row["IC95_high"]-row["OR"]]],
             fmt="o", color=colore, capsize=4, markersize=7, linewidth=1.5
         )
-
-    ax.axvline(1.0, color="black", linestyle="--", linewidth=1, alpha=0.7,
-               label="OR = 1 (nessuna associazione)")
-    ax.set_yticks(list(y_pos))
+    ax.axvline(1.0, color="black", linestyle="--", linewidth=1, alpha=0.7)
+    ax.set_yticks(range(len(df_or)))
     ax.set_yticklabels(df_or["Variabile"].tolist())
     ax.set_xlabel("Odds Ratio (IC 95%)", fontsize=10)
     ax.set_title(
-        f"Odds Ratio: predittore > p75 → ILI > p{SOGLIA_PERCENTILE_ILI}\n"
-        f"Rosso = IC 95% non include 1 (significativo)",
+        f"Odds Ratio — {label}\n"
+        f"Rosso = IC 95% non include 1 | Grigio = non significativo",
         fontsize=10, fontweight="bold"
     )
-    ax.legend(fontsize=9)
     ax.grid(True, alpha=0.3)
     plt.tight_layout()
-    fig.savefig(PLOT_DIR / "06_or_feature_selection.png", dpi=150)
+    fig.savefig(out_dir / "06_or_feature_selection.png", dpi=150)
     plt.close(fig)
-    print(f"  ✅ Salvato: 06_or_feature_selection.png")
 
     return df_or
 
 
 # =============================================================================
-# SEZIONE 6 — MODELLO OLS (LIVELLO 2: MODELLO PRINCIPALE)
+# SEZIONE 5 — LIVELLO 2A: OLS MULTIPLO
 # =============================================================================
 
 def modello_ols(df: pd.DataFrame, cols_pred: list[str],
-                target_col: str = "ILI_NORM") -> None:
+                out_dir: Path, label: str) -> sm.regression.linear_model.RegressionResultsWrapper:
     """
-    Regressione lineare multipla con statsmodels (OLS).
+    Regressione lineare multipla con statsmodels.
 
-    PERCHÉ statsmodels invece di sklearn:
-        statsmodels restituisce p-value, intervalli di confidenza al 95%,
-        R², F-statistic — tutto quello che serve per una tabella scientifica
-        in un report epidemiologico. sklearn è ottimizzato per la
-        performance predittiva, non per l'inferenza statistica.
+    Perché statsmodels invece di sklearn:
+        Restituisce p-value, IC 95%, R², F-statistic — essenziali per
+        una tabella scientifica in un report epidemiologico.
 
-    OUTPUT:
-        - Summary completo stampato a console
-        - Tabella CSV con coefficienti, p-value, IC 95%
-        - Forest plot dei coefficienti standardizzati
+    I predittori sono standardizzati (media=0, SD=1) prima della stima
+    per rendere i coefficienti direttamente confrontabili tra variabili
+    su scale diverse (°C vs µg/m³ vs %).
 
-    INTERPRETAZIONE COEFFICIENTI:
-        Un coefficiente β per la variabile X significa:
-        "A parità di tutte le altre variabili, un aumento di 1 unità
-        in X è associato a una variazione di β nel %ILI."
-
-        Coefficienti standardizzati (dividendo per SD):
-        "Un aumento di 1 deviazione standard in X è associato a
-        una variazione di β_std deviazioni standard nel %ILI."
-        → consentono il confronto diretto tra variabili su scale diverse.
-
-    LIMITAZIONE ESPLICITA:
-        Con n~80 e 4 stagioni, la significatività statistica (p-value)
-        è instabile. Un p < 0.05 con n piccolo e dati autocorrelati
-        NON è prova di associazione robusta. Interpretare con cautela.
+    Limitazione: OLS assume residui indipendenti. Con serie temporali
+    questa assunzione è violata (autocorrelazione). Il termine ILI_lag1
+    mitiga parzialmente il problema ma non lo elimina.
     """
-    print("\n" + "─" * 55)
-    print("📐 MODELLO OLS (statsmodels)")
-    print("─" * 55)
-
     cols_disp = [c for c in cols_pred if c in df.columns]
-    df_clean = df[[target_col] + cols_disp].dropna().copy()
+    df_clean  = df[["ILI_NORM"] + cols_disp].dropna().copy()
+    print(f"\n  OLS: {len(df_clean)} osservazioni, {len(cols_disp)} predittori")
 
-    print(f"  Osservazioni usate: {len(df_clean)}")
-    print(f"  Predittori: {cols_disp}")
-
-    X = df_clean[cols_disp]
-    y = df_clean[target_col]
-
-    # Standardizza i predittori per ottenere coefficienti confrontabili
-    scaler = StandardScaler()
+    scaler   = StandardScaler()
     X_scaled = pd.DataFrame(
-        scaler.fit_transform(X),
-        columns=cols_disp,
-        index=X.index
+        scaler.fit_transform(df_clean[cols_disp]),
+        columns=cols_disp, index=df_clean.index
     )
+    X_sm  = sm.add_constant(X_scaled)
+    model = sm.OLS(df_clean["ILI_NORM"], X_sm).fit()
 
-    X_sm = sm.add_constant(X_scaled)
-    modello = sm.OLS(y, X_sm).fit()
-
-    print("\n" + modello.summary().as_text())
+    print(model.summary().as_text())
 
     # Salva tabella coefficienti
     df_coef = pd.DataFrame({
-        "Variabile":    modello.params.index,
-        "Coefficiente": modello.params.values,
-        "Std_err":      modello.bse.values,
-        "t_stat":       modello.tvalues.values,
-        "p_value":      modello.pvalues.values,
-        "IC95_low":     modello.conf_int()[0].values,
-        "IC95_high":    modello.conf_int()[1].values,
+        "Variabile":    model.params.index,
+        "Coefficiente": model.params.values.round(4),
+        "Std_err":      model.bse.values.round(4),
+        "t_stat":       model.tvalues.values.round(4),
+        "p_value":      model.pvalues.values.round(4),
+        "IC95_low":     model.conf_int()[0].values.round(4),
+        "IC95_high":    model.conf_int()[1].values.round(4),
     })
     df_coef = df_coef[df_coef["Variabile"] != "const"]
-    df_coef.to_csv(OUT_DIR / "ols_coefficienti.csv", index=False)
-    print(f"\n  💾 Coefficienti OLS salvati: ols_coefficienti.csv")
+    df_coef.to_csv(out_dir / "ols_coefficienti.csv", index=False)
 
     # Forest plot coefficienti OLS
     fig, ax = plt.subplots(figsize=(8, max(4, len(df_coef) * 0.7)))
-    y_pos = range(len(df_coef))
-
-    for i, row in df_coef.iterrows():
-        sig = row["p_value"] < 0.05
-        colore = "#2980b9" if sig else "#95a5a6"
+    for i, (_, row) in enumerate(df_coef.iterrows()):
+        colore = "#2980b9" if row["p_value"] < 0.05 else "#95a5a6"
         ax.errorbar(
-            x=row["Coefficiente"], y=list(y_pos)[list(df_coef.index).index(i)],
-            xerr=[[row["Coefficiente"] - row["IC95_low"]],
-                  [row["IC95_high"] - row["Coefficiente"]]],
+            x=row["Coefficiente"], y=i,
+            xerr=[[row["Coefficiente"]-row["IC95_low"]],
+                  [row["IC95_high"]-row["Coefficiente"]]],
             fmt="o", color=colore, capsize=4, markersize=7, linewidth=1.5
         )
-
     ax.axvline(0, color="black", linestyle="--", linewidth=1, alpha=0.7)
-    ax.set_yticks(list(y_pos))
+    ax.set_yticks(range(len(df_coef)))
     ax.set_yticklabels(df_coef["Variabile"].tolist())
     ax.set_xlabel("Coefficiente OLS standardizzato (IC 95%)", fontsize=10)
     ax.set_title(
-        f"OLS multiplo — effetto netto su %ILI (R²={modello.rsquared:.3f})\n"
-        f"Blu = p<0.05 | Grigio = p≥0.05 | n={len(df_clean)}",
+        f"OLS multiplo — {label}\n"
+        f"R²={model.rsquared:.3f} | Blu=p<0.05 | Grigio=p≥0.05 | n={len(df_clean)}",
         fontsize=10, fontweight="bold"
     )
     ax.grid(True, alpha=0.3)
     plt.tight_layout()
-    fig.savefig(PLOT_DIR / "02_ols_coefficienti.png", dpi=150)
+    fig.savefig(out_dir / "02_ols_coefficienti.png", dpi=150)
     plt.close(fig)
-    print(f"  ✅ Salvato: 02_ols_coefficienti.png")
 
-    return modello
+    return model
 
 
 # =============================================================================
-# SEZIONE 7 — RIDGE REGRESSION CON CROSS-VALIDATION TEMPORALE
+# SEZIONE 6 — LIVELLO 2B: RIDGE + LEAVE-ONE-SEASON-OUT CV
 # =============================================================================
 
 def modello_ridge_cv(df: pd.DataFrame, cols_pred: list[str],
-                     target_col: str = "ILI_NORM") -> None:
+                      out_dir: Path, label: str) -> dict:
     """
-    Ridge Regression con LeaveOneGroupOut cross-validation per serie temporali.
+    Ridge Regression con LeaveOneGroupOut cross-validation.
 
-    PERCHÉ Ridge invece di OLS puro:
-        Ridge aggiunge una penalità L2 ai coefficienti, riducendoli verso zero.
-        Questo gestisce la multicollinearità (variabili ambientali correlate)
-        senza escludere manualmente variabili. Dal corso §7.3.1:
-        "For any regression problem with a high-dimensional feature set,
-        regularised variants should be preferred over standard linear regression."
+    Perché Ridge:
+        Gestisce la multicollinearità tra predittori ambientali
+        aggiungendo una penalità L2 che riduce i coefficienti verso zero
+        senza escludere variabili. Dal corso §7.3.1: "regularised variants
+        should be preferred" con feature set correlato.
 
-    PERCHÉ LeaveOneGroupOut:
+    Perché LeaveOneGroupOut (non k-fold random):
         Dal corso §7.5.2: "Shuffling must not be applied to time series."
-        Con LeaveOneGroupOut, ogni fold usa 3 stagioni per addestrare e
-        1 stagione per testare. Questo rispetta l'ordine temporale e simula
-        la previsione reale: il modello non "vede" la stagione di test.
+        LOGO-CV usa ogni stagione come fold di test: addestra su 3 stagioni,
+        testa sulla 4ª. Simula la previsione reale su stagioni non viste.
+        Con 4 stagioni → 4 fold → alta varianza della stima (dichiararlo).
 
-        Con 4 stagioni → 4 fold. La varianza dell'R² sarà alta (normale
-        con pochi fold): dichiararlo nel report.
+    Standardizzazione fit-sul-train-only:
+        Lo StandardScaler viene fittato SOLO sul training set di ogni fold
+        e poi applicato al test. Questo evita il data leakage: se si
+        standardizzasse sull'intero dataset, il test "vedrebbe" informazioni
+        future attraverso la media e la SD globali.
 
-    OUTPUT:
-        - R² per ogni fold (stagione test)
-        - Coefficienti medi standardizzati (feature importance)
-        - Grafico predicted vs actual
-        - Grafico importanza feature Ridge
+    Returns: dizionario con R² per fold e coefficienti medi.
     """
-    print("\n" + "─" * 55)
-    print("📐 RIDGE REGRESSION + LeaveOneGroupOut CV")
-    print("─" * 55)
-
     cols_disp = [c for c in cols_pred if c in df.columns]
-    df_clean = df[["STAGIONE", target_col] + cols_disp].dropna().copy()
+    df_clean  = df[["STAGIONE", "ILI_NORM"] + cols_disp].dropna().copy()
 
-    X = df_clean[cols_disp].values
-    y = df_clean[target_col].values
-    gruppi = df_clean["STAGIONE"].values  # una stagione = un gruppo
-
+    X       = df_clean[cols_disp].values
+    y       = df_clean["ILI_NORM"].values
+    gruppi  = df_clean["STAGIONE"].values
     stagioni_uniche = df_clean["STAGIONE"].unique()
-    print(f"  Osservazioni: {len(df_clean)} | Stagioni: {list(stagioni_uniche)}")
-    print(f"  Predittori: {cols_disp}")
 
-    # Standardizza i predittori
-    scaler = StandardScaler()
+    print(f"\n  Ridge LOGO-CV: {len(df_clean)} obs, "
+          f"stagioni: {list(stagioni_uniche)}")
 
-    # ── Cross-validation temporale ────────────────────────────────────────────
-    logo = LeaveOneGroupOut()
-    r2_per_fold = []
-    coef_per_fold = []
-    y_pred_tutti = np.full(len(y), np.nan)
-    y_true_tutti = y.copy()
+    logo            = LeaveOneGroupOut()
+    r2_per_fold     = []
+    coef_per_fold   = []
+    y_pred_tutti    = np.full(len(y), np.nan)
 
-    for fold_idx, (train_idx, test_idx) in enumerate(logo.split(X, y, gruppi)):
+    for train_idx, test_idx in logo.split(X, y, gruppi):
         stagione_test = gruppi[test_idx][0]
 
-        X_train = X[train_idx]
-        X_test  = X[test_idx]
-        y_train = y[train_idx]
-        y_test  = y[test_idx]
+        X_train, X_test = X[train_idx], X[test_idx]
+        y_train, y_test = y[train_idx], y[test_idx]
 
-        # Standardizza sul train, applica al test (evita data leakage)
-        scaler_fold = StandardScaler()
-        X_train_s = scaler_fold.fit_transform(X_train)
-        X_test_s  = scaler_fold.transform(X_test)
+        # Standardizza solo sul training (evita data leakage)
+        scaler_fold  = StandardScaler()
+        X_train_s    = scaler_fold.fit_transform(X_train)
+        X_test_s     = scaler_fold.transform(X_test)
 
-        # RidgeCV sceglie automaticamente il miglior alpha
         ridge = RidgeCV(alphas=ALPHAS_RIDGE)
         ridge.fit(X_train_s, y_train)
-
         y_pred = ridge.predict(X_test_s)
         y_pred_tutti[test_idx] = y_pred
 
         r2 = r2_score(y_test, y_pred)
-        r2_per_fold.append({"Stagione_test": stagione_test, "R2": round(r2, 4),
-                             "Alpha_scelto": ridge.alpha_})
+        r2_per_fold.append({
+            "ATS":           label,
+            "Stagione_test": stagione_test,
+            "R2":            round(r2, 4),
+            "Alpha_scelto":  ridge.alpha_,
+        })
         coef_per_fold.append(ridge.coef_)
+        print(f"  Fold test={stagione_test}: R²={r2:.4f}, alpha={ridge.alpha_}")
 
-        print(f"  Fold {fold_idx+1}: test={stagione_test}, "
-              f"R²={r2:.4f}, alpha={ridge.alpha_}")
-
-    # Coefficienti medi tra fold (feature importance media)
     coef_medio = np.mean(coef_per_fold, axis=0)
     coef_std   = np.std(coef_per_fold, axis=0)
 
-    df_ridge_coef = pd.DataFrame({
-        "Variabile":    cols_disp,
-        "Coef_medio":   coef_medio.round(4),
-        "Coef_std":     coef_std.round(4),
-        "Importanza":   np.abs(coef_medio).round(4),
+    df_ridge = pd.DataFrame({
+        "Variabile":  cols_disp,
+        "Coef_medio": coef_medio.round(4),
+        "Coef_std":   coef_std.round(4),
+        "Importanza": np.abs(coef_medio).round(4),
     }).sort_values("Importanza", ascending=False)
 
-    df_ridge_coef.to_csv(OUT_DIR / "ridge_coefficienti.csv", index=False)
-
     df_cv = pd.DataFrame(r2_per_fold)
-    df_cv.to_csv(OUT_DIR / "performance_cv.csv", index=False)
+    df_ridge.to_csv(out_dir / "ridge_coefficienti.csv", index=False)
+    df_cv.to_csv(out_dir / "performance_cv.csv", index=False)
 
-    print(f"\n  R² medio: {df_cv['R2'].mean():.4f} ± {df_cv['R2'].std():.4f}")
-    print(f"  ⚠ Con 4 fold, la stima è instabile — risultati esplorativi")
+    r2_medio = df_cv["R2"].mean()
+    r2_std   = df_cv["R2"].std()
+    print(f"  R² medio: {r2_medio:.4f} ± {r2_std:.4f}")
+    print(f"  ⚠ 4 fold → stima instabile. Risultati esplorativi.")
 
-    # ── Grafico 1: importanza feature Ridge ───────────────────────────────────
-    fig, ax = plt.subplots(figsize=(8, max(4, len(df_ridge_coef) * 0.7)))
-    colori = ["#c0392b" if c > 0 else "#2980b9" for c in df_ridge_coef["Coef_medio"]]
-
-    ax.barh(df_ridge_coef["Variabile"], df_ridge_coef["Coef_medio"],
-            xerr=df_ridge_coef["Coef_std"], color=colori, alpha=0.8,
+    # Grafico importanza feature Ridge
+    fig, ax = plt.subplots(figsize=(8, max(4, len(df_ridge) * 0.7)))
+    colori = ["#c0392b" if c > 0 else "#2980b9" for c in df_ridge["Coef_medio"]]
+    ax.barh(df_ridge["Variabile"], df_ridge["Coef_medio"],
+            xerr=df_ridge["Coef_std"], color=colori, alpha=0.8,
             capsize=4, edgecolor="white")
     ax.axvline(0, color="black", linewidth=0.8, linestyle="--")
-    ax.set_xlabel("Coefficiente Ridge standardizzato medio (±SD tra fold)", fontsize=10)
+    ax.set_xlabel("Coefficiente Ridge std. medio (±SD tra fold)", fontsize=10)
     ax.set_title(
-        "Feature importance — Ridge Regression\n"
-        "Rosso = associazione positiva con ILI | Blu = associazione negativa\n"
-        "Barre = variabilità tra stagioni",
+        f"Feature importance Ridge — {label}\n"
+        f"R²={r2_medio:.3f}±{r2_std:.3f} | Rosso=+ILI | Blu=-ILI",
         fontsize=10, fontweight="bold"
     )
     ax.grid(True, alpha=0.3)
     plt.tight_layout()
-    fig.savefig(PLOT_DIR / "03_ridge_coefficienti.png", dpi=150)
+    fig.savefig(out_dir / "03_ridge_coefficienti.png", dpi=150)
     plt.close(fig)
 
-    # ── Grafico 2: predicted vs actual ────────────────────────────────────────
-    mask_valid = ~np.isnan(y_pred_tutti)
-
+    # Grafico predicted vs actual
+    mask = ~np.isnan(y_pred_tutti)
     fig, ax = plt.subplots(figsize=(7, 6))
     scatter = ax.scatter(
-        y_true_tutti[mask_valid], y_pred_tutti[mask_valid],
-        c=pd.factorize(gruppi[mask_valid])[0],
-        cmap="tab10", alpha=0.7, s=50, edgecolors="white", linewidth=0.5
+        y[mask], y_pred_tutti[mask],
+        c=pd.factorize(gruppi[mask])[0],
+        cmap="tab10", alpha=0.7, s=50,
+        edgecolors="white", linewidth=0.5
     )
+    lim_min = min(y[mask].min(), y_pred_tutti[mask].min()) * 0.9
+    lim_max = max(y[mask].max(), y_pred_tutti[mask].max()) * 1.1
+    ax.plot([lim_min, lim_max], [lim_min, lim_max],
+            "k--", lw=1.5, label="Perfetto (pred=actual)")
+    r2_glob = r2_score(y[mask], y_pred_tutti[mask])
 
-    # Linea di riferimento perfetta (predicted = actual)
-    lim_min = min(y_true_tutti[mask_valid].min(), y_pred_tutti[mask_valid].min()) * 0.9
-    lim_max = max(y_true_tutti[mask_valid].max(), y_pred_tutti[mask_valid].max()) * 1.1
-    ax.plot([lim_min, lim_max], [lim_min, lim_max], "k--", lw=1.5,
-            label="Perfetto (pred = actual)")
-
-    r2_globale = r2_score(y_true_tutti[mask_valid], y_pred_tutti[mask_valid])
-    ax.set_xlabel("ILI reale (%ILI)", fontsize=11)
-    ax.set_ylabel("ILI predetto (%ILI)", fontsize=11)
-    ax.set_title(
-        f"Predicted vs Actual — Ridge + LOGO-CV\n"
-        f"R² globale = {r2_globale:.3f} | Colori = stagioni diverse",
-        fontsize=10, fontweight="bold"
-    )
-    ax.legend(fontsize=9)
-    ax.grid(True, alpha=0.3)
-
-    # Legenda stagioni
+    # Legenda colori stagioni
     stagioni_list = sorted(df_clean["STAGIONE"].unique())
-    patches = [mpatches.Patch(color=plt.cm.tab10(i / 9), label=s)
+    patches = [mpatches.Patch(color=plt.cm.tab10(i/9), label=s)
                for i, s in enumerate(stagioni_list)]
     ax.legend(handles=patches, title="Stagione", fontsize=8, loc="upper left")
 
+    ax.set_xlabel("%ILI reale", fontsize=11)
+    ax.set_ylabel("%ILI predetto", fontsize=11)
+    ax.set_title(
+        f"Predicted vs Actual — {label}\n"
+        f"R² globale (LOGO-CV) = {r2_glob:.3f}",
+        fontsize=10, fontweight="bold"
+    )
+    ax.grid(True, alpha=0.3)
     plt.tight_layout()
-    fig.savefig(PLOT_DIR / "05_predicted_vs_actual.png", dpi=150)
+    fig.savefig(out_dir / "05_predicted_vs_actual.png", dpi=150)
     plt.close(fig)
 
-    print(f"  ✅ Salvati: 03_ridge_coefficienti.png, 05_predicted_vs_actual.png")
-    print(f"  💾 Salvati: ridge_coefficienti.csv, performance_cv.csv")
+    return {
+        "label":      label,
+        "r2_medio":   r2_medio,
+        "r2_std":     r2_std,
+        "df_ridge":   df_ridge,
+        "df_cv":      df_cv,
+    }
 
 
 # =============================================================================
-# SEZIONE 8 — RANDOM FOREST + SHAP (LIVELLO 3: ESPLORATIVO)
+# SEZIONE 7 — LIVELLO 3: RANDOM FOREST + SHAP (ESPLORATIVO)
 # =============================================================================
 
-def modello_random_forest_shap(df: pd.DataFrame, cols_pred: list[str],
-                                target_col: str = "ILI_NORM") -> None:
+def modello_rf_shap(df: pd.DataFrame, cols_pred: list[str],
+                     out_dir: Path, label: str) -> None:
     """
-    Random Forest con SHAP values per l'interpretabilità.
+    Random Forest + SHAP values per esplorare pattern non-lineari.
 
-    CONTESTO (Capitolo 7 del corso, §7.7):
-        SHAP (SHapley Additive exPlanations) è il metodo XAI più adottato.
-        Ogni SHAP value rappresenta il contributo marginale medio di una
-        feature alla previsione, rispetto alla baseline (media del dataset).
-
-        Il SHAP summary plot mostra:
-        - Asse Y: feature ordinate per importanza (SHAP medio assoluto)
+    Contesto (§7.7 del corso):
+        SHAP assegna a ogni feature il contributo marginale medio
+        alla previsione. Il summary plot mostra:
+        - Asse Y: feature per importanza (SHAP medio assoluto)
         - Asse X: valore SHAP per ogni osservazione
-        - Colore: valore della feature (rosso = alto, blu = basso)
+        - Colore: valore feature (rosso=alto, blu=basso)
 
-        Un cluster di punti rossi a destra (SHAP > 0) significa:
-        "Valori alti di questa feature aumentano la previsione di ILI."
-
-    ⚠ DISCLAIMER IMPORTANTE (da includere nel report):
-        Con n~80 osservazioni, Random Forest è al limite dell'applicabilità.
-        max_depth=3 limita la complessità ma non elimina il rischio di
-        overfitting. I risultati SHAP sono qui usati solo per esplorare
-        pattern non-lineari, NON per conclusioni causali.
-        Il modello principale resta Ridge (Sezione 7).
-
-        Dal corso §7.1: "classical statistical approaches often outperform ML
-        when data are limited."
+    ⚠ DISCLAIMER (obbligatorio nel report):
+        Con n~80, Random Forest è al limite dell'applicabilità.
+        max_depth=3 limita la complessità ma non elimina l'overfitting.
+        Dal corso §7.1: "classical statistical approaches often outperform
+        ML when data are limited."
+        I risultati SHAP qui sono esplorativi — il modello principale è Ridge.
     """
     if not SHAP_DISPONIBILE:
-        print("\n  ⚠ SHAP non disponibile — sezione saltata.")
+        print(f"  ⚠ SHAP non disponibile — sezione saltata per {label}.")
         return
 
-    print("\n" + "─" * 55)
-    print("🌲 RANDOM FOREST + SHAP (ESPLORATIVO — n piccolo)")
-    print("─" * 55)
-    print("  ⚠ Con ~80 osservazioni, RF è esplorativo. Modello principale = Ridge.")
-
     cols_disp = [c for c in cols_pred if c in df.columns]
-    df_clean = df[[target_col] + cols_disp].dropna().copy()
+    df_clean  = df[["ILI_NORM"] + cols_disp].dropna().copy()
 
-    X = df_clean[cols_disp]
-    y = df_clean[target_col]
-
-    scaler = StandardScaler()
+    scaler   = StandardScaler()
     X_scaled = pd.DataFrame(
-        scaler.fit_transform(X), columns=cols_disp, index=X.index
+        scaler.fit_transform(df_clean[cols_disp]),
+        columns=cols_disp, index=df_clean.index
     )
+    y = df_clean["ILI_NORM"]
 
-    # Addestra RF su tutto il dataset (per SHAP globale)
-    # max_depth=3 è volutamente basso per limitare overfitting con n piccolo
     rf = RandomForestRegressor(
         n_estimators=RF_N_TREES,
         max_depth=RF_MAX_DEPTH,
@@ -1020,33 +827,128 @@ def modello_random_forest_shap(df: pd.DataFrame, cols_pred: list[str],
         n_jobs=-1
     )
     rf.fit(X_scaled, y)
-
     r2_train = r2_score(y, rf.predict(X_scaled))
-    print(f"  R² su training (ATTENZIONE: ottimistico per n piccolo): {r2_train:.4f}")
+    print(f"  RF R² training (ottimistico per n piccolo): {r2_train:.4f}")
 
-    # SHAP values
     explainer   = shap.TreeExplainer(rf)
     shap_values = explainer.shap_values(X_scaled)
 
-    # SHAP summary plot
-    fig, ax = plt.subplots(figsize=(9, max(5, len(cols_disp) * 0.6 + 2)))
+    # Nota: shap.summary_plot() gestisce internamente la figura.
+    # Non passiamo `ax` perché versioni vecchie di shap non lo accettano.
+    # Usiamo plot_size per controllare le dimensioni, poi salviamo con
+    # plt.savefig() prima che show=False chiuda la figura.
     shap.summary_plot(
         shap_values, X_scaled,
         feature_names=cols_disp,
         show=False,
-        plot_size=None,
-        ax=ax
+        plot_size=(9, max(5, len(cols_disp) * 0.6 + 2))
     )
-    ax.set_title(
-        "SHAP Summary Plot — Random Forest (ESPLORATIVO)\n"
-        "⚠ n~80: risultati instabili, solo esplorativo. Modello principale = Ridge.",
+    # Aggiunge il titolo alla figura corrente creata da shap
+    plt.title(
+        f"SHAP Summary — {label} (ESPLORATIVO)\n"
+        f"⚠ n~80: instabile. Modello principale = Ridge.",
         fontsize=10, fontweight="bold"
     )
     plt.tight_layout()
-    fig.savefig(PLOT_DIR / "04_shap_summary.png", dpi=150, bbox_inches="tight")
-    plt.close(fig)
+    plt.savefig(out_dir / "04_shap_summary.png", dpi=150, bbox_inches="tight")
+    plt.close()
+    print(f"  ✅ SHAP salvato: 04_shap_summary.png")
 
-    print(f"  ✅ Salvato: 04_shap_summary.png")
+
+# =============================================================================
+# SEZIONE 8 — CONFRONTO COMPARATIVO TRA LE TRE ATS
+# =============================================================================
+
+def confronto_ats(risultati: list[dict]) -> None:
+    """
+    Produce due grafici comparativi tra le tre ATS:
+
+    Grafico 1 — R² LOGO-CV per ATS:
+        Confronta la performance predittiva del modello Ridge nelle
+        tre ATS. Un R² più alto in una ATS suggerisce che i fattori
+        ambientali spiegano meglio l'ILI in quel contesto geografico.
+        ATTENZIONE: con 4 fold la varianza è alta — non sovra-interpretare
+        le differenze di R² tra ATS.
+
+    Grafico 2 — Feature importance Ridge per ATS (heatmap):
+        Mappa il coefficiente Ridge medio di ogni variabile per ogni ATS.
+        Permette di vedere se il peso relativo dei fattori ambientali
+        varia tra contesti geografici diversi (es. PM2.5 più importante
+        in pianura padana che in montagna — coerente con la letteratura).
+        Questo è il grafico più interessante per la discussion del report.
+    """
+    if not risultati:
+        return
+
+    print("\n" + "─" * 55)
+    print("📊 CONFRONTO COMPARATIVO TRA LE TRE ATS")
+    print("─" * 55)
+
+    # ── Grafico 1: R² per ATS ─────────────────────────────────────────────
+    fig, ax = plt.subplots(figsize=(8, 5))
+    labels   = [r["label"] for r in risultati]
+    r2_medi  = [r["r2_medio"] for r in risultati]
+    r2_stds  = [r["r2_std"]   for r in risultati]
+    colori   = ["#2980b9", "#27ae60", "#c0392b"]
+
+    bars = ax.bar(labels, r2_medi, yerr=r2_stds, color=colori,
+                  alpha=0.8, capsize=6, edgecolor="white", linewidth=1.2)
+    ax.axhline(0, color="black", linewidth=0.8, linestyle="--", alpha=0.5)
+    ax.set_ylabel("R² medio LOGO-CV (±SD tra fold)", fontsize=11)
+    ax.set_title(
+        "Performance predittiva Ridge — confronto tra ATS\n"
+        "⚠ 4 fold per ATS: alta varianza, interpretare con cautela",
+        fontsize=11, fontweight="bold"
+    )
+    for bar, r2, std in zip(bars, r2_medi, r2_stds):
+        ax.text(bar.get_x() + bar.get_width()/2,
+                bar.get_height() + std + 0.01,
+                f"{r2:.3f}", ha="center", va="bottom", fontsize=10)
+    ax.set_ylim(bottom=min(0, min(r2_medi) - 0.1))
+    ax.grid(True, alpha=0.3, axis="y")
+    plt.tight_layout()
+    fig.savefig(OUT_BASE / "confronto_r2_cv.png", dpi=150)
+    plt.close(fig)
+    print(f"  ✅ Salvato: confronto_r2_cv.png")
+
+    # ── Grafico 2: heatmap feature importance ─────────────────────────────
+    # Costruisce una matrice: righe = variabili, colonne = ATS
+    variabili_all = set()
+    for r in risultati:
+        variabili_all.update(r["df_ridge"]["Variabile"].tolist())
+    variabili_all = sorted(variabili_all)
+
+    mat = pd.DataFrame(index=variabili_all, columns=labels, dtype=float)
+    for r in risultati:
+        for _, row in r["df_ridge"].iterrows():
+            mat.loc[row["Variabile"], r["label"]] = row["Coef_medio"]
+
+    fig, ax = plt.subplots(figsize=(max(8, len(labels)*2.5),
+                                    max(5, len(variabili_all)*0.6)))
+    sns.heatmap(mat.astype(float), annot=True, fmt=".3f",
+                cmap="coolwarm", center=0, ax=ax,
+                linewidths=0.5, cbar_kws={"label": "Coeff. Ridge std."})
+    ax.set_title(
+        "Feature importance Ridge per ATS\n"
+        "Rosso = associazione positiva con %ILI | Blu = negativa",
+        fontsize=11, fontweight="bold"
+    )
+    plt.tight_layout()
+    fig.savefig(OUT_BASE / "confronto_ridge_importanza.png", dpi=150)
+    plt.close(fig)
+    print(f"  ✅ Salvato: confronto_ridge_importanza.png")
+
+    # ── CSV riepilogativo ─────────────────────────────────────────────────
+    rows = []
+    for r in risultati:
+        rows.append({
+            "ATS":       r["label"],
+            "R2_medio":  round(r["r2_medio"], 4),
+            "R2_std":    round(r["r2_std"], 4),
+            "N_stagioni": len(r["df_cv"]),
+        })
+    pd.DataFrame(rows).to_csv(OUT_BASE / "riepilogo_comparativo_ats.csv", index=False)
+    print(f"  ✅ Salvato: riepilogo_comparativo_ats.csv")
 
 
 # =============================================================================
@@ -1055,72 +957,87 @@ def modello_random_forest_shap(df: pd.DataFrame, cols_pred: list[str],
 
 def main() -> None:
     print("\n" + "=" * 65)
-    print("SCRIPT 7 — MODELLO MULTIVARIATO FATTORI AMBIENTALI vs ILI")
+    print("SCRIPT 7 — MODELLO MULTIVARIATO AMBIENTE vs ILI")
+    print("ATS Milano | ATS Bergamo | ATS Montagna")
     print("=" * 65)
-    print(
-        "\n  GERARCHIA METODOLOGICA:\n"
-        "  Livello 1 (sempre): Correlazione predittori + Odds Ratio\n"
-        "  Livello 2 (principale): OLS multiplo + Ridge con LOGO-CV\n"
-        "  Livello 3 (esplorativo): Random Forest + SHAP\n"
-    )
 
-    # ── 1. Costruisci dataset ─────────────────────────────────────────────────
-    try:
-        df, cols_pred = costruisci_dataset()
-    except FileNotFoundError as e:
-        print(f"\n❌ {e}")
-        return
+    # Carica i lag ottimali una volta sola (condivisi tra ATS)
+    print("\n📂 Caricamento lag ottimali (Script 4)...")
+    lag_map = carica_lag_ottimali()
 
-    if df.empty or len(df) < 20:
-        print(f"\n❌ Dataset troppo piccolo ({len(df)} righe) — impossibile procedere.")
-        return
+    risultati_ridge = []  # raccoglie i risultati per il confronto finale
 
-    # ── 2. Livello 1: analisi esplorativa ─────────────────────────────────────
-    print("\n" + "=" * 65)
-    print("LIVELLO 1 — ANALISI ESPLORATIVA")
-    print("=" * 65)
-    analisi_correlazione(df, cols_pred)
-    df_or = calcola_odds_ratio(df, cols_pred)
-    print("\n  Odds Ratio calcolati:")
-    print(df_or[["Variabile", "OR", "IC95_low", "IC95_high", "Significativo"]].to_string(index=False))
+    # ── Pipeline per ogni ATS ────────────────────────────────────────────────
+    for ats_key, cfg in ATS_CONFIG.items():
 
-    # ── 3. Livello 2: OLS ─────────────────────────────────────────────────────
-    print("\n" + "=" * 65)
-    print("LIVELLO 2A — OLS MULTIPLO (statsmodels)")
-    print("=" * 65)
-    modello_ols(df, cols_pred)
+        print(f"\n\n{'='*65}")
+        print(f"  ELABORAZIONE: {ats_key}  ({cfg['label']})")
+        print(f"{'='*65}")
 
-    # ── 4. Livello 2: Ridge + CV temporale ───────────────────────────────────
-    print("\n" + "=" * 65)
-    print("LIVELLO 2B — RIDGE + LeaveOneGroupOut CV")
-    print("=" * 65)
-    modello_ridge_cv(df, cols_pred)
+        # Crea cartella output per questa ATS
+        out_dir = OUT_BASE / ats_key
+        out_dir.mkdir(parents=True, exist_ok=True)
+        plot_dir = out_dir / "grafici"
+        plot_dir.mkdir(exist_ok=True)
 
-    # ── 5. Livello 3: RF + SHAP ───────────────────────────────────────────────
-    print("\n" + "=" * 65)
-    print("LIVELLO 3 — RANDOM FOREST + SHAP (ESPLORATIVO)")
-    print("=" * 65)
-    modello_random_forest_shap(df, cols_pred)
+        # ── Costruisci dataset ──────────────────────────────────────────
+        df, cols_pred = costruisci_dataset_ats(ats_key, cfg, lag_map)
 
-    # ── 6. Riepilogo finale ───────────────────────────────────────────────────
+        if df.empty or len(df) < 15:
+            print(f"  ❌ Dataset troppo piccolo ({len(df)} righe) — ATS saltata.")
+            continue
+
+        # Salva dataset per riproducibilità
+        df.to_csv(out_dir / "dataset_unificato.csv", index=False)
+
+        # ── Livello 1: analisi esplorativa ─────────────────────────────
+        print(f"\n  --- LIVELLO 1: Correlazione + OR ---")
+        analisi_correlazione(df, cols_pred, plot_dir, cfg["label"])
+        df_or = calcola_odds_ratio(df, cols_pred, plot_dir, cfg["label"])
+        print(df_or[["Variabile","OR","IC95_low","IC95_high","Significativo"]]
+              .to_string(index=False))
+
+        # ── Livello 2A: OLS ────────────────────────────────────────────
+        print(f"\n  --- LIVELLO 2A: OLS multiplo ---")
+        modello_ols(df, cols_pred, plot_dir, cfg["label"])
+
+        # ── Livello 2B: Ridge + LOGO-CV ────────────────────────────────
+        print(f"\n  --- LIVELLO 2B: Ridge + LOGO-CV ---")
+        res = modello_ridge_cv(df, cols_pred, plot_dir, cfg["label"])
+        risultati_ridge.append(res)
+
+        # Copia i CSV nella cartella ATS (non solo in grafici/)
+        for csv_file in plot_dir.parent.glob("*.csv"):
+            pass  # già salvati in out_dir direttamente
+
+        # ── Livello 3: RF + SHAP ───────────────────────────────────────
+        print(f"\n  --- LIVELLO 3: Random Forest + SHAP (esplorativo) ---")
+        modello_rf_shap(df, cols_pred, plot_dir, cfg["label"])
+
+        print(f"\n  ✅ {ats_key} completata → {out_dir}")
+
+    # ── Confronto finale tra ATS ─────────────────────────────────────────────
+    if len(risultati_ridge) > 1:
+        confronto_ats(risultati_ridge)
+
+    # ── Riepilogo output ─────────────────────────────────────────────────────
     print("\n" + "=" * 65)
     print("✅ SCRIPT 7 COMPLETATO")
-    print(f"\n📂 Output salvati in: {OUT_DIR}")
-    print(f"📂 Grafici salvati in: {PLOT_DIR}")
-    print("\nFile prodotti:")
-    for f in sorted(OUT_DIR.rglob("*")):
+    print(f"\n📂 Output in: {OUT_BASE}")
+    print("\nStruttura file prodotti:")
+    for f in sorted(OUT_BASE.rglob("*")):
         if f.is_file():
-            print(f"  └─ {f.relative_to(OUT_DIR)}")
+            print(f"  └─ {f.relative_to(OUT_BASE)}")
 
     print("\n" + "─" * 65)
-    print("⚠ NOTA PER IL REPORT — BIAS DA DICHIARARE:")
+    print("⚠ BIAS DA DICHIARARE NEL REPORT:")
     print("  1. Bias ecologico: dati aggregati ATS, non individuali")
-    print("  2. n~80 osservazioni: risultati esplorativi, non conclusivi")
-    print("  3. Autocorrelazione: OLS assume residui indipendenti (violato)")
-    print("     → mitigato con termine autoregressivo ILI_lag1")
-    print("  4. 4 fold LOGO-CV: stima performance intrinsecamente instabile")
-    print("  5. Random Forest: solo esplorativo (n piccolo → overfitting)")
-    print("  6. Confounding non misurato: vaccinazioni, varianti virali")
+    print("  2. n~80 per ATS: risultati esplorativi, non conclusivi")
+    print("  3. Autocorrelazione residui OLS → mitigata con ILI_lag1")
+    print("  4. Dati ARPA condivisi tra ATS (non stratificati per territorio)")
+    print("  5. Lag uniformi tra ATS (stimati su ATS Milano da Script 4)")
+    print("  6. 4 fold LOGO-CV: varianza della stima R² elevata")
+    print("  7. RF + SHAP solo esplorativo (n piccolo → overfitting)")
     print("─" * 65)
 
 
