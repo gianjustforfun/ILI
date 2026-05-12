@@ -18,40 +18,46 @@ PREREQUISITI:
   Credenziali in ~/.cdsapirc (vedi README)
 
 OUTPUT:
-  era5_ats.nc  (~2-5 MB per stagione, stima)
+  era5_ats.nc  — copre ottobre 2021 → aprile 2026
+
+NOTA SUL PERIODO:
+  Le stagioni influenzali di interesse vanno da ottobre 2021 ad aprile 2026.
+  Questo significa scaricare anni 2021-2026 per i mesi ott-apr.
+  Es: stagione 2021/22 → ott 2021 (anno 2021) + nov 2021-apr 2022 (anno 2022)
+  Il file copre tutto il range in un'unica richiesta.
 """
 
 import cdsapi
 import os
 
 # ---------------------------------------------------------------------------
-# CONFIGURAZIONE — MODIFICATE QUESTI PARAMETRI
+# CONFIGURAZIONE
 # ---------------------------------------------------------------------------
 
-# Anni delle stagioni influenzali che volete analizzare.
-# Una "stagione" va da ottobre ANNO a aprile ANNO+1.
-# Esempio: stagione 2022/23 → anni ['2022', '2023'], mesi ott-apr
-ANNI = ['2022', '2023', '2024']   # <-- adattate ai vostri dati ILI
+# Anni necessari per coprire le stagioni influenzali 2021/22 → 2025/26:
+#   stagione 2021/22 → ottobre 2021 ... aprile 2022
+#   stagione 2022/23 → ottobre 2022 ... aprile 2023
+#   stagione 2023/24 → ottobre 2023 ... aprile 2024
+#   stagione 2024/25 → ottobre 2024 ... aprile 2025
+#   stagione 2025/26 → ottobre 2025 ... aprile 2026
+# → servono gli anni 2021, 2022, 2023, 2024, 2025, 2026
+ANNI = ['2021', '2022', '2023', '2024', '2025', '2026']
 
-# Mesi stagione influenzale (ottobre=10 ... aprile=4)
-# Nota: gennaio 2025 appartiene alla stagione 2024/25, quindi includete
-# tutti i mesi che vi servono come range continuo.
-MESI = ['10', '11', '12', '01', '02', '03', '04']
+# Mesi della stagione influenzale (ottobre → aprile)
+MESI = ['01', '02', '03', '04', '10', '11', '12']
 
-# Ora del giorno da scaricare (UTC). Usiamo solo le 12:00.
-# Le 12:00 UTC = 13:00-14:00 ora italiana → buona rappresentatività della T diurna.
-# Se volete la media giornaliera reale, cambiate in ['00:00','06:00','12:00','18:00']
-# ma il file peserà 4 volte tanto.
+# Ora del giorno (UTC). Solo 12:00 → risparmio ~75% vs download orario.
+# 12:00 UTC = 13:00-14:00 ora italiana → buona rappresentatività della T diurna.
 ORA = ['12:00']
 
 # Bounding box [Nord, Ovest, Sud, Est] in gradi decimali.
-# Calcolato per contenere strettamente:
+# Copre strettamente:
 #   - Provincia di Bergamo
 #   - Provincia di Sondrio
-#   - Comuni montagna di Brescia (Val Camonica, fino a Edolo/Ponte di Legno)
-#   - Comuni montagna di Como (Alto Lago di Como, Gravedona area)
-# Margine di 0.1° aggiunto per non troncare celle di bordo.
-BBOX = [46.7,   # Nord  (punta nord di Sondrio / confine CH)
+#   - Comuni montagna di Brescia (Val Camonica, fino a Ponte di Legno)
+#   - Comuni montagna di Como (Alto Lago, area Gravedona)
+# Margine 0.1° per non troncare celle di bordo ERA5.
+BBOX = [46.7,   # Nord  (punta nord Sondrio / confine CH)
         9.3,    # Ovest (Lago di Como occidentale)
         45.4,   # Sud   (confine sud prov. Bergamo)
         10.6]   # Est   (Val Camonica est)
@@ -70,10 +76,15 @@ def main():
     print("Connessione al CDS Copernicus...")
     c = cdsapi.Client()
 
-    print(f"Richiesta dati ERA5 per anni {ANNI}, mesi {MESI}...")
-    print(f"Bounding box: {BBOX}")
-    print("Variabili: 2m_temperature + 2m_dewpoint_temperature")
-    print(f"Ora giornaliera: {ORA} UTC  (solo 1 timestep/giorno → file più leggero)")
+    print(f"Richiesta dati ERA5...")
+    print(f"  Anni  : {ANNI}")
+    print(f"  Mesi  : {MESI}  (solo stagione influenzale ott-apr)")
+    print(f"  Bbox  : {BBOX}")
+    print(f"  Ora   : {ORA} UTC  (1 timestep/giorno)")
+    print(f"  Output: {OUTPUT_FILE}")
+    print()
+    print("⚠️  NOTA: il download copre 6 anni × 7 mesi.")
+    print("   Il CDS potrebbe mettere la richiesta in coda — attesa normale.")
 
     c.retrieve(
         'reanalysis-era5-single-levels',
@@ -81,22 +92,21 @@ def main():
             'product_type': 'reanalysis',
             'variable': [
                 '2m_temperature',           # T in Kelvin
-                '2m_dewpoint_temperature',  # Td in Kelvin, serve per calcolare AH e RH
+                '2m_dewpoint_temperature',  # Td in Kelvin → calcolo AH e RH
             ],
-            'year': ANNI,
+            'year':  ANNI,
             'month': MESI,
-            # Scarica tutti i giorni (i mesi corti semplicemente non avranno il giorno 31)
-            'day': [str(d).zfill(2) for d in range(1, 32)],
-            'time': ORA,
+            # Tutti i giorni: i mesi corti ignorano semplicemente il giorno 31
+            'day':   [str(d).zfill(2) for d in range(1, 32)],
+            'time':  ORA,
             'format': 'netcdf',
-            'area': BBOX,   # ritaglia solo la nostra regione
+            'area':  BBOX,
         },
         OUTPUT_FILE
     )
 
     size_mb = os.path.getsize(OUTPUT_FILE) / (1024 * 1024)
-    print(f"\nDownload completato: {OUTPUT_FILE}  ({size_mb:.1f} MB)")
-
+    print(f"\n✓ Download completato: {OUTPUT_FILE}  ({size_mb:.1f} MB)")
 
 if __name__ == '__main__':
     main()
