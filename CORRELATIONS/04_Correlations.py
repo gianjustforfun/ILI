@@ -6,8 +6,8 @@ SCRIPT 4 — PICCHI E CROSS-CORRELAZIONE AMBIENTE vs ILI ATS
 COSA FA QUESTO SCRIPT:
     Legge i file CSV delle settimane di interesse (già filtrate
     dalla pipeline precedente) per ciascuna variabile ambientale
-    ARPA e il file ili_ats_milano.csv con i dati ILI settimanali
-    di ATS Milano.
+    ARPA e i CSV ILI di ATS Bergamo e ATS Montagna (prodotti dallo Script 1)
+    che vengono sommati per ottenere il totale ILI del territorio Bergamo + Montagna.
 
     L'obiettivo è condurre DUE analisi complementari:
 
@@ -34,106 +34,56 @@ COSA FA QUESTO SCRIPT:
         abbinamento all'analisi 2.
 
     ── ANALISI 2: CROSS-CORRELAZIONE ─────────────────────────
-        Calcola la correlazione di Pearson tra la serie
-        ambientale e la serie ILI sfalsate di un lag
-        variabile da 0 a MAX_LAG_SETTIMANE settimane.
+        Calcola la correlazione tra la serie ambientale e la
+        serie ILI sfalsate di un lag variabile da 0 a
+        MAX_LAG_SETTIMANE settimane.
 
-        Per ogni (variabile, stagione, lag) calcola r di Pearson
-        tra la serie ambientale alla settimana t e la serie ILI
-        alla settimana t + lag.
+        Per ogni (variabile, stagione, lag) calcola DUE misure
+        di correlazione in parallelo:
 
-        NOTA IMPORTANTE per la TEMPERATURA:
-            Per la temperatura il segnale biologico atteso è che
-            temperature PIÙ BASSE precedano picchi ILI. Poiché
-            la correlazione di Pearson è simmetrica rispetto al
-            segno, per la temperatura si usa la serie invertita
-            (-temperatura) in modo che un aumento del segnale
-            corrisponda a "più freddo", rendendo l'interpretazione
-            coerente con le altre variabili (coefficiente positivo
-            = variabile alta precede ILI alto).
+            ▸ r di Pearson
+            ▸ ρ di Spearman
 
-        Per ogni variabile vengono prodotti:
-            - tabella lag vs correlazione media tra stagioni
-            - lag ottimale: quello con la correlazione media più alta
-            - grafico a linee (lag in asse X, r in asse Y) con una
-              linea per stagione e la media evidenziata
+        COME INTERPRETARE I DUE COEFFICIENTI:
+            r ≈ ρ   → relazione lineare e monotona, risultati robusti
+            ρ > r   → relazione monotona ma non lineare; preferire ρ
+            r > ρ   → Pearson spinto da outlier; segnale di allarme
+            entrambi bassi → nessuna relazione stabile a quel lag
 
-        Questo metodo è più robusto dell'analisi 1 perché:
-            a) usa TUTTA la serie stagionale (20 punti), non solo 5 picchi
-            b) non richiede la selezione soggettiva dei picchi
-            c) produce un risultato continuo (r per ogni lag)
-               che permette di identificare il lag con il segnale
-               più forte in modo oggettivo
-            d) non soffre del bias di abbinamento per rango
-
-        Limitazioni:
-            - con 20 punti per stagione la correlazione è instabile:
-              servono |r| > 0.44 per p < 0.05 (test a due code)
-            - il lag ottimale potrebbe variare tra stagioni,
-              riflettendo eterogeneità reale o rumore
-            - NON implica causalità: due serie correlate con lag
-              potrebbero essere entrambe causate da un terzo fattore
+        NOTA per TEMPERATURA:
+            La serie viene invertita (−T) così che un coefficiente
+            positivo significhi "più freddo → più ILI".
 
 STRUTTURA FILE DI INPUT:
     ARPA/SETTIMANE_DI_INTERESSE/
-        HUMIDITY/     HUMIDITY_2022_2023.csv, HUMIDITY_2023_2024.csv, ...
-        NO2/          NO2_2022_2023.csv, ...
-        PM10/         PM10_2022_2023.csv, ...
-        PM25/         PM25_2022_2023.csv, ...
-        TEMPERATURE/  TEMPERATURE_2022_2023.csv, ...
-
-    Tutti i CSV ARPA hanno colonna "Settimana" (numero ISO 48-52, 1-15)
-    più colonne per sensore/ATS.
-    - TEMPERATURE e HUMIDITY: colonne tipo <ATS>_max, <ATS>_media, <ATS>_min
-      → si usa SOLO la colonna "_media" per evitare di mescolare grandezze
-    - PM10, PM25, NO2: una colonna per stazione (struttura piatta)
-      → si usa la media di tutte le stazioni
+        HUMIDITY/TEMPERATURE/PM10/PM25/NO2/
 
     SORVEGLIANZA ACCESSI PS/
-        ili_ats_milano.csv
+        ATS_BERGAMO/ili_ats_bergamo_stagionale.csv   ← Script 1
+        ATS_MONTAGNA/ili_ats_montagna_stagionale.csv ← Script 1
 
-    Struttura ili_ats_milano.csv (wide format):
-        WEEK | 2022 | 2023 | 2024 | 2025 | 2026
-          48 | 1692 | 1252 |  988 | 1353 |  NaN
-         ...
-          15 |  867 |  891 | 1007 |  883 |  866
+    Struttura CSV ILI (long format):
+        STAGIONE | WEEK | ORDINE | ACCESSI_ILI_ATS_<area>
+        22-23    |   48 |      1 |                    352
 
-    CONVENZIONE STAGIONI — punto critico del mapping:
-        La colonna ILI "2022" contiene:
-            - sett. 48-52 di fine 2021  (fisicamente a cavallo tra anni)
-            - sett. 1-15  di inizio 2022
-        Per convenzione la stagione viene chiamata con l'anno in cui TERMINA.
-
-        I file ARPA usano invece il formato "anno_inizio_anno_fine":
-            ARPA "*_2021_2022.csv"  ↔  colonna ILI "2022"
-            ARPA "*_2022_2023.csv"  ↔  colonna ILI "2023"
-            ARPA "*_2023_2024.csv"  ↔  colonna ILI "2024"
-            ARPA "*_2024_2025.csv"  ↔  colonna ILI "2025"
-            ARPA "*_2025_2026.csv"  ↔  colonna ILI "2026"
-
-        Il mapping è gestito dal dizionario STAGIONE_ILI_TO_ARPA.
-
-NOTA METODOLOGICA (bias da dichiarare nel report):
-    - Dati a livello ATS (aggregazione ecologica): non è possibile
-      inferire relazioni causali a livello individuale.
-    - Con ~20 settimane per stagione e 4-5 stagioni disponibili
-      il rischio di spurious correlation è elevato.
-      Tutti i risultati sono descrittivi, non causali.
-    - Soglia indicativa di significatività per r con n=20:
-      |r| > 0.44 per p < 0.05 (test t a due code).
-      Le correlazioni sotto questa soglia non sono interpretabili.
+    CONVENZIONE STAGIONI:
+        Script 1 "21-22"  ↔  ARPA "*_2021_2022.csv"
+        Script 1 "22-23"  ↔  ARPA "*_2022_2023.csv"
+        Script 1 "23-24"  ↔  ARPA "*_2023_2024.csv"
+        Script 1 "24-25"  ↔  ARPA "*_2024_2025.csv"
+        Script 1 "25-26"  ↔  ARPA "*_2025_2026.csv"
 
 OUTPUT:
     CORRELATIONS/output/
         picchi_ambientali_settimane.csv
-        picchi_ili_ats_milano.csv
+        picchi_ili_ats_bergamo_montagna.csv
         abbinamenti_picchi_vs_ili.csv
-        riepilogo_correlazioni_stagionale.csv      ← analisi 1
-        cross_correlazione_per_lag.csv             ← analisi 2
-        cross_correlazione_lag_ottimale.csv        ← analisi 2 (sintesi)
+        riepilogo_correlazioni_stagionale.csv
+        cross_correlazione_per_lag.csv
+        cross_correlazione_lag_ottimale.csv
     CORRELATIONS/output/grafici/
-        <variabile>_vs_ili_<stagione>.png          ← analisi 1
-        xcorr_<variabile>.png                      ← analisi 2
+        <variabile>_vs_ili_<stagione>.png
+        xcorr_<variabile>.png
 
 REQUISITI:
     pip install pandas numpy matplotlib scipy
@@ -149,7 +99,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.signal import find_peaks
-from scipy.stats import pearsonr
+from scipy.stats import pearsonr, spearmanr
 
 warnings.filterwarnings("ignore")
 plt.style.use("seaborn-v0_8-whitegrid")
@@ -162,7 +112,7 @@ BASE_DIR     = Path(__file__).resolve().parent   # .../CORRELATIONS/
 PROJECT_ROOT = BASE_DIR.parent                   # .../ILI/
 
 SETTIMANE_DIR = PROJECT_ROOT / "ARPA" / "SETTIMANE_DI_INTERESSE"
-ILI_DIR       = PROJECT_ROOT / "SORVEGLIANZA ACCESSI PS"
+ILI_DIR       = PROJECT_ROOT / "SORVEGLIANZA ACCESSI PS"/"output"
 OUTPUT_DIR    = BASE_DIR / "output"
 PLOTS_DIR     = OUTPUT_DIR / "grafici"
 
@@ -173,9 +123,6 @@ PLOTS_DIR.mkdir(parents=True, exist_ok=True)
 # CONFIGURAZIONE VARIABILI E STAGIONI
 # =============================================================================
 
-# Mappa: nome variabile -> (sottocartella ARPA, tipo di picco da cercare)
-#   "min" = valori PIÙ BASSI  → TEMPERATURE (freddo intenso)
-#   "max" = valori PIÙ ALTI   → tutto il resto
 VARIABILI: dict[str, tuple[str, str]] = {
     "TEMPERATURE": ("TEMPERATURE", "min"),
     "HUMIDITY":    ("HUMIDITY",    "max"),
@@ -184,156 +131,124 @@ VARIABILI: dict[str, tuple[str, str]] = {
     "NO2":         ("NO2",         "max"),
 }
 
-# Variabili con struttura multi-misura per sensore (colonne _max/_media/_min):
-# per queste si usa SOLO la colonna "_media" per la serie rappresentativa.
 TIPOLOGIE_CON_SOTTOSTAT: set[str] = {"TEMPERATURE", "HUMIDITY"}
 
-# File ILI ATS Milano (wide format, una colonna per stagione)
-ILI_FILE = ILI_DIR / "ili_ats_milano.csv"
+# File ILI — long format prodotti dallo Script 1
+ILI_FILE_BERGAMO  = ILI_DIR / "ATS_BERGAMO"  / "ili_ats_bergamo_stagionale.csv"
+ILI_FILE_MONTAGNA = ILI_DIR / "ATS_MONTAGNA" / "ili_ats_montagna_stagionale.csv"
 
-# Mapping stagione ILI → etichetta stagione ARPA
-# Aggiornare se vengono aggiunte nuove stagioni.
+# Mapping stagione ILI (convenzione "YY-YY" di Script 1) → stagione ARPA ("YYYY_YYYY")
 STAGIONE_ILI_TO_ARPA: dict[str, str] = {
-    "2022": "2021_2022",
-    "2023": "2022_2023",
-    "2024": "2023_2024",
-    "2025": "2024_2025",
-    "2026": "2025_2026",
+    "21-22": "2021_2022",
+    "22-23": "2022_2023",
+    "23-24": "2023_2024",
+    "24-25": "2024_2025",
+    "25-26": "2025_2026",
 }
 
-# ── Parametri analisi 1: picchi ───────────────────────────────────────────────
-TOP_K_PEAKS         = 5     # numero di picchi da selezionare per stagione
-MIN_DISTANCE_WEEKS  = 2     # distanza minima (settimane) tra due picchi consecutivi
-MIN_PROMINENCE_FRAC = 0.15  # fraction * std della serie = prominenza minima adattiva
+# ── Parametri analisi 1 ───────────────────────────────────────────────────────
+TOP_K_PEAKS         = 5
+MIN_DISTANCE_WEEKS  = 2
+MIN_PROMINENCE_FRAC = 0.15
 
-# ── Parametri analisi 2: cross-correlazione ───────────────────────────────────
-MAX_LAG_SETTIMANE = 8
-# Lag massimo da testare in settimane.
-# Motivazione: 8 settimane (~2 mesi) è un limite superiore ragionevole
-# per un effetto ambientale sull'ILI. La letteratura (Shaman et al.,
-# Feng et al.) riporta lag di 1-4 settimane. Con una finestra stagionale
-# di 20 settimane, un lag di 8 lascia almeno 12 coppie per il calcolo di r.
-
+# ── Parametri analisi 2 ───────────────────────────────────────────────────────
+MAX_LAG_SETTIMANE      = 8
 SOGLIA_R_SIGNIFICATIVO = 0.44
-# Soglia indicativa di significatività statistica per r di Pearson con n=20.
-# Deriva dall'inverso della distribuzione t: t = r*sqrt(n-2)/sqrt(1-r^2),
-# con t critico a 2 code per p<0.05 e df=18 ≈ 2.101.
-# Usata solo per evidenziare visivamente i risultati nel grafico,
-# non come soglia di decisione formale.
 
 # =============================================================================
 # FUNZIONI DI SUPPORTO — ORDINAMENTO STAGIONALE
 # =============================================================================
 
 def ordine_settimana(s: int) -> int:
-    """
-    Mappa il numero di settimana ISO a una posizione progressiva
-    che rispetta l'ordine cronologico della stagione influenzale:
-
-        Settimana 48 → posizione  1   (inizio stagione, dicembre)
-        Settimana 52 → posizione  5
-        Settimana  1 → posizione  6   (inizio anno solare nuovo)
-        Settimana 15 → posizione 20   (fine stagione, aprile)
-
-    Senza questa trasformazione matplotlib ordinerebbe le settimane
-    1-15 prima delle 48-52, spezzando visivamente la curva stagionale.
-    """
+    """Sett. 48→1, 52→5, 1→6, 15→20 (ordine cronologico stagionale)."""
     return s - 47 if s >= 48 else s + 5
 
 
 def settimane_stagione() -> list[int]:
-    """
-    Lista delle settimane della stagione influenzale in ordine cronologico:
-        [48, 49, 50, 51, 52, 1, 2, ..., 15]
-    """
+    """[48, 49, 50, 51, 52, 1, 2, ..., 15]"""
     return [48, 49, 50, 51, 52] + list(range(1, 16))
 
 # =============================================================================
-# CARICAMENTO ILI ATS MILANO
+# CARICAMENTO ILI ATS BERGAMO E MONTAGNA
 # =============================================================================
 
-def carica_ili_ats_milano() -> pd.DataFrame:
+def _carica_ili_long(path: Path, col_valore: str, label: str) -> pd.DataFrame:
     """
-    Legge ili_ats_milano.csv (wide format) e lo trasforma in formato long.
-
-    Struttura attesa del file di input:
-        WEEK | 2022 | 2023 | 2024 | 2025 | 2026
-          48 | 1692 | 1252 |  988 | 1353 |  NaN
-          49 | 1783 | 1872 | 1052 | 1916 |  NaN
-         ...
-          15 |  867 |  891 | 1007 |  883 |  866
-
-    La prima colonna (WEEK) contiene i numeri di settimana ISO.
-    Le colonne successive sono le stagioni (anno di fine stagione).
-    I NaN corrispondono a settimane non ancora avvenute.
-
-    Dopo la trasformazione il DataFrame ha una riga per settimana per stagione:
+    Legge un CSV long prodotto dallo Script 1 e lo normalizza nel formato:
         WEEK | Stagione_ILI | Stagione_ARPA | Valore | Ordine
 
-    Returns
-    -------
-    pd.DataFrame  Long format, DataFrame vuoto se file non trovato.
+    Struttura attesa input:
+        STAGIONE | WEEK | ORDINE | <col_valore>
+        22-23    |   48 |      1 |         352
     """
-    if not ILI_FILE.exists():
-        print(f"   ❌ File ILI non trovato: {ILI_FILE}")
+    if not path.exists():
+        print(f"   ❌ File ILI {label} non trovato: {path}")
         return pd.DataFrame()
 
-    df = pd.read_csv(ILI_FILE)
+    df = pd.read_csv(path)
     df.columns = [str(c).strip() for c in df.columns]
 
-    col_week = df.columns[0]
-    col_anni = [c for c in df.columns if c != col_week]
+    required = {"STAGIONE", "WEEK", col_valore}
+    missing  = required - set(df.columns)
+    if missing:
+        print(f"   ❌ Colonne mancanti in {path.name}: {missing}")
+        return pd.DataFrame()
 
-    df[col_week] = pd.to_numeric(df[col_week], errors="coerce")
-    df = df.dropna(subset=[col_week])
-    df[col_week] = df[col_week].astype(int)
+    df["WEEK"]     = pd.to_numeric(df["WEEK"],     errors="coerce")
+    df[col_valore] = pd.to_numeric(df[col_valore], errors="coerce")
+    df = df.dropna(subset=["WEEK", col_valore])
+    df["WEEK"] = df["WEEK"].astype(int)
 
-    # Trasformazione wide → long
-    df_long = df.melt(
-        id_vars=col_week,
-        value_vars=col_anni,
-        var_name="Stagione_ILI",
-        value_name="Valore"
-    ).rename(columns={col_week: "WEEK"})
+    df = df[df["WEEK"].isin(set(settimane_stagione()))].copy()
 
-    df_long = df_long.dropna(subset=["Valore"]).copy()
-    df_long["WEEK"]   = df_long["WEEK"].astype(int)
-    df_long["Valore"] = pd.to_numeric(df_long["Valore"], errors="coerce")
+    df = df.rename(columns={"STAGIONE": "Stagione_ILI", col_valore: "Valore"})
+    df["Ordine"]       = df["WEEK"].apply(ordine_settimana)
+    df["Stagione_ARPA"] = df["Stagione_ILI"].map(STAGIONE_ILI_TO_ARPA)
 
-    # Filtra solo le settimane della finestra influenzale
-    df_long = df_long[df_long["WEEK"].isin(set(settimane_stagione()))].copy()
-
-    df_long["Ordine"]       = df_long["WEEK"].apply(ordine_settimana)
-    df_long["Stagione_ARPA"] = df_long["Stagione_ILI"].map(STAGIONE_ILI_TO_ARPA)
-
-    sconosciute = df_long[df_long["Stagione_ARPA"].isna()]["Stagione_ILI"].unique()
+    sconosciute = df[df["Stagione_ARPA"].isna()]["Stagione_ILI"].unique()
     if len(sconosciute) > 0:
-        print(f"   ⚠️  Stagioni ILI senza mapping ARPA: {sconosciute}")
+        print(f"   ⚠️  Stagioni {label} senza mapping ARPA: {sconosciute}")
         print(f"       → Aggiorna STAGIONE_ILI_TO_ARPA in cima allo script.")
-        df_long = df_long.dropna(subset=["Stagione_ARPA"])
+        df = df.dropna(subset=["Stagione_ARPA"])
 
-    df_long = df_long.sort_values(["Stagione_ILI", "Ordine"]).reset_index(drop=True)
+    df = df[["WEEK", "Stagione_ILI", "Stagione_ARPA", "Valore", "Ordine"]]
+    df = df.sort_values(["Stagione_ILI", "Ordine"]).reset_index(drop=True)
 
-    print(f"   ✅ Stagioni ILI caricate: {sorted(df_long['Stagione_ILI'].unique())}")
-    return df_long
+    print(f"   ✅ ILI {label} — stagioni: {sorted(df['Stagione_ILI'].unique())}")
+    return df
+
+
+def carica_ili_ats_bergamo_montagna() -> pd.DataFrame:
+    """
+    Carica i CSV ILI di Bergamo e Montagna (output Script 1) e
+    li SOMMA per settimana/stagione → totale ILI Bergamo + Montagna.
+    """
+    df_bg = _carica_ili_long(ILI_FILE_BERGAMO,  "ACCESSI_ILI_ATS_BERGAMO",  "Bergamo")
+    df_mt = _carica_ili_long(ILI_FILE_MONTAGNA, "ACCESSI_ILI_ATS_MONTAGNA", "Montagna")
+
+    dfs = [d for d in [df_bg, df_mt] if not d.empty]
+    if not dfs:
+        print("   ❌ Nessun dato ILI disponibile.")
+        return pd.DataFrame()
+
+    df_all = pd.concat(dfs, ignore_index=True)
+    df_agg = (
+        df_all
+        .groupby(["WEEK", "Stagione_ILI", "Stagione_ARPA", "Ordine"], as_index=False)["Valore"]
+        .sum()
+    )
+    df_agg = df_agg.sort_values(["Stagione_ILI", "Ordine"]).reset_index(drop=True)
+
+    n_bg = len(df_bg) if not df_bg.empty else 0
+    n_mt = len(df_mt) if not df_mt.empty else 0
+    print(f"   ✅ ILI Bergamo + Montagna: {n_bg} + {n_mt} → {len(df_agg)} righe aggregate")
+    return df_agg
 
 # =============================================================================
 # CARICAMENTO VARIABILI AMBIENTALI ARPA
 # =============================================================================
 
 def carica_variabile(nome_variabile: str, sottocartella: str) -> pd.DataFrame:
-    """
-    Legge tutti i CSV stagionali di una variabile dalla sottocartella
-    SETTIMANE_DI_INTERESSE e li unifica in un unico DataFrame.
-
-    Il nome della stagione ARPA viene estratto dal nome del file:
-        pattern: <VARIABILE>_<anno>_<anno>.csv → stagione = "<anno>_<anno>"
-
-    Returns
-    -------
-    pd.DataFrame  Colonne: Settimana | Stagione_ARPA | <colonne sensori>
-                  DataFrame vuoto se nessun file valido trovato.
-    """
     cartella = SETTIMANE_DIR / sottocartella
     if not cartella.exists():
         print(f"   ⚠️  Cartella non trovata: {cartella}")
@@ -358,27 +273,14 @@ def carica_variabile(nome_variabile: str, sottocartella: str) -> pd.DataFrame:
         except Exception as e:
             print(f"   ⚠️  Errore leggendo {f.name}: {e}")
 
-    if not dfs:
-        return pd.DataFrame()
-
-    return pd.concat(dfs, ignore_index=True)
+    return pd.concat(dfs, ignore_index=True) if dfs else pd.DataFrame()
 
 
 def prepara_serie(df: pd.DataFrame, nome_variabile: str) -> pd.DataFrame:
     """
-    Calcola la serie rappresentativa settimanale mediando le colonne appropriate.
-
-    Logica di selezione colonne:
-        TEMPERATURE / HUMIDITY → solo colonne "_media"
-            Motivazione: mediare _max, _media e _min insieme produce un
-            numero senza interpretazione statistica chiara.
-        PM10 / PM25 / NO2 → tutte le colonne numeriche
-            Struttura piatta: un valore per stazione.
-
-    Returns
-    -------
-    pd.DataFrame  Colonne: Settimana | Stagione_ARPA | Valore | Ordine
-                  Ordinato per (Stagione_ARPA, Ordine).
+    Calcola la serie rappresentativa settimanale.
+    TEMPERATURE/HUMIDITY → media delle colonne '_media'
+    PM10/PM25/NO2        → media di tutte le colonne numeriche (una per stazione)
     """
     if df.empty:
         return pd.DataFrame()
@@ -404,70 +306,27 @@ def prepara_serie(df: pd.DataFrame, nome_variabile: str) -> pd.DataFrame:
     df["Valore"] = df[cols].mean(axis=1, skipna=True)
 
     serie = (
-        df.groupby(["Stagione_ARPA", "Settimana"], as_index=False)["Valore"]
-        .mean()
+        df.groupby(["Stagione_ARPA", "Settimana"], as_index=False)["Valore"].mean()
     )
-
     serie["Ordine"] = serie["Settimana"].apply(ordine_settimana)
-    serie = serie.sort_values(["Stagione_ARPA", "Ordine"]).reset_index(drop=True)
-
-    return serie
+    return serie.sort_values(["Stagione_ARPA", "Ordine"]).reset_index(drop=True)
 
 # =============================================================================
-# ANALISI 1 — RILEVAMENTO E ABBINAMENTO PICCHI
+# ANALISI 1 — RILEVAMENTO PICCHI
 # =============================================================================
 
-def trova_picchi_candidati(
-    valori: np.ndarray, mode: str
-) -> tuple[np.ndarray, np.ndarray]:
-    """
-    Individua i candidati picchi con scipy.signal.find_peaks.
-
-    Per i minimi (TEMPERATURE) inverte il segnale prima di passarlo
-    a find_peaks (che lavora solo su massimi locali), identificando
-    i periodi di FREDDO INTENSO anziché i periodi caldi.
-
-    Prominenza minima adattiva = MAX(std * MIN_PROMINENCE_FRAC, ε):
-        evita falsi positivi su serie piatte, evita falsi negativi
-        su serie ad alta varianza.
-
-    Returns: indici dei picchi, prominenze corrispondenti.
-    """
+def trova_picchi_candidati(valori: np.ndarray, mode: str) -> tuple[np.ndarray, np.ndarray]:
     x = valori if mode == "max" else -valori
     prominenza_min = max(np.nanstd(x) * MIN_PROMINENCE_FRAC, 1e-6)
-    idx, props = find_peaks(
-        x,
-        prominence=prominenza_min,
-        distance=max(1, MIN_DISTANCE_WEEKS)
-    )
-    prominenze = props.get("prominences", np.ones(len(idx)))
-    return idx, prominenze
+    idx, props = find_peaks(x, prominence=prominenza_min, distance=max(1, MIN_DISTANCE_WEEKS))
+    return idx, props.get("prominences", np.ones(len(idx)))
 
 
-def seleziona_top_k_picchi(
-    df_stagione: pd.DataFrame,
-    mode: str,
-    top_k: int = TOP_K_PEAKS
-) -> pd.DataFrame:
+def seleziona_top_k_picchi(df_stagione: pd.DataFrame, mode: str,
+                           top_k: int = TOP_K_PEAKS) -> pd.DataFrame:
     """
     Seleziona i TOP_K picchi più rilevanti in una stagione.
-
-    Strategia a due fasi:
-        Fase 1 — find_peaks + prominenza adattiva:
-            Se trova almeno top_k candidati, seleziona i migliori per valore.
-        Fase 2 — Fallback su nlargest / nsmallest:
-            Se i candidati sono meno di top_k (serie piatta, dati scarsi),
-            seleziona direttamente i top_k valori estremi.
-
-    NOTA per TEMPERATURE (mode="min"):
-        Seleziona i valori PIÙ BASSI (freddo intenso), coerente con la
-        letteratura che associa il freddo all'aumento dell'ILI invernale.
-
-    Il risultato è ordinato per Ordine stagionale (sequenza temporale).
-
-    Returns
-    -------
-    pd.DataFrame  Colonne: Settimana | Valore | Ordine | Rango
+    Il DataFrame in input deve avere le colonne: Settimana, Valore, Ordine.
     """
     df = df_stagione.dropna(subset=["Valore"]).sort_values("Ordine").reset_index(drop=True)
     if df.empty:
@@ -484,11 +343,7 @@ def seleziona_top_k_picchi(
             "Prominenza": prominenze,
         })
         asc = (mode == "min")
-        top = (
-            candidati
-            .sort_values(["Valore", "Prominenza"], ascending=[asc, False])
-            .head(top_k)
-        )
+        top = candidati.sort_values(["Valore", "Prominenza"], ascending=[asc, False]).head(top_k)
     else:
         top_idx = (
             df["Valore"].nsmallest(top_k).index if mode == "min"
@@ -499,26 +354,16 @@ def seleziona_top_k_picchi(
 
     top = top.sort_values("Ordine").reset_index(drop=True)
     top["Rango"] = np.arange(1, len(top) + 1)
-
     return top[["Settimana", "Valore", "Ordine", "Rango"]]
 
 
-def correla_picchi(
-    env_peaks:    pd.DataFrame,
-    ili_peaks:    pd.DataFrame,
-    variabile:    str,
-    stagione_ili: str,
-) -> tuple[dict | None, pd.DataFrame]:
+def correla_picchi(env_peaks: pd.DataFrame, ili_peaks: pd.DataFrame,
+                   variabile: str, stagione_ili: str) -> tuple[dict | None, pd.DataFrame]:
     """
-    Abbina picchi ambientali e ILI per rango temporale e calcola
-    lag (settimane) e correlazione di Pearson sui valori abbinati.
-
-    Abbinamento: picco ambientale rango k ↔ picco ILI rango k
-    Lag = Ordine(ILI) - Ordine(ambiente):
-        > 0 → ILI arriva DOPO il picco ambientale (atteso)
-        < 0 → ILI precede il picco (possibile artefatto, vedi doc script)
-
-    Returns: dizionario riassuntivo + DataFrame coppie.
+    Abbina picchi ambientali e ILI per rango temporale.
+    Lag = Ordine(ILI) − Ordine(ambiente):
+        > 0 → ILI arriva DOPO il picco ambientale (biologicamente atteso)
+        < 0 → possibile artefatto da bias di ranking
     """
     n = min(len(env_peaks), len(ili_peaks), TOP_K_PEAKS)
     if n == 0:
@@ -552,26 +397,12 @@ def correla_picchi(
         "Env_valore_medio_picco": float(coppie["Env_Valore"].mean()),
         "ILI_valore_medio_picco": float(coppie["ILI_Valore"].mean()),
     }
-
     return summary, coppie
 
 
-def crea_grafico_picchi(
-    env_serie:    pd.DataFrame,
-    env_picchi:   pd.DataFrame,
-    ili_serie:    pd.DataFrame,
-    ili_picchi:   pd.DataFrame,
-    variabile:    str,
-    stagione_ili: str,
-) -> None:
-    """
-    Grafico a due pannelli sovrapposti (asse X condiviso):
-        Superiore: serie ambientale con picchi (punti rossi)
-        Inferiore: serie ILI con picchi (punti rossi)
-
-    Le linee verticali tratteggiate aiutano a leggere il lag tra pannelli.
-    Salvato in: PLOTS_DIR/<variabile>_vs_ili_<stagione>.png
-    """
+def crea_grafico_picchi(env_serie: pd.DataFrame, env_picchi: pd.DataFrame,
+                        ili_serie: pd.DataFrame, ili_picchi: pd.DataFrame,
+                        variabile: str, stagione_ili: str) -> None:
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 8), sharex=True)
 
     sett_lista = settimane_stagione()
@@ -579,29 +410,24 @@ def crea_grafico_picchi(
     tick_label = [str(s) for s in sett_lista]
     tipo_picco = "minimi (freddo)" if "TEMP" in variabile.upper() else "massimi"
 
-    ax1.plot(env_serie["Ordine"], env_serie["Valore"],
-             color="#1a5276", lw=2, label=variabile)
+    ax1.plot(env_serie["Ordine"], env_serie["Valore"], color="#1a5276", lw=2, label=variabile)
     if env_picchi is not None and not env_picchi.empty:
         ax1.scatter(env_picchi["Ordine"], env_picchi["Valore"],
-                    color="#c0392b", s=65, zorder=4,
-                    label=f"Top {TOP_K_PEAKS} picchi {tipo_picco}")
+                    color="#c0392b", s=65, zorder=4, label=f"Top {TOP_K_PEAKS} picchi {tipo_picco}")
         for _, r in env_picchi.iterrows():
             ax1.axvline(r["Ordine"], color="#c0392b", alpha=0.2, lw=1.2, ls="--")
 
     ax1.set_ylabel(variabile, fontsize=11)
-    ax1.set_title(
-        f"{variabile} vs ILI ATS Milano  —  Stagione {stagione_ili}",
-        fontsize=13, fontweight="bold"
-    )
+    ax1.set_title(f"{variabile} vs ILI ATS Bergamo e Montagna  —  Stagione {stagione_ili}",
+                  fontsize=13, fontweight="bold")
     ax1.legend(loc="upper right", fontsize=9)
     ax1.grid(True, alpha=0.3)
 
     ax2.plot(ili_serie["Ordine"], ili_serie["Valore"],
-             color="#1e8449", lw=2, label="ILI ATS Milano")
+             color="#1e8449", lw=2, label="ILI ATS Bergamo e Montagna")
     if ili_picchi is not None and not ili_picchi.empty:
         ax2.scatter(ili_picchi["Ordine"], ili_picchi["Valore"],
-                    color="#c0392b", s=65, zorder=4,
-                    label=f"Top {TOP_K_PEAKS} picchi ILI")
+                    color="#c0392b", s=65, zorder=4, label=f"Top {TOP_K_PEAKS} picchi ILI")
         for _, r in ili_picchi.iterrows():
             ax2.axvline(r["Ordine"], color="#c0392b", alpha=0.2, lw=1.2, ls="--")
 
@@ -619,189 +445,117 @@ def crea_grafico_picchi(
     print(f"   📈 {out_path.name}")
 
 # =============================================================================
-# ANALISI 2 — CROSS-CORRELAZIONE
+# ANALISI 2 — CROSS-CORRELAZIONE (Pearson + Spearman)
 # =============================================================================
 
 def calcola_cross_correlazione_stagione(
-    env_serie:   pd.DataFrame,
-    ili_serie:   pd.DataFrame,
-    variabile:   str,
-    stagione_ili: str,
-    max_lag:     int = MAX_LAG_SETTIMANE,
+    env_serie: pd.DataFrame, ili_serie: pd.DataFrame,
+    variabile: str, stagione_ili: str,
+    max_lag: int = MAX_LAG_SETTIMANE,
 ) -> pd.DataFrame:
     """
-    Calcola la correlazione di Pearson tra la serie ambientale e la serie
-    ILI per ogni lag da 0 a max_lag settimane, su una singola stagione.
-
-    Meccanismo:
-        Per ogni lag L (in settimane):
-            - Prende la serie ambientale alle posizioni t = 1, ..., N-L
-            - Prende la serie ILI alle posizioni t+L = L+1, ..., N
-            - Calcola r di Pearson tra le due sottosequenze allineate
-
-        Questo risponde alla domanda:
-            "La variabile ambientale alla settimana t è correlata con
-             l'ILI L settimane dopo?"
-
-    NOTA per TEMPERATURE:
-        La serie di temperatura viene invertita (-T) prima del calcolo.
-        Motivazione: temperature basse → ILI alto è la relazione attesa.
-        Con l'inversione, un r positivo a lag L significa "quando fa
-        più freddo, L settimane dopo gli accessi ILI aumentano",
-        coerente con l'interpretazione delle altre variabili.
-
-    Richiede almeno MIN_PUNTI_XCORR punti sovrapposti per calcolare r.
-    Con max_lag=8 e N=20, il minimo è 12 punti (sufficiente).
-
-    Parameters
-    ----------
-    env_serie    : pd.DataFrame  Serie ambientale (colonne: Ordine, Valore)
-    ili_serie    : pd.DataFrame  Serie ILI (colonne: Ordine, Valore)
-    variabile    : str           Nome variabile (per output)
-    stagione_ili : str           Es. "2023"
-    max_lag      : int           Lag massimo da testare
-
-    Returns
-    -------
-    pd.DataFrame  Colonne: Variabile | Stagione_ILI | Lag | r_Pearson | p_value | N_punti
-                  Una riga per ogni lag testato (0, 1, ..., max_lag).
+    Calcola r di Pearson e ρ di Spearman tra serie ambientale e ILI
+    per ogni lag da 0 a max_lag settimane.
+    Per TEMPERATURE la serie viene invertita (−T) prima del calcolo.
     """
-    MIN_PUNTI_XCORR = 5  # minimo di punti sovrapposti per calcolare r
+    MIN_PUNTI_XCORR = 5
 
-    # Allinea le due serie sull'asse Ordine (posizione stagionale)
     env_ord = env_serie.set_index("Ordine")["Valore"].sort_index()
     ili_ord = ili_serie.set_index("Ordine")["Valore"].sort_index()
 
-    # Per temperatura inverte il segnale: più negativo = più freddo
-    # → con l'inversione un valore alto = freddo intenso, coerente con
-    #   l'interpretazione "variabile alta precede ILI alto"
     if variabile.upper() == "TEMPERATURE":
         env_ord = -env_ord
 
-    # Indice comune delle posizioni disponibili in entrambe le serie
     ordini_comuni = sorted(set(env_ord.index) & set(ili_ord.index))
-
     righe = []
-    for lag in range(0, max_lag + 1):
-        # Posizioni usabili: ambiente a t, ILI a t+lag
-        # t deve essere in ordini_comuni, t+lag pure
-        t_vals    = [o for o in ordini_comuni if (o + lag) in ordini_comuni]
-        t_lag_vals = [o + lag for o in t_vals]
 
-        n_punti = len(t_vals)
+    for lag in range(0, max_lag + 1):
+        t_vals     = [o for o in ordini_comuni if (o + lag) in ordini_comuni]
+        t_lag_vals = [o + lag for o in t_vals]
+        n_punti    = len(t_vals)
+
+        base_row = {"Variabile": variabile, "Stagione_ILI": stagione_ili, "Lag": lag}
+
         if n_punti < MIN_PUNTI_XCORR:
-            # Troppo pochi punti per essere affidabile, inserisce NaN
-            righe.append({
-                "Variabile":    variabile,
-                "Stagione_ILI": stagione_ili,
-                "Lag":          lag,
-                "r_Pearson":    np.nan,
-                "p_value":      np.nan,
-                "N_punti":      n_punti,
-            })
+            righe.append({**base_row, "r_Pearson": np.nan, "p_Pearson": np.nan,
+                           "rho_Spearman": np.nan, "p_Spearman": np.nan, "N_punti": n_punti})
             continue
 
-        x = env_ord.loc[t_vals].values      # serie ambientale a t
-        y = ili_ord.loc[t_lag_vals].values  # serie ILI a t + lag
-
-        # Rimuove coppie con NaN (dati mancanti su qualche settimana)
+        x = env_ord.loc[t_vals].values
+        y = ili_ord.loc[t_lag_vals].values
         mask = ~(np.isnan(x) | np.isnan(y))
         x, y = x[mask], y[mask]
 
         if len(x) < MIN_PUNTI_XCORR:
-            righe.append({
-                "Variabile":    variabile,
-                "Stagione_ILI": stagione_ili,
-                "Lag":          lag,
-                "r_Pearson":    np.nan,
-                "p_value":      np.nan,
-                "N_punti":      len(x),
-            })
+            righe.append({**base_row, "r_Pearson": np.nan, "p_Pearson": np.nan,
+                           "rho_Spearman": np.nan, "p_Spearman": np.nan, "N_punti": len(x)})
             continue
 
-        r, p = pearsonr(x, y)
-        righe.append({
-            "Variabile":    variabile,
-            "Stagione_ILI": stagione_ili,
-            "Lag":          lag,
-            "r_Pearson":    float(r),
-            "p_value":      float(p),
-            "N_punti":      len(x),
-        })
+        r_p, p_p = pearsonr(x, y)
+        r_s, p_s = spearmanr(x, y)
+        righe.append({**base_row, "r_Pearson": float(r_p), "p_Pearson": float(p_p),
+                       "rho_Spearman": float(r_s), "p_Spearman": float(p_s), "N_punti": len(x)})
 
     return pd.DataFrame(righe)
 
 
-def crea_grafico_xcorr(
-    df_xcorr: pd.DataFrame,
-    variabile: str,
-) -> None:
-    """
-    Crea il grafico della cross-correlazione per una variabile:
-        - Asse X: lag (settimane)
-        - Asse Y: r di Pearson
-        - Una linea per stagione (colori diversi)
-        - Linea nera spessa = media tra stagioni
-        - Banda grigia orizzontale = zona ±SOGLIA_R_SIGNIFICATIVO
-          (indica approssimativamente p < 0.05 con n=20)
-        - Rettangolo verde trasparente sul lag ottimale (r media massima)
-
-    Il grafico aiuta a rispondere:
-        "A quale lag la variabile ambientale ha la correlazione
-         più stabile e più alta con l'ILI, tra le stagioni?"
-
-    Salvato in: PLOTS_DIR/xcorr_<variabile>.png
-    """
+def crea_grafico_xcorr(df_xcorr: pd.DataFrame, variabile: str) -> None:
     df_v = df_xcorr[df_xcorr["Variabile"] == variabile].copy()
     if df_v.empty:
         return
 
     stagioni = sorted(df_v["Stagione_ILI"].unique())
     lags     = sorted(df_v["Lag"].unique())
-
-    fig, ax = plt.subplots(figsize=(10, 5))
-
-    colori = plt.cm.tab10(np.linspace(0, 0.8, len(stagioni)))
+    fig, ax  = plt.subplots(figsize=(11, 5))
+    colori   = plt.cm.tab10(np.linspace(0, 0.8, len(stagioni)))
 
     for stagione, colore in zip(stagioni, colori):
         df_s = df_v[df_v["Stagione_ILI"] == stagione].sort_values("Lag")
         ax.plot(df_s["Lag"], df_s["r_Pearson"],
-                marker="o", lw=1.5, markersize=5,
-                color=colore, alpha=0.7, label=f"Stagione {stagione}")
+                marker="o", lw=1.5, markersize=5, color=colore, alpha=0.7,
+                label=f"Stagione {stagione} — Pearson")
+        ax.plot(df_s["Lag"], df_s["rho_Spearman"],
+                marker="^", lw=1.0, markersize=4, color=colore, alpha=0.45, ls="--")
 
-    # Media tra stagioni per ogni lag
-    media = df_v.groupby("Lag")["r_Pearson"].mean()
-    ax.plot(media.index, media.values,
-            color="black", lw=2.5, marker="D", markersize=6,
-            label="Media stagioni", zorder=5)
+    media_p = df_v.groupby("Lag")["r_Pearson"].mean()
+    ax.plot(media_p.index, media_p.values, color="black", lw=2.5, marker="D", markersize=6,
+            label="Media Pearson (r)", zorder=5)
 
-    # Banda di non significatività (|r| < soglia)
-    ax.axhspan(-SOGLIA_R_SIGNIFICATIVO, SOGLIA_R_SIGNIFICATIVO,
-               color="gray", alpha=0.12,
-               label=f"|r| < {SOGLIA_R_SIGNIFICATIVO} (p > 0.05 indicativo)")
+    media_s = df_v.groupby("Lag")["rho_Spearman"].mean()
+    ax.plot(media_s.index, media_s.values, color="#8e44ad", lw=2.5, marker="s", markersize=6,
+            ls="--", label="Media Spearman (ρ)", zorder=5)
+
+    ax.axhspan(-SOGLIA_R_SIGNIFICATIVO, SOGLIA_R_SIGNIFICATIVO, color="gray", alpha=0.12,
+               label=f"|coeff.| < {SOGLIA_R_SIGNIFICATIVO} (p > 0.05 indicativo)")
     ax.axhline(0, color="black", lw=0.8, ls="--", alpha=0.5)
 
-    # Evidenzia il lag ottimale (media r massima)
-    if not media.dropna().empty:
-        lag_ottimale = int(media.idxmax())
-        ax.axvline(lag_ottimale, color="#27ae60", lw=2, ls=":",
-                   label=f"Lag ottimale: {lag_ottimale} sett.")
+    lag_ott_p = None
+    if not media_p.dropna().empty:
+        lag_ott_p = int(media_p.idxmax())
+        ax.axvline(lag_ott_p, color="#27ae60", lw=2, ls=":",
+                   label=f"Lag ottimale Pearson: {lag_ott_p} sett.")
+
+    if not media_s.dropna().empty:
+        lag_ott_s = int(media_s.idxmax())
+        if lag_ott_p is not None and lag_ott_s != lag_ott_p:
+            ax.axvline(lag_ott_s, color="#8e44ad", lw=2, ls=":",
+                       label=f"Lag ottimale Spearman: {lag_ott_s} sett.")
 
     etichetta_var = variabile
     if variabile == "TEMPERATURE":
-        etichetta_var = "TEMPERATURE (invertita: +r = più freddo → più ILI)"
+        etichetta_var = "TEMPERATURE (invertita: +coeff = più freddo → più ILI)"
 
     ax.set_title(
-        f"Cross-correlazione {etichetta_var} vs ILI ATS Milano",
-        fontsize=12, fontweight="bold"
+        f"Cross-correlazione {etichetta_var} vs ILI ATS Bergamo e Montagna\n"
+        f"linee continue = Pearson r   |   linee tratteggiate = Spearman ρ",
+        fontsize=11, fontweight="bold"
     )
     ax.set_xlabel("Lag (settimane): ambiente a t, ILI a t + lag", fontsize=10)
-    ax.set_ylabel("r di Pearson", fontsize=10)
+    ax.set_ylabel("Coefficiente di correlazione", fontsize=10)
     ax.set_xticks(lags)
     ax.set_ylim(-1.05, 1.05)
-    ax.legend(loc="lower right", fontsize=8)
+    ax.legend(loc="lower right", fontsize=8, ncol=2)
     ax.grid(True, alpha=0.3)
-
     plt.tight_layout()
     out_path = PLOTS_DIR / f"xcorr_{variabile.lower()}.png"
     fig.savefig(out_path, dpi=160, bbox_inches="tight")
@@ -811,29 +565,10 @@ def crea_grafico_xcorr(
 
 def analisi_cross_correlazione(
     df_env_all: dict[str, pd.DataFrame],
-    ili_df:     pd.DataFrame,
+    ili_df: pd.DataFrame,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
-    """
-    Esegue la cross-correlazione per tutte le variabili e stagioni.
-
-    Coordina:
-        1. calcola_cross_correlazione_stagione() per ogni (var, stagione)
-        2. Raccoglie tutti i risultati in un unico DataFrame
-        3. Calcola il lag ottimale per variabile (media r tra stagioni)
-        4. Chiama crea_grafico_xcorr() per ogni variabile
-
-    Parameters
-    ----------
-    df_env_all : dict  variabile → DataFrame serie ambientale (da prepara_serie)
-    ili_df     : pd.DataFrame  Output di carica_ili_ats_milano()
-
-    Returns
-    -------
-    df_xcorr_tutti   : pd.DataFrame  Tutti i risultati per lag/stagione/variabile
-    df_lag_ottimale  : pd.DataFrame  Lag ottimale e r media per variabile
-    """
     print("\n" + "─" * 55)
-    print("📐 ANALISI 2 — CROSS-CORRELAZIONE")
+    print("📐 ANALISI 2 — CROSS-CORRELAZIONE (Pearson + Spearman)")
     print("─" * 55)
 
     tutti_xcorr = []
@@ -841,104 +576,93 @@ def analisi_cross_correlazione(
     for variabile, (_, mode) in VARIABILI.items():
         if variabile not in df_env_all:
             continue
-
         df_env = df_env_all[variabile]
         print(f"\n   🔗 Cross-correlazione {variabile}...")
 
         for stagione_ili, stagione_arpa in STAGIONE_ILI_TO_ARPA.items():
-
             env_stagione = df_env[df_env["Stagione_ARPA"] == stagione_arpa].copy()
             ili_stagione = ili_df[ili_df["Stagione_ILI"] == stagione_ili].copy()
-
             if env_stagione.empty or ili_stagione.empty:
                 continue
 
-            # Normalizza il nome colonna per ili_stagione
+            # Rinomina WEEK → Settimana per compatibilità con set_index("Ordine")
             ili_stagione = ili_stagione.rename(columns={"WEEK": "Settimana"})
 
             df_lag = calcola_cross_correlazione_stagione(
-                env_serie=env_stagione,
-                ili_serie=ili_stagione,
-                variabile=variabile,
-                stagione_ili=stagione_ili,
+                env_serie=env_stagione, ili_serie=ili_stagione,
+                variabile=variabile, stagione_ili=stagione_ili,
             )
             tutti_xcorr.append(df_lag)
 
-        # Grafico per questa variabile (tutte le stagioni sovrapposte)
         if tutti_xcorr:
-            df_xcorr_parziale = pd.concat(tutti_xcorr, ignore_index=True)
-            crea_grafico_xcorr(df_xcorr_parziale, variabile)
+            crea_grafico_xcorr(pd.concat(tutti_xcorr, ignore_index=True), variabile)
 
     if not tutti_xcorr:
         return pd.DataFrame(), pd.DataFrame()
 
     df_xcorr_tutti = pd.concat(tutti_xcorr, ignore_index=True)
 
-    # ── Tabella lag ottimale per variabile ────────────────────────────────────
-    # Calcola la media di r tra stagioni per ogni (variabile, lag)
-    # e seleziona il lag con r media massima
     media_per_lag = (
         df_xcorr_tutti
-        .groupby(["Variabile", "Lag"])["r_Pearson"]
-        .mean()
-        .reset_index()
-        .rename(columns={"r_Pearson": "r_media"})
+        .groupby(["Variabile", "Lag"])[["r_Pearson", "rho_Spearman"]]
+        .mean().reset_index()
     )
 
     lag_ottimale_rows = []
     for var in media_per_lag["Variabile"].unique():
-        sub = media_per_lag[media_per_lag["Variabile"] == var].dropna(subset=["r_media"])
-        if sub.empty:
-            continue
-        best = sub.loc[sub["r_media"].idxmax()]
-        lag_ottimale_rows.append({
-            "Variabile":          var,
-            "Lag_ottimale_sett":  int(best["Lag"]),
-            "r_media_max":        float(best["r_media"]),
-            "Interpretazione":    (
-                "TEMPERATURE (segnale invertito: +r = freddo precede ILI)"
-                if var == "TEMPERATURE"
-                else f"{var} alta precede ILI alto"
-            ),
-        })
+        sub   = media_per_lag[media_per_lag["Variabile"] == var]
+        sub_p = sub.dropna(subset=["r_Pearson"])
+        sub_s = sub.dropna(subset=["rho_Spearman"])
+        row   = {"Variabile": var}
+        if not sub_p.empty:
+            idx_p = sub_p["r_Pearson"].idxmax()
+            row["Lag_ottimale_Pearson"]      = int(sub_p.loc[idx_p, "Lag"])
+            row["r_Pearson_medio_ottimale"]   = float(sub_p.loc[idx_p, "r_Pearson"])
+        if not sub_s.empty:
+            idx_s = sub_s["rho_Spearman"].idxmax()
+            row["Lag_ottimale_Spearman"]       = int(sub_s.loc[idx_s, "Lag"])
+            row["rho_Spearman_medio_ottimale"] = float(sub_s.loc[idx_s, "rho_Spearman"])
+        if "Lag_ottimale_Pearson" in row and "Lag_ottimale_Spearman" in row:
+            row["Lag_concordano"] = row["Lag_ottimale_Pearson"] == row["Lag_ottimale_Spearman"]
+        lag_ottimale_rows.append(row)
 
-    df_lag_ottimale = pd.DataFrame(lag_ottimale_rows)
-
-    return df_xcorr_tutti, df_lag_ottimale
+    return df_xcorr_tutti, pd.DataFrame(lag_ottimale_rows)
 
 # =============================================================================
 # MAIN
 # =============================================================================
 
-def main() -> None:
-    print("\n" + "=" * 60)
+def main():
+    print("=" * 60)
     print("SCRIPT 4 — PICCHI E CROSS-CORRELAZIONE AMBIENTE vs ILI")
+    print("           ATS Bergamo + ATS Montagna")
     print("=" * 60)
 
-    # ── 1. Carica ILI ATS Milano ──────────────────────────────────────────────
-    print("\n📂 Caricamento ILI ATS Milano...")
-    ili_df = carica_ili_ats_milano()
-
+    # ── 1. Carica ILI ATS Bergamo e Montagna (CSV da Script 1) ──────────────
+    print("\n📂 Caricamento ILI ATS Bergamo e Montagna (Script 1 CSV)...")
+    ili_df = carica_ili_ats_bergamo_montagna()
     if ili_df.empty:
         print("❌ Impossibile procedere senza dati ILI.")
         return
 
-    # ── 2. Carica e prepara tutte le serie ambientali ─────────────────────────
-    # Le serie vengono tenute in un dizionario per riutilizzarle
-    # sia nell'analisi 1 (picchi) che nell'analisi 2 (cross-correlazione)
-    print("\n📂 Caricamento serie ambientali ARPA...")
+    # ── 2. Carica variabili ambientali ARPA ──────────────────────────────────
+    print("\n📂 Caricamento variabili ambientali ARPA...")
     df_env_all: dict[str, pd.DataFrame] = {}
-
     for variabile, (sottocartella, _) in VARIABILI.items():
+        print(f"\n   📁 {variabile}...")
         df_raw = carica_variabile(variabile, sottocartella)
-        df_serie = prepara_serie(df_raw, variabile)
+        df_serie = prepara_serie(df_raw, variabile) if not df_raw.empty else pd.DataFrame()
         if not df_serie.empty:
             df_env_all[variabile] = df_serie
             print(f"   ✅ {variabile}: {sorted(df_serie['Stagione_ARPA'].unique())}")
         else:
             print(f"   ⚠️  {variabile}: nessun dato, skip.")
 
-    # ── 3. ANALISI 1: picchi ──────────────────────────────────────────────────
+    if not df_env_all:
+        print("❌ Nessuna variabile ambientale disponibile.")
+        return
+
+    # ── 3. ANALISI 1: Picchi ─────────────────────────────────────────────────
     print("\n" + "─" * 55)
     print("🔍 ANALISI 1 — PICCHI")
     print("─" * 55)
@@ -951,24 +675,22 @@ def main() -> None:
     for variabile, (_, mode) in VARIABILI.items():
         if variabile not in df_env_all:
             continue
-
         df_serie = df_env_all[variabile]
         print(f"\n   {'─'*45}")
         print(f"   🔍 {variabile}  →  picchi {'MINIMI (freddo)' if mode=='min' else 'MASSIMI'}")
         stagioni_arpa_disponibili = set(df_serie["Stagione_ARPA"].unique())
 
         for stagione_ili, stagione_arpa in STAGIONE_ILI_TO_ARPA.items():
-
             if stagione_arpa not in stagioni_arpa_disponibili:
                 continue
 
             ili_stagione = ili_df[ili_df["Stagione_ILI"] == stagione_ili].copy()
             if ili_stagione.empty:
                 continue
-
             env_stagione = df_serie[df_serie["Stagione_ARPA"] == stagione_arpa].copy()
 
             env_p = seleziona_top_k_picchi(env_stagione, mode=mode)
+            # ↓ FIX: rinomina WEEK→Settimana prima di passare a seleziona_top_k_picchi
             ili_p = seleziona_top_k_picchi(
                 ili_stagione.rename(columns={"WEEK": "Settimana"}),
                 mode="max"
@@ -995,6 +717,7 @@ def main() -> None:
             if not coppie.empty:
                 tutte_coppie.append(coppie)
 
+            # Grafico: usa versione rinominata anche per il plot
             ili_per_plot = ili_stagione.rename(columns={"WEEK": "Settimana"})
             crea_grafico_picchi(
                 env_serie=env_stagione, env_picchi=env_p,
@@ -1007,21 +730,15 @@ def main() -> None:
             print(f"   ✅ ILI {stagione_ili} ↔ ARPA {stagione_arpa}: "
                   f"lag medio = {lag:+.1f} sett. | corr = {corr:.3f}")
 
-    # ── 4. ANALISI 2: cross-correlazione ─────────────────────────────────────
+    # ── 4. ANALISI 2: Cross-correlazione ─────────────────────────────────────
     df_xcorr, df_lag_ottimale = analisi_cross_correlazione(df_env_all, ili_df)
 
-    # ── 5. Salva output CSV ───────────────────────────────────────────────────
+    # ── 5. Salva CSV ─────────────────────────────────────────────────────────
     print(f"\n{'=' * 55}")
     print("💾 Salvataggio output CSV...")
 
     def salva_csv(lista_o_df, nome: str) -> None:
-        if isinstance(lista_o_df, list):
-            if not lista_o_df:
-                print(f"   ⚠️  Nessun dato per {nome}")
-                return
-            df = pd.concat(lista_o_df, ignore_index=True)
-        else:
-            df = lista_o_df
+        df = pd.concat(lista_o_df, ignore_index=True) if isinstance(lista_o_df, list) else lista_o_df
         if df is None or df.empty:
             print(f"   ⚠️  Nessun dato per {nome}")
             return
@@ -1029,9 +746,8 @@ def main() -> None:
         df.to_csv(path, index=False)
         print(f"   ✅ {nome}  ({len(df)} righe)")
 
-    # Analisi 1
     salva_csv(tutti_env_picchi, "picchi_ambientali_settimane.csv")
-    salva_csv(tutti_ili_picchi, "picchi_ili_ats_milano.csv")
+    salva_csv(tutti_ili_picchi, "picchi_ili_ats_bergamo_montagna.csv")
     salva_csv(tutte_coppie,     "abbinamenti_picchi_vs_ili.csv")
 
     if tutti_summary:
@@ -1044,15 +760,17 @@ def main() -> None:
         pd.set_option("display.width", 140)
         print(summary_df.to_string(index=False))
 
-    # Analisi 2
-    salva_csv(df_xcorr,         "cross_correlazione_per_lag.csv")
-    salva_csv(df_lag_ottimale,  "cross_correlazione_lag_ottimale.csv")
+    salva_csv(df_xcorr,        "cross_correlazione_per_lag.csv")
+    salva_csv(df_lag_ottimale, "cross_correlazione_lag_ottimale.csv")
 
     if not df_lag_ottimale.empty:
         print(f"\n{'─' * 55}")
-        print("RIEPILOGO ANALISI 2 — LAG OTTIMALE (cross-correlazione)")
+        print("RIEPILOGO ANALISI 2 — LAG OTTIMALE (Pearson r + Spearman ρ)")
         print("─" * 55)
         print(df_lag_ottimale.to_string(index=False))
+        print()
+        print("  NB: 'Lag_concordano = True' → i due metodi concordano sul lag → risultato robusto.")
+        print("  NB: se False → preferire Spearman per PM/NO2, Pearson per T/Umidità.")
 
     print(f"\n✅ ELABORAZIONE COMPLETATA")
     print(f"📂 Output in:  {OUTPUT_DIR}")

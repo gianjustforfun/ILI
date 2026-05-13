@@ -1,0 +1,952 @@
+[
+  {
+    "idsensore":5597,
+    "nomestazione":"Bergamo v.Goisis",
+    "comune":"Bergamo",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.71591825,
+    "lng":9.68896994
+  },
+  {
+    "idsensore":5599,
+    "nomestazione":"Osio Sotto v.per Levate",
+    "comune":"Osio Sotto",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.62055568,
+    "lng":9.61173782
+  },
+  {
+    "idsensore":5593,
+    "nomestazione":"Ponte San Pietro v. Moiolo",
+    "comune":"Ponte San Pietro",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.69608872,
+    "lng":9.58779631
+  },
+  {
+    "idsensore":10548,
+    "nomestazione":"Dalmine v.Verdi",
+    "comune":"Dalmine",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"PM10 (SM2005)",
+    "lat":45.64971,
+    "lng":9.60123469
+  },
+  {
+    "idsensore":6921,
+    "nomestazione":"Erba v. Battisti",
+    "comune":"Erba",
+    "provincia":"CO",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"PM10 (SM2005)",
+    "lat":45.8085738,
+    "lng":9.2217792
+  },
+  {
+    "idsensore":9915,
+    "nomestazione":"Seriate v. Garibaldi",
+    "comune":"Seriate",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"Particelle sospese PM2.5",
+    "lat":45.68636206,
+    "lng":9.71495853
+  },
+  {
+    "idsensore":6922,
+    "nomestazione":"Olgiate Comasco v.Roma",
+    "comune":"Olgiate Comasco",
+    "provincia":"CO",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"PM10 (SM2005)",
+    "lat":45.78389908,
+    "lng":8.96640489
+  },
+  {
+    "idsensore":9984,
+    "nomestazione":"Brescia Villaggio Sereno",
+    "comune":"Brescia",
+    "provincia":"BS",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Particelle sospese PM2.5",
+    "lat":45.51306214,
+    "lng":10.19190606
+  },
+  {
+    "idsensore":6951,
+    "nomestazione":"Brescia v.Broletto",
+    "comune":"Brescia",
+    "provincia":"BS",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"PM10 (SM2005)",
+    "lat":45.54006456,
+    "lng":10.22281989
+  },
+  {
+    "idsensore":6859,
+    "nomestazione":"Rezzato v.De Gasperi",
+    "comune":"Rezzato",
+    "provincia":"BS",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.51571417,
+    "lng":10.33624003
+  },
+  {
+    "idsensore":30163,
+    "nomestazione":"Brescia Villaggio Sereno",
+    "comune":"Brescia",
+    "provincia":"BS",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.51306214,
+    "lng":10.19190606
+  },
+  {
+    "idsensore":12570,
+    "nomestazione":"Como v.Cattaneo",
+    "comune":"Como",
+    "provincia":"CO",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Particelle sospese PM2.5",
+    "lat":45.81504217,
+    "lng":9.06697886
+  },
+  {
+    "idsensore":10547,
+    "nomestazione":"Dalmine v.Verdi",
+    "comune":"Dalmine",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"Particelle sospese PM2.5",
+    "lat":45.64971,
+    "lng":9.60123469
+  },
+  {
+    "idsensore":10019,
+    "nomestazione":"Calusco d'Adda v. Caduti sul Lavoro",
+    "comune":"Calusco d'Adda",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.69043647,
+    "lng":9.48426111
+  },
+  {
+    "idsensore":6925,
+    "nomestazione":"Bormio v.Monte Braulio",
+    "comune":"Bormio",
+    "provincia":"SO",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"PM10 (SM2005)",
+    "lat":46.46952397,
+    "lng":10.37543275
+  },
+  {
+    "idsensore":30160,
+    "nomestazione":"Darfo Boario Terme v. De Amicis",
+    "comune":"Darfo Boario Terme",
+    "provincia":"BS",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.87460256,
+    "lng":10.17736553
+  },
+  {
+    "idsensore":5586,
+    "nomestazione":"Bergamo v.Meucci",
+    "comune":"Bergamo",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.69104328,
+    "lng":9.64366092
+  },
+  {
+    "idsensore":5591,
+    "nomestazione":"Tavernola Bergamasca v.Riva di Sotto",
+    "comune":"Tavernola Bergamasca",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.71630489,
+    "lng":10.04477436
+  },
+  {
+    "idsensore":20357,
+    "nomestazione":"Bormio v.Monte Braulio",
+    "comune":"Bormio",
+    "provincia":"SO",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Particelle sospese PM2.5",
+    "lat":46.46952397,
+    "lng":10.37543275
+  },
+  {
+    "idsensore":5569,
+    "nomestazione":"Olgiate Comasco v.Roma",
+    "comune":"Olgiate Comasco",
+    "provincia":"CO",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.78389908,
+    "lng":8.96640489
+  },
+  {
+    "idsensore":20753,
+    "nomestazione":"DarfoBT",
+    "comune":"Darfo Boario Terme",
+    "provincia":"BS",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"PM10 (SM2005)",
+    "lat":45.87626097,
+    "lng":10.17883506
+  },
+  {
+    "idsensore":6959,
+    "nomestazione":"Cant\u00f9 v.Meucci",
+    "comune":"Cant\u00f9",
+    "provincia":"CO",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"PM10 (SM2005)",
+    "lat":45.73083728,
+    "lng":9.12573936
+  },
+  {
+    "idsensore":10407,
+    "nomestazione":"Villa di Serio v. Glera",
+    "comune":"Villa di Serio",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.727881,
+    "lng":9.738481
+  },
+  {
+    "idsensore":5573,
+    "nomestazione":"Tirano Viale Italia",
+    "comune":"Tirano",
+    "provincia":"SO",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":46.216293,
+    "lng":10.170397
+  },
+  {
+    "idsensore":6852,
+    "nomestazione":"Ospitaletto v. XXV aprile",
+    "comune":"Ospitaletto",
+    "provincia":"BS",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.55325867,
+    "lng":10.08492175
+  },
+  {
+    "idsensore":5565,
+    "nomestazione":"Mariano Comense v.le Lombardia",
+    "comune":"Mariano Comense",
+    "provincia":"CO",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.68865731,
+    "lng":9.18065777
+  },
+  {
+    "idsensore":5587,
+    "nomestazione":"Bergamo v.Garibaldi",
+    "comune":"Bergamo",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.69568669,
+    "lng":9.66126061
+  },
+  {
+    "idsensore":6924,
+    "nomestazione":"Tirano Viale Italia",
+    "comune":"Tirano",
+    "provincia":"SO",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"PM10 (SM2005)",
+    "lat":46.216293,
+    "lng":10.170397
+  },
+  {
+    "idsensore":5768,
+    "nomestazione":"Mariano Comense v.le Lombardia",
+    "comune":"Mariano Comense",
+    "provincia":"CO",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"PM10",
+    "lat":45.68865731,
+    "lng":9.18065777
+  },
+  {
+    "idsensore":6926,
+    "nomestazione":"Morbegno v.Cortivacci",
+    "comune":"Morbegno",
+    "provincia":"SO",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"PM10 (SM2005)",
+    "lat":46.135486,
+    "lng":9.56624
+  },
+  {
+    "idsensore":6781,
+    "nomestazione":"Brescia v.Turati",
+    "comune":"Brescia",
+    "provincia":"BS",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.53953611,
+    "lng":10.23178722
+  },
+  {
+    "idsensore":6935,
+    "nomestazione":"Treviglio p.zza Insurrezione",
+    "comune":"Treviglio",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"PM10 (SM2005)",
+    "lat":45.51933533,
+    "lng":9.59201917
+  },
+  {
+    "idsensore":9897,
+    "nomestazione":"Casirate d'Adda v. Cimitero",
+    "comune":"Casirate d'Adda",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.49822794,
+    "lng":9.55624181
+  },
+  {
+    "idsensore":6958,
+    "nomestazione":"Sondrio v.Mazzini",
+    "comune":"Sondrio",
+    "provincia":"SO",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"PM10 (SM2005)",
+    "lat":46.16797103,
+    "lng":9.87014581
+  },
+  {
+    "idsensore":5595,
+    "nomestazione":"Treviglio p.zza Insurrezione",
+    "comune":"Treviglio",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.51933533,
+    "lng":9.59201917
+  },
+  {
+    "idsensore":6952,
+    "nomestazione":"Sarezzo v.Minelli",
+    "comune":"Sarezzo",
+    "provincia":"BS",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"PM10 (SM2005)",
+    "lat":45.64962671,
+    "lng":10.20509022
+  },
+  {
+    "idsensore":20759,
+    "nomestazione":"DarfoBT",
+    "comune":"Darfo Boario Terme",
+    "provincia":"BS",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.87626097,
+    "lng":10.17883506
+  },
+  {
+    "idsensore":10028,
+    "nomestazione":"Calusco d'Adda v. Caduti sul Lavoro",
+    "comune":"Calusco d'Adda",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"Particelle sospese PM2.5",
+    "lat":45.69043647,
+    "lng":9.48426111
+  },
+  {
+    "idsensore":20752,
+    "nomestazione":"DarfoBT",
+    "comune":"Darfo Boario Terme",
+    "provincia":"BS",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Particelle sospese PM2.5",
+    "lat":45.87626097,
+    "lng":10.17883506
+  },
+  {
+    "idsensore":5598,
+    "nomestazione":"Filago v.Don Milani",
+    "comune":"Filago",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.63387247,
+    "lng":9.55609572
+  },
+  {
+    "idsensore":10438,
+    "nomestazione":"Sondrio v.Paribelli",
+    "comune":"Sondrio",
+    "provincia":"SO",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Particelle sospese PM2.5",
+    "lat":46.16785664,
+    "lng":9.87921169
+  },
+  {
+    "idsensore":10507,
+    "nomestazione":"Dalmine v.Verdi",
+    "comune":"Dalmine",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.64971,
+    "lng":9.60123469
+  },
+  {
+    "idsensore":5596,
+    "nomestazione":"Ciserano c.so Europa",
+    "comune":"Ciserano",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.59155664,
+    "lng":9.60613797
+  },
+  {
+    "idsensore":20488,
+    "nomestazione":"Erba v. Battisti",
+    "comune":"Erba",
+    "provincia":"CO",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Particelle sospese PM2.5",
+    "lat":45.8085738,
+    "lng":9.2217792
+  },
+  {
+    "idsensore":6937,
+    "nomestazione":"Lallio v. Sforzatica",
+    "comune":"Lallio",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"PM10 (SM2005)",
+    "lat":45.65967114,
+    "lng":9.61858011
+  },
+  {
+    "idsensore":6761,
+    "nomestazione":"Brescia v.Broletto",
+    "comune":"Brescia",
+    "provincia":"BS",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.54006456,
+    "lng":10.22281989
+  },
+  {
+    "idsensore":9978,
+    "nomestazione":"Casirate d'Adda v. Cimitero",
+    "comune":"Casirate d'Adda",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"Particelle sospese PM2.5",
+    "lat":45.49822794,
+    "lng":9.55624181
+  },
+  {
+    "idsensore":17293,
+    "nomestazione":"Sondrio v.Paribelli",
+    "comune":"Sondrio",
+    "provincia":"SO",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"PM10 (SM2005)",
+    "lat":46.16785664,
+    "lng":9.87921169
+  },
+  {
+    "idsensore":6931,
+    "nomestazione":"Bergamo v.Meucci",
+    "comune":"Bergamo",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"PM10 (SM2005)",
+    "lat":45.69104328,
+    "lng":9.64366092
+  },
+  {
+    "idsensore":20491,
+    "nomestazione":"Brescia S.Polo",
+    "comune":"Brescia",
+    "provincia":"BS",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.5086668,
+    "lng":10.25637025
+  },
+  {
+    "idsensore":5567,
+    "nomestazione":"Erba v. Battisti",
+    "comune":"Erba",
+    "provincia":"CO",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.8085738,
+    "lng":9.2217792
+  },
+  {
+    "idsensore":5589,
+    "nomestazione":"Costa Volpino v.Nazionale",
+    "comune":"Costa Volpino",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.82716061,
+    "lng":10.09707131
+  },
+  {
+    "idsensore":20495,
+    "nomestazione":"Brescia v.Tartaglia",
+    "comune":"Brescia",
+    "provincia":"BS",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.54264789,
+    "lng":10.21120522
+  },
+  {
+    "idsensore":6813,
+    "nomestazione":"Gambara v.Parma",
+    "comune":"Gambara",
+    "provincia":"BS",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.24955194,
+    "lng":10.29913
+  },
+  {
+    "idsensore":5564,
+    "nomestazione":"Como v.Cattaneo",
+    "comune":"Como",
+    "provincia":"CO",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.81504217,
+    "lng":9.06697886
+  },
+  {
+    "idsensore":6837,
+    "nomestazione":"Manerbio v.Solferino",
+    "comune":"Manerbio",
+    "provincia":"BS",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.34995906,
+    "lng":10.14475383
+  },
+  {
+    "idsensore":9961,
+    "nomestazione":"Brescia Villaggio Sereno",
+    "comune":"Brescia",
+    "provincia":"BS",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"PM10 (SM2005)",
+    "lat":45.51306214,
+    "lng":10.19190606
+  },
+  {
+    "idsensore":10450,
+    "nomestazione":"Darfo Boario Terme v. De Amicis",
+    "comune":"Darfo Boario Terme",
+    "provincia":"BS",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Particelle sospese PM2.5",
+    "lat":45.87460256,
+    "lng":10.17736553
+  },
+  {
+    "idsensore":20565,
+    "nomestazione":"Bergamo v.Garibaldi",
+    "comune":"Bergamo",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"PM10 (SM2005)",
+    "lat":45.69568669,
+    "lng":9.66126061
+  },
+  {
+    "idsensore":5769,
+    "nomestazione":"Olgiate Comasco v.Roma",
+    "comune":"Olgiate Comasco",
+    "provincia":"CO",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"PM10",
+    "lat":45.78389908,
+    "lng":8.96640489
+  },
+  {
+    "idsensore":6744,
+    "nomestazione":"Breno v.Don Putelli",
+    "comune":"Breno",
+    "provincia":"BS",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.95683656,
+    "lng":10.30106589
+  },
+  {
+    "idsensore":20564,
+    "nomestazione":"Brescia v.Tartaglia",
+    "comune":"Brescia",
+    "provincia":"BS",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Particelle sospese PM2.5",
+    "lat":45.54264789,
+    "lng":10.21120522
+  },
+  {
+    "idsensore":6962,
+    "nomestazione":"Filago v.Don Milani",
+    "comune":"Filago",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"PM10 (SM2005)",
+    "lat":45.63387247,
+    "lng":9.55609572
+  },
+  {
+    "idsensore":5590,
+    "nomestazione":"Casnigo via Europa",
+    "comune":"Casnigo",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.81464142,
+    "lng":9.86771003
+  },
+  {
+    "idsensore":6786,
+    "nomestazione":"Brescia v.Ziziola",
+    "comune":"Brescia",
+    "provincia":"BS",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.51456611,
+    "lng":10.21846492
+  },
+  {
+    "idsensore":5594,
+    "nomestazione":"Seriate v. Garibaldi",
+    "comune":"Seriate",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.68636206,
+    "lng":9.71495853
+  },
+  {
+    "idsensore":6936,
+    "nomestazione":"Osio Sotto v.per Levate",
+    "comune":"Osio Sotto",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"PM10 (SM2005)",
+    "lat":45.62055568,
+    "lng":9.61173782
+  },
+  {
+    "idsensore":5600,
+    "nomestazione":"Lallio v. Sforzatica",
+    "comune":"Lallio",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.65967114,
+    "lng":9.61858011
+  },
+  {
+    "idsensore":10413,
+    "nomestazione":"Villa di Serio v. Glera",
+    "comune":"Villa di Serio",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"PM10 (SM2005)",
+    "lat":45.727881,
+    "lng":9.738481
+  },
+  {
+    "idsensore":6954,
+    "nomestazione":"Rezzato v.De Gasperi",
+    "comune":"Rezzato",
+    "provincia":"BS",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"PM10 (SM2005)",
+    "lat":45.51571417,
+    "lng":10.33624003
+  },
+  {
+    "idsensore":10432,
+    "nomestazione":"Sondrio v.Paribelli",
+    "comune":"Sondrio",
+    "provincia":"SO",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":46.16785664,
+    "lng":9.87921169
+  },
+  {
+    "idsensore":10501,
+    "nomestazione":"Darfo Boario Terme v. De Amicis",
+    "comune":"Darfo Boario Terme",
+    "provincia":"BS",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"PM10 (SM2005)",
+    "lat":45.87460256,
+    "lng":10.17736553
+  },
+  {
+    "idsensore":9965,
+    "nomestazione":"Casirate d'Adda v. Cimitero",
+    "comune":"Casirate d'Adda",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"PM10 (SM2005)",
+    "lat":45.49822794,
+    "lng":9.55624181
+  },
+  {
+    "idsensore":6798,
+    "nomestazione":"Sarezzo v.Minelli",
+    "comune":"Sarezzo",
+    "provincia":"BS",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.64962671,
+    "lng":10.20509022
+  },
+  {
+    "idsensore":5572,
+    "nomestazione":"Sondrio v.Mazzini",
+    "comune":"Sondrio",
+    "provincia":"SO",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":46.16797103,
+    "lng":9.87014581
+  },
+  {
+    "idsensore":5757,
+    "nomestazione":"Ponte San Pietro v. Moiolo",
+    "comune":"Ponte San Pietro",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"PM10",
+    "lat":45.69608872,
+    "lng":9.58779631
+  },
+  {
+    "idsensore":5574,
+    "nomestazione":"Bormio v.Monte Braulio",
+    "comune":"Bormio",
+    "provincia":"SO",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":46.46952397,
+    "lng":10.37543275
+  },
+  {
+    "idsensore":5566,
+    "nomestazione":"Fino Mornasco SP27 casa dell'Alpino",
+    "comune":"Fino Mornasco",
+    "provincia":"CO",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.74804547,
+    "lng":9.04259906
+  },
+  {
+    "idsensore":6775,
+    "nomestazione":"Brescia v.Triumplina",
+    "comune":"Brescia",
+    "provincia":"BS",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.57159144,
+    "lng":10.23148892
+  },
+  {
+    "idsensore":6919,
+    "nomestazione":"Como v.Cattaneo",
+    "comune":"Como",
+    "provincia":"CO",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"PM10 (SM2005)",
+    "lat":45.81504217,
+    "lng":9.06697886
+  },
+  {
+    "idsensore":10027,
+    "nomestazione":"Calusco d'Adda v. Caduti sul Lavoro",
+    "comune":"Calusco d'Adda",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"PM10 (SM2005)",
+    "lat":45.69043647,
+    "lng":9.48426111
+  },
+  {
+    "idsensore":6826,
+    "nomestazione":"Lonato del Garda v.del Marchesino",
+    "comune":"Lonato del Garda",
+    "provincia":"BS",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.46375819,
+    "lng":10.48078183
+  },
+  {
+    "idsensore":5575,
+    "nomestazione":"Morbegno v.Cortivacci",
+    "comune":"Morbegno",
+    "provincia":"SO",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":46.135486,
+    "lng":9.56624
+  },
+  {
+    "idsensore":5568,
+    "nomestazione":"Cant\u00f9 v.Meucci",
+    "comune":"Cant\u00f9",
+    "provincia":"CO",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.73083728,
+    "lng":9.12573936
+  },
+  {
+    "idsensore":20104,
+    "nomestazione":"Treviglio p.zza Insurrezione",
+    "comune":"Treviglio",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"Particelle sospese PM2.5",
+    "lat":45.51933533,
+    "lng":9.59201917
+  },
+  {
+    "idsensore":20496,
+    "nomestazione":"Brescia v.Tartaglia",
+    "comune":"Brescia",
+    "provincia":"BS",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"PM10 (SM2005)",
+    "lat":45.54264789,
+    "lng":10.21120522
+  },
+  {
+    "idsensore":10399,
+    "nomestazione":"Bergamo v.Meucci",
+    "comune":"Bergamo",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"Particelle sospese PM2.5",
+    "lat":45.69104328,
+    "lng":9.64366092
+  },
+  {
+    "idsensore":6953,
+    "nomestazione":"Odolo v.Praes",
+    "comune":"Odolo",
+    "provincia":"BS",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"PM10 (SM2005)",
+    "lat":45.64605175,
+    "lng":10.38929672
+  },
+  {
+    "idsensore":30158,
+    "nomestazione":"Brescia v.Broletto",
+    "comune":"Brescia",
+    "provincia":"BS",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Particelle sospese PM2.5",
+    "lat":45.54006456,
+    "lng":10.22281989
+  },
+  {
+    "idsensore":20828,
+    "nomestazione":"Erba - Buccinigo",
+    "comune":"Erba",
+    "provincia":"CO",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.80439096,
+    "lng":9.20901588
+  },
+  {
+    "idsensore":6934,
+    "nomestazione":"Seriate v. Garibaldi",
+    "comune":"Seriate",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"PM10 (SM2005)",
+    "lat":45.68636206,
+    "lng":9.71495853
+  },
+  {
+    "idsensore":5570,
+    "nomestazione":"Chiavenna v.Cerletti",
+    "comune":"Chiavenna",
+    "provincia":"SO",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":46.32081378,
+    "lng":9.39559186
+  },
+  {
+    "idsensore":20492,
+    "nomestazione":"Brescia S.Polo",
+    "comune":"Brescia",
+    "provincia":"BS",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Particelle sospese PM2.5",
+    "lat":45.5086668,
+    "lng":10.25637025
+  },
+  {
+    "idsensore":6841,
+    "nomestazione":"Odolo v.Praes",
+    "comune":"Odolo",
+    "provincia":"BS",
+    "ATS":"ATS_Montagna",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.64605175,
+    "lng":10.38929672
+  },
+  {
+    "idsensore":5592,
+    "nomestazione":"Nembro v.Locatelli",
+    "comune":"Nembro",
+    "provincia":"BG",
+    "ATS":"ATS_Bergamo",
+    "nometiposensore":"Biossido di Azoto",
+    "lat":45.74304147,
+    "lng":9.76054592
+  }
+]

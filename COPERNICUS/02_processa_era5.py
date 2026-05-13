@@ -130,7 +130,7 @@ from pathlib import Path
 # ---------------------------------------------------------------------------
 
 ERA5_FILE  = 'era5_ats.nc'
-COMUNI_SHP = 'Com01012024_g_WGS84.shp'
+COMUNI_SHP = "data/raw/Com01012026_g_WGS84.shp"
 
 # ATS territory definition.
 # ISTAT province codes (3-digit zero-padded):
