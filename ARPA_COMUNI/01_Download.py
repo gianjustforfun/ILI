@@ -1,5 +1,5 @@
 """
-download_arpa_stime_comunali_v5.py
+download_arpa_stime_comunali.py
 ====================================
 STRATEGIA FINALE: scarica l'intero dataset con paginazione semplice
 (nessun $where), poi filtra in pandas per idsensore.
