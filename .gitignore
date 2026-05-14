@@ -1,0 +1,4 @@
+# ARPA - file dati pesanti (rigenerabili con 01_Download.py)
+ARPA_COMUNI/dati_arpa_output/stime_comunali_*.csv
+ARPA_COMUNI/dati_arpa_output/stime_comunali_FINALE.csv
+ARPA_COMUNI/dati_arpa_output/stime_comunali_FINALE.parquet
