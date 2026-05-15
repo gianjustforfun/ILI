@@ -584,17 +584,6 @@ def main():
     if "comune" in df_finale.columns:
         print(f"Comuni unici:   {df_finale['comune'].nunique()}")
 
-    csv_out = os.path.join(OUTPUT_DIR, "stime_comunali_FINALE.csv")
-    df_finale.to_csv(csv_out, index=False)
-    print(f"\n→ CSV: {csv_out}")
-
-    try:
-        pq_out = os.path.join(OUTPUT_DIR, "stime_comunali_FINALE.parquet")
-        df_finale.to_parquet(pq_out, index=False)
-        print(f"→ Parquet: {pq_out}")
-    except Exception as e:
-        print(f"  Parquet: {e} (pip install pyarrow)")
-
     check_comuni_e_giorni_per_anno(OUTPUT_DIR, DATASET_IDS, parametri_interesse=PARAMETRI_INTERESSE, salva_csv=True)
 
 if __name__ == "__main__":
