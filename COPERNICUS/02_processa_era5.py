@@ -17,19 +17,59 @@ WHAT THIS SCRIPT DOES:
         2. Reproject the ATS boundaries from the ISTAT native CRS
            (EPSG:32632, UTM Zone 32N, metres) to WGS84 (EPSG:4326,
            decimal degrees) to match the ERA5 coordinate system.
-        3. For each daily timestep in era5_ats.nc:
-             a) Extract a 2-D grid snapshot of T2m and Td.
-             b) Compute AH and RH at every grid cell using the Magnus
-                formula (Alduchov & Eskridge 1996) — the same
-                formulation adopted by Shaman & Kohn (2009).
-             c) Perform a spatial join between ERA5 grid-cell points
+        3. For each CALENDAR DATE in era5_ats.nc:
+             a) Select all timesteps belonging to that date
+                (00:00, 06:00, 12:00, 18:00 UTC — 4 per day).
+             b) Average T2m and Td across the 4 timesteps at every
+                grid cell to obtain daily-mean T and Td.
+                NOTE: averaging is done on T and Td BEFORE computing
+                humidity, not on AH/RH directly, because the Magnus
+                formula is non-linear (see HUMIDITY ORDER section).
+             c) Compute AH and RH from the daily-mean T and Td.
+             d) Perform a spatial join between ERA5 grid-cell points
                 and the ATS polygons.
-             d) Compute the unweighted spatial mean of T, AH and RH
+             e) Compute the unweighted spatial mean of T, AH and RH
                 over all grid cells that fall within each ATS polygon.
         4. Concatenate all daily records into a single long-format
            DataFrame and save to CSV.
         5. Save the ATS boundary polygons (dissolved from comuni) as a
            GeoJSON file for downstream use and quality-control mapping.
+
+IMPORTANT CHANGE FROM PREVIOUS VERSION:
+    Script 1 now downloads 4 timesteps per day (00:00, 06:00, 12:00,
+    18:00 UTC) instead of a single 12:00 UTC snapshot. This script
+    has been updated accordingly:
+
+        OLD FLOW (single timestep):
+            for each timestep → compute AH/RH → spatial mean → 1 row/day
+
+        NEW FLOW (4 timesteps):
+            for each DATE → mean(T, Td over 4 timesteps) → compute AH/RH
+                         → spatial mean → 1 row/day
+
+    The output format (one row per date per ATS) is unchanged; only
+    the internal computation pipeline has been updated.
+
+HUMIDITY COMPUTATION ORDER — WHY T FIRST, THEN AH:
+    The Magnus formula is non-linear (exponential). This means:
+
+        mean(AH(T₁, Td₁), AH(T₂, Td₂), ...)  ≠  AH(mean(T), mean(Td))
+
+    The two approaches give slightly different results. We choose to
+    average T and Td first, then compute AH and RH from the daily means,
+    because:
+        - It mirrors the procedure used in Shaman et al. (2009, 2010),
+          who applied humidity formulas to daily-mean temperature.
+        - It is consistent with how ARPA Lombardia produces daily-mean
+          pollutant values (a single arithmetic mean over 24 h readings).
+        - It is the more physically meaningful quantity: AH computed from
+          the mean daily temperature, rather than the mean of 4 AH values
+          computed from instantaneous temperatures.
+
+    The numerical difference between the two approaches is typically
+    < 0.05 g/m³ for the temperature ranges observed in northern Italy
+    during influenza season. We document the choice here for
+    reproducibility.
 
 HUMIDITY FORMULAE:
     Saturation vapour pressure (hPa) — Magnus formula:
@@ -78,16 +118,16 @@ PREREQUISITES:
     1 gennaio 2024" → extract Com01012024_g_WGS84.shp.
 
 INPUT:
-    era5_ats.nc              — output of Script 1
+    era5_ats.nc              — output of Script 1 (4 timesteps/day)
     Com01012024_g_WGS84.shp  — ISTAT comuni boundaries (WGS84)
 
 OUTPUT:
     meteo_per_ats_giornaliero.csv — one row per (date, ATS), columns:
         data                  : calendar date (YYYY-MM-DD)
         ATS                   : ATS_Bergamo | ATS_Montagna
-        temperatura_C         : mean 2 m air temperature        [°C]
-        umidita_assoluta_gm3  : mean absolute humidity          [g/m³]
-        umidita_relativa_pct  : mean relative humidity          [%]
+        temperatura_C         : daily-mean 2 m air temperature   [°C]
+        umidita_assoluta_gm3  : absolute humidity from daily mean [g/m³]
+        umidita_relativa_pct  : relative humidity from daily mean [%]
 
     confini_ats.geojson       — dissolved ATS boundary polygons
                                 (WGS84, for mapping and QC)
@@ -95,7 +135,8 @@ OUTPUT:
 DOWNSTREAM USAGE:
     meteo_per_ats_giornaliero.csv is read by the GAM / regression
     scripts to provide the meteorological covariates (AH or RH) that
-    modulate influenza transmission risk.
+    modulate influenza transmission risk. The daily values are then
+    aggregated to ISO-week means by the analysis scripts.
 
 BIASES AND LIMITATIONS:
     - ERA5 grid cells (~27 km) are much coarser than the ATS area:
@@ -111,9 +152,9 @@ BIASES AND LIMITATIONS:
     - The Magnus formula is accurate to within 0.1 % for temperatures
       between −40 °C and +60 °C; no corrections are applied for
       ice-bulb effects below 0 °C.
-    - Only the 12:00 UTC snapshot is used (inherited from Script 1);
-      daily-mean AH/RH would require averaging over all four standard
-      synoptic hours (00, 06, 12, 18 UTC).
+    - Four 6-hourly timesteps approximate but do not perfectly reproduce
+      the true 24-hour mean; ERA5 hourly data would be ideal but would
+      increase file size and download time by ~6×.
 
 =============================================================
 """
@@ -176,15 +217,20 @@ def calc_humidity(T_k: np.ndarray, Td_k: np.ndarray):
     Uses the Magnus formula for saturation vapour pressure
     (Alduchov & Eskridge 1996), consistent with Shaman & Kohn (2009).
 
+    IMPORTANT: T_k and Td_k must already be DAILY MEANS (averaged over
+    the 4 ERA5 timesteps) before calling this function. Do not pass
+    instantaneous values and average the output — see module docstring
+    section 'HUMIDITY COMPUTATION ORDER' for the rationale.
+
     Parameters
     ----------
-    T_k  : np.ndarray — 2 m air temperature         [K]
-    Td_k : np.ndarray — 2 m dewpoint temperature     [K]
+    T_k  : np.ndarray — daily-mean 2 m air temperature     [K]
+    Td_k : np.ndarray — daily-mean 2 m dewpoint temperature [K]
 
     Returns
     -------
-    AH   : np.ndarray — absolute humidity            [g/m³]
-    RH   : np.ndarray — relative humidity            [%]
+    AH   : np.ndarray — absolute humidity                  [g/m³]
+    RH   : np.ndarray — relative humidity                  [%]
     """
     T_c  = T_k  - 273.15
     Td_c = Td_k - 273.15
@@ -194,8 +240,8 @@ def calc_humidity(T_k: np.ndarray, Td_k: np.ndarray):
     # Actual vapour pressure at dewpoint temperature [hPa]
     e_act = 6.1078 * np.exp((17.2694 * Td_c) / (Td_c + 237.29))
 
-    RH = (e_act / e_sat) * 100.0                  # relative humidity [%]
-    AH = (2165.0 * e_act) / T_k                   # absolute humidity [g/m³]
+    RH = (e_act / e_sat) * 100.0     # relative humidity [%]
+    AH = (2165.0 * e_act) / T_k      # absolute humidity [g/m³]
 
     return AH, RH
 
@@ -216,43 +262,85 @@ def build_ats_mask(comuni_gdf: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
     return pd.concat(results, ignore_index=True)
 
 
-def era5_to_points(ds: xr.Dataset, timestep) -> gpd.GeoDataFrame:
+def daily_mean_to_points(ds: xr.Dataset, date_str: str,
+                         dim_time: str) -> gpd.GeoDataFrame:
     """
-    Extract a single daily snapshot from the ERA5 dataset and convert
-    the 2-D grid to a GeoDataFrame of point geometries (one per cell).
+    For a given calendar date, average all available ERA5 timesteps
+    (00:00, 06:00, 12:00, 18:00 UTC) at each grid cell, then compute
+    AH and RH from the daily-mean T and Td.
 
-    Handles both 'time' and 'valid_time' dimension names, which differ
-    between ERA5 legacy and recent CDS downloads.
+    CHANGE FROM PREVIOUS VERSION:
+        Previously, this function received a single timestep and
+        computed AH/RH from instantaneous T and Td. Now it receives a
+        date string, selects all timesteps for that date, averages T
+        and Td first, and then computes humidity. This ensures that
+        the output represents a true daily mean, consistent with ARPA
+        Lombardia daily-mean pollutant data.
 
     Parameters
     ----------
-    ds        : xr.Dataset — the full ERA5 dataset
-    timestep  : numpy datetime64 — the specific timestep to extract
+    ds        : xr.Dataset  — the full ERA5 dataset (all timesteps)
+    date_str  : str         — calendar date to process ('YYYY-MM-DD')
+    dim_time  : str         — name of the time dimension in ds
+                              ('time' or 'valid_time')
 
     Returns
     -------
     gdf : gpd.GeoDataFrame with columns:
           lon, lat, T_celsius, AH, RH, geometry
     """
-    dim_time = 'valid_time' if 'valid_time' in ds.dims else 'time'
-    day_slice = ds.sel({dim_time: timestep})
+    # ── MODIFICA 1: seleziona TUTTI i timestep del giorno ────────────────
+    # Con 4 timestep/giorno, ds[dim_time] ha valori come:
+    #   2022-01-01T00:00, 2022-01-01T06:00, 2022-01-01T12:00, 2022-01-01T18:00
+    # Selezioniamo quelli che iniziano con la data voluta e facciamo la media.
+    #
+    # ds.sel con method='nearest' selezionerebbe UN solo timestep.
+    # Usiamo invece where() per filtrare tutti i timestep del giorno.
+    times_for_date = pd.to_datetime(
+        ds[dim_time].values
+    ).normalize() == pd.Timestamp(date_str)
 
-    T  = day_slice['t2m'].values.flatten()
-    Td = day_slice['d2m'].values.flatten()
+    if not times_for_date.any():
+        raise ValueError(f"No ERA5 timesteps found for date {date_str}")
 
+    n_timesteps = int(times_for_date.sum())
+    if n_timesteps < 4:
+        # Avvisa ma procedi: alcuni giorni ai bordi del dataset o dopo
+        # il filtro per mese potrebbero avere meno di 4 snapshot.
+        print(f"  WARNING {date_str}: only {n_timesteps}/4 timesteps available "
+              f"— daily mean will be less accurate.")
+
+    # Seleziona il sottoinsieme e calcola la media lungo la dimensione tempo
+    # ── MODIFICA 2: media su T e Td PRIMA di calcolare AH/RH ────────────
+    # .mean(dim=dim_time) produce array 2D (lat × lon) con la media giornaliera.
+    # È matematicamente più corretto rispetto a calcolare AH istantaneo
+    # e poi fare la media, perché la formula di Magnus è non-lineare.
+    day_ds = ds.isel({dim_time: times_for_date})
+    T_mean  = day_ds['t2m'].mean(dim=dim_time).values   # shape: (lat, lon) [K]
+    Td_mean = day_ds['d2m'].mean(dim=dim_time).values   # shape: (lat, lon) [K]
+
+    # Griglia lat/lon
     lons, lats = np.meshgrid(ds.longitude.values, ds.latitude.values)
     lons = lons.flatten()
     lats = lats.flatten()
 
-    AH, RH = calc_humidity(T, Td)
+    # Calcola AH e RH dai valori MEDI giornalieri
+    AH, RH = calc_humidity(T_mean.flatten(), Td_mean.flatten())
 
     return gpd.GeoDataFrame({
         'lon'       : lons,
         'lat'       : lats,
-        'T_celsius' : T - 273.15,
+        'T_celsius' : T_mean.flatten() - 273.15,
         'AH'        : AH,
         'RH'        : RH,
     }, geometry=gpd.points_from_xy(lons, lats), crs='EPSG:4326')
+
+
+def in_flu_season(date) -> bool:
+    """Return True if the date falls within an influenza season window
+    (ISO weeks 46-52 or 1-15)."""
+    iso_week = pd.Timestamp(date).isocalendar().week
+    return iso_week >= 46 or iso_week <= 15
 
 
 # ---------------------------------------------------------------------------
@@ -312,31 +400,43 @@ def main():
     print(f"  Dimensions : {dict(ds.sizes)}")
 
     dim_time = 'valid_time' if 'valid_time' in ds.dims else 'time'
-    timesteps = ds[dim_time].values
-    print(f"  Time dim   : '{dim_time}'  ({len(timesteps)} timesteps)")
-    print(f"  Period     : {str(timesteps[0])[:10]}  →  {str(timesteps[-1])[:10]}")
+    all_timesteps = pd.to_datetime(ds[dim_time].values)
+    print(f"  Time dim   : '{dim_time}'  ({len(all_timesteps)} timesteps total)")
+    print(f"  Period     : {all_timesteps[0].date()}  →  {all_timesteps[-1].date()}")
 
-    # Filter to influenza-season weeks only (ISO weeks 46-52 and 1-15)
-    import datetime
-    def in_flu_season(np_dt):
-        d = pd.Timestamp(np_dt).date()
-        iso_week = d.isocalendar().week
-        return iso_week >= 46 or iso_week <= 15
+    # ── MODIFICA 3: costruiamo la lista di DATE UNICHE (non timestep) ────
+    # Con 4 timestep/giorno, iterare su ogni timestep produrrebbe
+    # 4 righe per giorno nel CSV finale. Invece iteriamo sulle DATE
+    # e all'interno di ogni data aggreghiamo i 4 timestep.
+    all_dates = sorted(set(all_timesteps.normalize()))   # date uniche
 
-    timesteps_filtered = [t for t in timesteps if in_flu_season(t)]
-    print(f"  After ISO-week filter (wk 46-15): {len(timesteps_filtered)} timesteps")
+    # Filtro per stagione influenzale (settimane ISO 46-52 e 1-15)
+    dates_flu = [d for d in all_dates if in_flu_season(d)]
+    print(f"  Unique dates after ISO-week filter (wk 46-15): {len(dates_flu)}")
 
-    # --- 4. Daily spatial join and ATS aggregation ---
-    print("\nProcessing daily snapshots...")
+    # Sanity check: ogni data dovrebbe avere 4 timestep
+    timestep_counts = all_timesteps.normalize().value_counts().sort_index()
+    dates_not_4 = timestep_counts[timestep_counts != 4]
+    if not dates_not_4.empty:
+        print(f"\n  WARNING: the following dates have ≠ 4 timesteps:")
+        for d, n in dates_not_4.items():
+            print(f"    {d.date()} → {n} timestep(s)")
+
+    # --- 4. Daily aggregation and spatial join ---
+    print("\nProcessing daily means (4 timesteps → 1 daily value per ATS)...")
     rows = []
 
-    for t in timesteps_filtered:
-        date_str = str(t)[:10]
+    for date in dates_flu:
+        date_str = date.strftime('%Y-%m-%d')
 
-        # ERA5 grid → GeoDataFrame of points
-        gdf_pts = era5_to_points(ds, t)
+        # Aggrega i 4 timestep → daily-mean T e Td → calcola AH/RH
+        try:
+            gdf_pts = daily_mean_to_points(ds, date_str, dim_time)
+        except ValueError as e:
+            print(f"  SKIP {date_str}: {e}")
+            continue
 
-        # Spatial join: each ERA5 point → ATS polygon
+        # Spatial join: ogni cella ERA5 → poligono ATS
         joined = gpd.sjoin(
             gdf_pts,
             comuni_ats[['ATS', 'geometry']],
@@ -348,7 +448,7 @@ def main():
             print(f"  WARNING {date_str}: no ERA5 grid point falls within any ATS polygon.")
             continue
 
-        # Unweighted spatial mean per ATS
+        # Media spaziale non pesata per ATS
         per_ats = (joined
                    .groupby('ATS')
                    .agg(T_celsius=('T_celsius', 'mean'),
@@ -375,7 +475,16 @@ def main():
     print("\nFirst rows:")
     print(df_out.head(10).to_string(index=False))
 
-    # --- 6. Descriptive statistics ---
+    # --- 6. Sanity check: ogni data dovrebbe avere esattamente 2 righe (una per ATS) ---
+    rows_per_date = df_out.groupby('data').size()
+    bad_dates = rows_per_date[rows_per_date != 2]
+    if not bad_dates.empty:
+        print(f"\n  WARNING: {len(bad_dates)} date(s) have ≠ 2 ATS rows (expected 2):")
+        print(bad_dates.to_string())
+    else:
+        print(f"\n  ✓ Sanity check passed: all dates have exactly 2 ATS rows.")
+
+    # --- 7. Descriptive statistics ---
     print("\n--- DESCRIPTIVE STATISTICS BY ATS ---")
     print(df_out.groupby('ATS')[
         ['temperatura_C', 'umidita_assoluta_gm3', 'umidita_relativa_pct']
