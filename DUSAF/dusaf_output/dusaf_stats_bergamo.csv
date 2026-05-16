@@ -1,9 +1,11 @@
-ats,macro_cat,area_km2,percentuale
-ATS Bergamo,Boschi e zone naturali,1583.3936,57.4685
-ATS Bergamo,Agricola,720.5867,26.1533
-ATS Bergamo,Residenziale,227.0748,8.2416
-ATS Bergamo,Industriale / Commerciale / Infrastrutture,112.9383,4.0990
-ATS Bergamo,Altre superfici artificiali,51.9859,1.8868
-ATS Bergamo,Corpi idrici,37.1276,1.3475
-ATS Bergamo,Zone estrattive e cantieri,21.4254,0.7776
-ATS Bergamo,Zone umide,0.7059,0.0256
+ats,nome_lungo,macro_cat,area_km2,percentuale
+Bergamo,ATS di Bergamo,Boschi e zone naturali,1583.3936,57.4685
+Bergamo,ATS di Bergamo,Agricola,720.5867,26.1533
+Bergamo,ATS di Bergamo,Residenziale,227.0748,8.2416
+Bergamo,ATS di Bergamo,Industriale / Commerciale,112.9383,4.0990
+Bergamo,ATS di Bergamo,Altre superfici artificiali,51.9859,1.8868
+Bergamo,ATS di Bergamo,Corpi idrici,37.1276,1.3475
+Bergamo,ATS di Bergamo,Zone estrattive e cantieri,21.4254,0.7776
+Bergamo,ATS di Bergamo,Zone umide,0.7059,0.0256
+Bergamo,ATS di Bergamo,Verde urbano,0.0000,0.0000
+Bergamo,ATS di Bergamo,Altro / Non classificato,0.0000,0.0000

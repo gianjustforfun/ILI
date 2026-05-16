@@ -1,0 +1,81 @@
+ats,nome_lungo,macro_cat,area_km2,percentuale
+Milano,ATS Città Metropolitana di Milano,Agricola,1377.3156,58.4029
+Milano,ATS Città Metropolitana di Milano,Residenziale,317.6313,13.4686
+Milano,ATS Città Metropolitana di Milano,Industriale / Commerciale,231.7526,9.8271
+Milano,ATS Città Metropolitana di Milano,Boschi e zone naturali,171.0814,7.2544
+Milano,ATS Città Metropolitana di Milano,Altre superfici artificiali,134.2366,5.6921
+Milano,ATS Città Metropolitana di Milano,Zone estrattive e cantieri,83.4169,3.5372
+Milano,ATS Città Metropolitana di Milano,Corpi idrici,40.5936,1.7213
+Milano,ATS Città Metropolitana di Milano,Zone umide,2.2739,0.0964
+Milano,ATS Città Metropolitana di Milano,Verde urbano,0.0000,0.0000
+Milano,ATS Città Metropolitana di Milano,Altro / Non classificato,0.0000,0.0000
+Insubria,ATS dell'Insubria,Boschi e zone naturali,1197.4203,52.4007
+Insubria,ATS dell'Insubria,Residenziale,342.7827,15.0006
+Insubria,ATS dell'Insubria,Agricola,330.9059,14.4809
+Insubria,ATS dell'Insubria,Corpi idrici,188.9381,8.2682
+Insubria,ATS dell'Insubria,Industriale / Commerciale,113.9536,4.9868
+Insubria,ATS dell'Insubria,Altre superfici artificiali,80.2410,3.5115
+Insubria,ATS dell'Insubria,Zone estrattive e cantieri,24.0439,1.0522
+Insubria,ATS dell'Insubria,Zone umide,6.8364,0.2992
+Insubria,ATS dell'Insubria,Verde urbano,0.0000,0.0000
+Insubria,ATS dell'Insubria,Altro / Non classificato,0.0000,0.0000
+Brianza,ATS della Brianza,Boschi e zone naturali,538.7752,44.5090
+Brianza,ATS della Brianza,Agricola,242.1264,20.0024
+Brianza,ATS della Brianza,Residenziale,194.9455,16.1047
+Brianza,ATS della Brianza,Industriale / Commerciale,89.0441,7.3561
+Brianza,ATS della Brianza,Corpi idrici,76.0998,6.2867
+Brianza,ATS della Brianza,Altre superfici artificiali,50.7406,4.1917
+Brianza,ATS della Brianza,Zone estrattive e cantieri,17.7864,1.4694
+Brianza,ATS della Brianza,Zone umide,0.9690,0.0800
+Brianza,ATS della Brianza,Verde urbano,0.0000,0.0000
+Brianza,ATS della Brianza,Altro / Non classificato,0.0000,0.0000
+Bergamo,ATS di Bergamo,Boschi e zone naturali,1583.3936,57.4685
+Bergamo,ATS di Bergamo,Agricola,720.5867,26.1533
+Bergamo,ATS di Bergamo,Residenziale,227.0748,8.2416
+Bergamo,ATS di Bergamo,Industriale / Commerciale,112.9383,4.0990
+Bergamo,ATS di Bergamo,Altre superfici artificiali,51.9859,1.8868
+Bergamo,ATS di Bergamo,Corpi idrici,37.1276,1.3475
+Bergamo,ATS di Bergamo,Zone estrattive e cantieri,21.4254,0.7776
+Bergamo,ATS di Bergamo,Zone umide,0.7059,0.0256
+Bergamo,ATS di Bergamo,Verde urbano,0.0000,0.0000
+Bergamo,ATS di Bergamo,Altro / Non classificato,0.0000,0.0000
+Brescia,ATS di Brescia,Agricola,1478.4078,41.9142
+Brescia,ATS di Brescia,Boschi e zone naturali,1248.2983,35.3904
+Brescia,ATS di Brescia,Residenziale,259.5352,7.3581
+Brescia,ATS di Brescia,Corpi idrici,247.7550,7.0241
+Brescia,ATS di Brescia,Industriale / Commerciale,168.8111,4.7859
+Brescia,ATS di Brescia,Altre superfici artificiali,84.5545,2.3972
+Brescia,ATS di Brescia,Zone estrattive e cantieri,36.7664,1.0424
+Brescia,ATS di Brescia,Zone umide,3.0974,0.0878
+Brescia,ATS di Brescia,Verde urbano,0.0000,0.0000
+Brescia,ATS di Brescia,Altro / Non classificato,0.0000,0.0000
+Pavia,ATS di Pavia,Agricola,2138.1779,72.0338
+Pavia,ATS di Pavia,Boschi e zone naturali,493.7848,16.6353
+Pavia,ATS di Pavia,Residenziale,162.9825,5.4908
+Pavia,ATS di Pavia,Industriale / Commerciale,75.0445,2.5282
+Pavia,ATS di Pavia,Corpi idrici,42.3364,1.4263
+Pavia,ATS di Pavia,Altre superfici artificiali,34.9601,1.1778
+Pavia,ATS di Pavia,Zone estrattive e cantieri,16.1388,0.5437
+Pavia,ATS di Pavia,Zone umide,4.8751,0.1642
+Pavia,ATS di Pavia,Verde urbano,0.0000,0.0000
+Pavia,ATS di Pavia,Altro / Non classificato,0.0000,0.0000
+ValPadana,ATS della Val Padana,Agricola,3385.0316,82.3415
+ValPadana,ATS della Val Padana,Residenziale,243.9611,5.9344
+ValPadana,ATS della Val Padana,Industriale / Commerciale,177.5473,4.3189
+ValPadana,ATS della Val Padana,Boschi e zone naturali,126.9534,3.0882
+ValPadana,ATS della Val Padana,Corpi idrici,86.8534,2.1127
+ValPadana,ATS della Val Padana,Altre superfici artificiali,58.3988,1.4206
+ValPadana,ATS della Val Padana,Zone estrattive e cantieri,21.9444,0.5338
+ValPadana,ATS della Val Padana,Zone umide,10.2777,0.2500
+ValPadana,ATS della Val Padana,Verde urbano,0.0000,0.0000
+ValPadana,ATS della Val Padana,Altro / Non classificato,0.0000,0.0000
+Montagna,ATS della Montagna,Boschi e zone naturali,4096.6895,88.1534
+Montagna,ATS della Montagna,Agricola,330.7827,7.1179
+Montagna,ATS della Montagna,Residenziale,86.8715,1.8693
+Montagna,ATS della Montagna,Corpi idrici,70.9132,1.5259
+Montagna,ATS della Montagna,Altre superfici artificiali,28.5150,0.6136
+Montagna,ATS della Montagna,Industriale / Commerciale,24.3440,0.5238
+Montagna,ATS della Montagna,Zone estrattive e cantieri,5.3599,0.1153
+Montagna,ATS della Montagna,Zone umide,3.7512,0.0807
+Montagna,ATS della Montagna,Verde urbano,0.0000,0.0000
+Montagna,ATS della Montagna,Altro / Non classificato,0.0000,0.0000

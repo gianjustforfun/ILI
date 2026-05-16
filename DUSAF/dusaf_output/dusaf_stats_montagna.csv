@@ -1,9 +1,11 @@
-ats,macro_cat,area_km2,percentuale
-ATS Montagna,Boschi e zone naturali,4046.3318,86.9601
-ATS Montagna,Agricola,348.6117,7.4920
-ATS Montagna,Corpi idrici,98.9313,2.1261
-ATS Montagna,Residenziale,93.9965,2.0201
-ATS Montagna,Altre superfici artificiali,28.9146,0.6214
-ATS Montagna,Industriale / Commerciale / Infrastrutture,26.6199,0.5721
-ATS Montagna,Zone estrattive e cantieri,5.8894,0.1266
-ATS Montagna,Zone umide,3.7940,0.0815
+ats,nome_lungo,macro_cat,area_km2,percentuale
+Montagna,ATS della Montagna,Boschi e zone naturali,4096.6895,88.1534
+Montagna,ATS della Montagna,Agricola,330.7827,7.1179
+Montagna,ATS della Montagna,Residenziale,86.8715,1.8693
+Montagna,ATS della Montagna,Corpi idrici,70.9132,1.5259
+Montagna,ATS della Montagna,Altre superfici artificiali,28.5150,0.6136
+Montagna,ATS della Montagna,Industriale / Commerciale,24.3440,0.5238
+Montagna,ATS della Montagna,Zone estrattive e cantieri,5.3599,0.1153
+Montagna,ATS della Montagna,Zone umide,3.7512,0.0807
+Montagna,ATS della Montagna,Verde urbano,0.0000,0.0000
+Montagna,ATS della Montagna,Altro / Non classificato,0.0000,0.0000
