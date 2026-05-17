@@ -8,18 +8,22 @@ WHAT THIS SCRIPT DOES:
        project directory (one file per ATS/province per year).
     2. Extracts the population total from each file (last row, column
        'Totale').
-    3. Builds two population datasets:
-         a) ATS Bergamo — directly from ATS BERGAMO/ files.
+    3. Builds three population datasets:
+         a) ATS Bergamo  — directly from ATS BERGAMO/ files.
          b) ATS Montagna — sum of:
               • Selected comuni of Provincia di Brescia
               • Selected comuni of Provincia di Como
               • Entire Provincia di Sondrio
+         c) ATS Brianza  — sum of:              ← NUOVO
+              • Entire Provincia di Lecco
+              • Entire Provincia di Monza e Brianza
     4. Saves one CSV per influenza season per ATS into:
          output/stagioni/ATS_BERGAMO/
          output/stagioni/ATS_MONTAGNA/
+         output/stagioni/ATS_BRIANZA/            ← NUOVO
     5. Produces one plot per influenza season (saved to output/grafici/)
-       showing — for both ATS Bergamo and ATS Montagna — two overlaid
-       curves:
+       showing — for ATS Bergamo, ATS Montagna, and ATS Brianza — two
+       overlaid curves:
          • Total ER visits / population  (all-cause rate)
          • ILI ER visits  / population   (ILI-specific rate)
 
@@ -27,27 +31,24 @@ INPUT DIRECTORY STRUCTURE EXPECTED:
     ISTAT/
     ├── ATS BERGAMO/
     │   ├── Popolazione residente_ATS_Bergamo_2022.csv
-    │   ├── Popolazione residente_ATS_Bergamo_2023.csv
-    │   ├── Popolazione residente_ATS_Bergamo_2024.csv
-    │   ├── Popolazione residente_ATS_Bergamo_2025.csv
-    │   └── Popolazione residente_ATS_Bergamo_2026.csv
-    └── ATS MONTAGNA/
-        ├── BRESCIA/
-        │   ├── Popolazione residente_Prov_Brescia_2022.csv
+    │   └── ...
+    ├── ATS MONTAGNA/
+    │   ├── BRESCIA/
+    │   ├── COMO/
+    │   └── SONDRIO/
+    └── ATS BRIANZA/                             ← NUOVO
+        ├── LECCO/
+        │   ├── Popolazione residente_Prov_Lecco_2022.csv
         │   └── ...
-        ├── COMO/
-        │   ├── Popolazione residente_Prov_Como_2022.csv
-        │   └── ...
-        └── SONDRIO/
-            ├── Popolazione residente_Prov_Sondrio_2022.csv
+        └── MONZA/
+            ├── Popolazione residente_Prov_Monza_2022.csv
             └── ...
 
-    ⚠ NOTE: The Brescia and Como CSVs from ISTAT contain data at
-      COMUNE level, not provincia level. This script filters only the
-      comuni that fall within the ATS Montagna catchment area (see
-      COMUNI_BRESCIA and COMUNI_COMO constants below). The Sondrio
-      CSV is taken in full (all comuni in Sondrio belong to ATS
-      Montagna). ATS Bergamo is a single-file dataset (province = ATS).
+    ⚠ NOTE — ATS Brianza coverage:
+      • Lecco   : intera provincia → nessun filtro necessario
+      • Monza   : intera provincia (Monza e Brianza) → nessun filtro necessario
+      La logica è identica a quella usata per la Provincia di Sondrio in
+      ATS Montagna: get_population_total() somma tutti i comuni del file.
 
 INFLUENZA SEASON CONVENTION (same as Script 1):
     Season 21-22 : weeks 1-15 of 2022 only (weeks 48-52 of 2021 missing)
@@ -68,26 +69,21 @@ ILI DATA DEPENDENCY:
         ../SORVEGLIANZA ACCESSI PS/output/ATS_BERGAMO/ili_ats_bergamo_stagionale.csv
         ../SORVEGLIANZA ACCESSI PS/output/ATS_MONTAGNA/access_tot_montagna_stagionale.csv
         ../SORVEGLIANZA ACCESSI PS/output/ATS_MONTAGNA/ili_ats_montagna_stagionale.csv
+        ../SORVEGLIANZA ACCESSI PS/output/ATS_BRIANZA/access_tot_brianza_stagionale.csv   ← NUOVO
+        ../SORVEGLIANZA ACCESSI PS/output/ATS_BRIANZA/ili_ats_brianza_stagionale.csv      ← NUOVO
     ➜ Run Script 1 before this script.
 
 OUTPUT STRUCTURE:
     output/
     ├── stagioni/
     │   ├── ATS_BERGAMO/
-    │   │   ├── popolazione_bergamo_21-22.csv
-    │   │   ├── popolazione_bergamo_22-23.csv
-    │   │   ├── popolazione_bergamo_23-24.csv
-    │   │   ├── popolazione_bergamo_24-25.csv
-    │   │   └── popolazione_bergamo_25-26.csv
-    │   └── ATS_MONTAGNA/
-    │       ├── popolazione_montagna_21-22.csv
+    │   ├── ATS_MONTAGNA/
+    │   └── ATS_BRIANZA/                         ← NUOVO
+    │       ├── popolazione_brianza_21-22.csv
     │       └── ...
     └── grafici/
         ├── ratio_ili_population_21-22.png
-        ├── ratio_ili_population_22-23.png
-        ├── ratio_ili_population_23-24.png
-        ├── ratio_ili_population_24-25.png
-        └── ratio_ili_population_25-26.png
+        └── ...
 
 BIASES AND LIMITATIONS:
     - Ecological bias: all data are aggregated at ATS level. No
@@ -120,20 +116,19 @@ ISTAT_DIR = "."  # lo script gira da dentro ISTAT/, quindi "." è la root corret
 # Output directories
 OUT_STAGIONI_BG = "output/istat_ats_bergamo"
 OUT_STAGIONI_MT = "output/istat_ats_montagna"
-OUT_MONTAGNA_ALL = "output/istat_ats_montagna/whole"   # un CSV per anno, tutti i comuni ATS Montagna
+OUT_STAGIONI_BR = "output/istat_ats_brianza"          # ← NUOVO
+OUT_MONTAGNA_ALL = "output/istat_ats_montagna/whole"
 OUT_GRAFICI     = "output/grafici"
 
 # Script 1 CSV outputs (read as ILI input)
-# Path relative to where you run the script (project root = ILI/)
 ILI_DIR_BG = "../SORVEGLIANZA ACCESSI PS/output/ATS_BERGAMO"
 ILI_DIR_MT = "../SORVEGLIANZA ACCESSI PS/output/ATS_MONTAGNA"
+ILI_DIR_BR = "../SORVEGLIANZA ACCESSI PS/output/ATS_BRIANZA"  # ← NUOVO
 
 # Years available in the ISTAT files
-# Modify this list if you add or remove yearly files
 ANNI_DISPONIBILI = [2022, 2023, 2024, 2025, 2026]
 
 # Season → ISTAT year mapping (we use the later calendar year of each season)
-# If the 2026 file does not exist yet, the script falls back to 2025
 STAGIONI = {
     "21-22": 2022,
     "22-23": 2023,
@@ -144,11 +139,6 @@ STAGIONI = {
 
 # -------------------------------------------------------
 # ATS MONTAGNA — comuni that belong to this ATS
-# Source: official ATS Montagna catchment area
-#
-# The ISTAT files now have ONE ROW PER COMUNE (column 'Comune'),
-# so we can filter exactly — no approximation needed.
-# Sondrio: read in full (entire province = ATS Montagna).
 # -------------------------------------------------------
 
 COMUNI_BRESCIA = [
@@ -169,6 +159,8 @@ COMUNI_COMO = [
 ]
 
 # Sondrio: entire province → no filter needed
+# Lecco:   entire province → no filter needed  (ATS Brianza)
+# Monza:   entire province → no filter needed  (ATS Brianza)
 
 
 # -------------------------------------------------------
@@ -185,6 +177,8 @@ def get_population_total(filepath):
     Used for:
         ATS Bergamo  — all 243 comuni of the province
         Sondrio      — all comuni of the province (= entire ATS Montagna)
+        Lecco        — all comuni of the province (= part of ATS Brianza)
+        Monza        — all comuni of the province (= part of ATS Brianza)
 
     Parameters:
         filepath (str): path to the ISTAT CSV file
@@ -207,23 +201,11 @@ def get_population_total(filepath):
 
 def get_population_comuni(filepath, comuni_list):
     """
-    Reads an ISTAT CSV where EACH ROW IS ONE COMUNE (new format from
-    demo.istat.it with columns: 'Codice comune', 'Comune', marital
-    status columns, 'Totale maschi', 'Totale femmine', 'Totale').
+    Reads an ISTAT CSV where EACH ROW IS ONE COMUNE and filters to the
+    comuni in comuni_list, returning the sum of their 'Totale' column.
 
-    Filters to the comuni in comuni_list and sums their 'Totale' column.
-
-    This is the EXACT and CORRECT approach: no approximation needed
-    because the file already has one row per comune with its population.
-
-    Matching strategy:
-        Exact string match after stripping leading/trailing whitespace
-        from both the CSV values and the comuni_list entries.
-        If a comune is not found, a warning is printed and it is skipped
-        (contributes 0 to the sum). Check warnings carefully — a mismatch
-        is usually due to accents, apostrophes, or capitalisation differences
-        between how the comune is named in COMUNI_BRESCIA/COMUNI_COMO and
-        how ISTAT spells it in the file.
+    Used for:
+        ATS Montagna — Brescia subset and Como subset
 
     Parameters:
         filepath (str):      path to the ISTAT per-comune CSV
@@ -242,7 +224,6 @@ def get_population_comuni(filepath, comuni_list):
             print(f"     Columns found: {df.columns.tolist()}")
             return 0
 
-        # Normalise whitespace in both sides for robust matching
         df['_comune_norm'] = df['Comune'].astype(str).str.strip()
         comuni_norm = [c.strip() for c in comuni_list]
 
@@ -263,45 +244,16 @@ def get_population_comuni(filepath, comuni_list):
         return 0
 
 
-
 def salva_csv_comuni_montagna(filepath_bs, filepath_co, filepath_so,
                               anno, comuni_bs, comuni_co, output_dir):
     """
-    Builds a single per-comune CSV for ATS Montagna for a given year,
-    combining:
-        - the selected comuni from the Brescia provincial file
-        - the selected comuni from the Como provincial file
-        - ALL comuni from the Sondrio provincial file
-
-    Each row in the output is one comune with its total population.
-    The file is saved as:
-        <output_dir>/ats_montagna_comuni_<anno>.csv
-
-    Columns in the output:
-        PROVINCIA   : 'Brescia', 'Como', or 'Sondrio'
-        Comune      : comune name as in the ISTAT source file
-        Totale      : total resident population
-
-    WHY this CSV is useful:
-        It gives you the full per-comune breakdown of the ATS Montagna
-        population for each year. This is the granular dataset you need
-        if you later want to weight analyses by sub-territory or verify
-        that the total matches the aggregate figure used in the plots.
-
-    Parameters:
-        filepath_bs (str):  path to Brescia provincial CSV (or None)
-        filepath_co (str):  path to Como provincial CSV (or None)
-        filepath_so (str):  path to Sondrio provincial CSV (or None)
-        anno (int):         reference year (used in filename)
-        comuni_bs (list):   list of Brescia comuni to include
-        comuni_co (list):   list of Como comuni to include
-        output_dir (str):   where to save the output CSV
+    Builds a single per-comune CSV for ATS Montagna for a given year.
+    Unchanged from the original script.
     """
     os.makedirs(output_dir, exist_ok=True)
     parts = []
 
     def _load_filter(filepath, comuni_list, provincia_label):
-        """Loads a provincial CSV, filters to comuni_list, adds PROVINCIA col."""
         if filepath is None or not os.path.exists(filepath):
             print(f"  ⚠ [{provincia_label}] file not found — skipped.")
             return pd.DataFrame()
@@ -309,7 +261,6 @@ def salva_csv_comuni_montagna(filepath_bs, filepath_co, filepath_so,
         if 'Comune' not in df.columns or 'Totale' not in df.columns:
             print(f"  ⚠ [{provincia_label}] unexpected columns — skipped.")
             return pd.DataFrame()
-        # Filter if a comuni_list is provided; otherwise take all rows
         if comuni_list is not None:
             norm = [c.strip() for c in comuni_list]
             df['_norm'] = df['Comune'].astype(str).str.strip()
@@ -320,7 +271,7 @@ def salva_csv_comuni_montagna(filepath_bs, filepath_co, filepath_so,
 
     parts.append(_load_filter(filepath_bs, comuni_bs, 'Brescia'))
     parts.append(_load_filter(filepath_co, comuni_co, 'Como'))
-    parts.append(_load_filter(filepath_so, None,      'Sondrio'))   # all comuni
+    parts.append(_load_filter(filepath_so, None,      'Sondrio'))
 
     result = pd.concat([p for p in parts if not p.empty], ignore_index=True)
 
@@ -338,7 +289,7 @@ def salva_csv_comuni_montagna(filepath_bs, filepath_co, filepath_so,
 def _find_year_file(folder, anno):
     """
     Finds the CSV file for a given year inside a folder by looking for
-    files whose name ends with '_YYYY.csv' or contains 'YYYY'.
+    files whose name contains 'YYYY'.
 
     Parameters:
         folder (str): directory to search
@@ -357,16 +308,8 @@ def _find_year_file(folder, anno):
 
 def load_ili_csv(filepath, value_col):
     """
-    Loads a seasonalised ILI CSV produced by Script 1 and returns it
-    as a DataFrame.
-
-    Parameters:
-        filepath (str):   path to the CSV
-        value_col (str):  name of the value column to keep
-
-    Returns:
-        pd.DataFrame with columns [STAGIONE, WEEK, ORDINE, value_col]
-        or empty DataFrame if file not found
+    Loads a seasonalised ILI CSV produced by Script 1.
+    Returns empty DataFrame if file not found.
     """
     if not os.path.exists(filepath):
         print(f"  ⚠ ILI file not found: {filepath} — run Script 1 first.")
@@ -378,17 +321,11 @@ def load_ili_csv(filepath, value_col):
     return df
 
 
-def salva_csv_stagione(pop_value, anno_istat, stagione, ats_label, output_dir):
+def salva_csv_stagione(pop_value, anno_istat, stagione, ats_label, output_dir,
+                       extra_cols=None):
     """
     Saves a one-row CSV summarising the population figure used for a
     given influenza season.
-
-    WHY save a per-season CSV:
-        Keeping the population denominator alongside the ILI counts
-        makes the dataset self-contained for downstream analyses and
-        ensures reproducibility — anyone running a later script can
-        verify which population figure was used without re-running
-        this script.
 
     Parameters:
         pop_value (int):    population count
@@ -396,18 +333,35 @@ def salva_csv_stagione(pop_value, anno_istat, stagione, ats_label, output_dir):
         stagione (str):     e.g. '22-23'
         ats_label (str):    e.g. 'ATS_BERGAMO'
         output_dir (str):   where to save
+        extra_cols (dict):  additional columns to include in the CSV
+                            (used by ATS Montagna and ATS Brianza to
+                            record sub-territory breakdown)
     """
     os.makedirs(output_dir, exist_ok=True)
-    prefix = "bergamo" if "BERGAMO" in ats_label else "montagna"
+
+    # Derive filename prefix from ATS label
+    if "BERGAMO" in ats_label:
+        prefix = "bergamo"
+    elif "MONTAGNA" in ats_label:
+        prefix = "montagna"
+    elif "BRIANZA" in ats_label:
+        prefix = "brianza"
+    else:
+        prefix = ats_label.lower().replace(" ", "_")
+
     fname  = f"popolazione_{prefix}_{stagione}.csv"
     fpath  = os.path.join(output_dir, fname)
 
-    df_out = pd.DataFrame([{
+    row = {
         "STAGIONE":         stagione,
         "ATS":              ats_label,
         "ANNO_ISTAT":       anno_istat,
         "POPOLAZIONE_TOT":  pop_value if pop_value is not None else "N/A",
-    }])
+    }
+    if extra_cols:
+        row.update(extra_cols)
+
+    df_out = pd.DataFrame([row])
     df_out.to_csv(fpath, index=False)
     print(f"  ✓ Saved: {fpath}")
 
@@ -421,11 +375,10 @@ print("SECTION 3: LOADING ISTAT POPULATION DATA")
 print("=" * 65)
 
 # --- 3a: ATS BERGAMO ---
-# One file per year, covering the whole ATS (province = ATS)
 print("\n[3a] ATS BERGAMO — whole-ATS files")
 
 folder_bg = os.path.join(ISTAT_DIR, "ATS BERGAMO")
-pop_bergamo = {}   # {stagione: population}
+pop_bergamo = {}
 
 for stagione, anno in STAGIONI.items():
     filepath = _find_year_file(folder_bg, anno)
@@ -439,23 +392,17 @@ for stagione, anno in STAGIONI.items():
         continue
     pop = get_population_total(filepath)
     pop_bergamo[stagione] = pop
-    disp = f"{pop:,}" if pop else "N/A"
-    print(f"  ✓ {stagione} ({anno}): population = {disp}  [{os.path.basename(filepath)}]")
+    print(f"  ✓ {stagione} ({anno}): population = {pop:,}  [{os.path.basename(filepath)}]")
 
-# Save per-season CSVs
 print("\n  Saving per-season CSVs (ATS Bergamo)...")
 for stagione, pop in pop_bergamo.items():
     anno_usato = STAGIONI[stagione]
-    # If 2026 was unavailable, we used 2025
     if anno_usato == 2026 and pop is not None:
-        # Check which file we actually found
         if _find_year_file(folder_bg, 2026) is None:
             anno_usato = 2025
     salva_csv_stagione(pop, anno_usato, stagione, "ATS_BERGAMO", OUT_STAGIONI_BG)
 
 # --- 3b: ATS MONTAGNA — BRESCIA subset ---
-# The Brescia folder likely contains one file per year for the whole
-# province. We attempt to filter to the ATS Montagna comuni.
 print("\n[3b] ATS MONTAGNA — Brescia subset")
 
 folder_bs = os.path.join(ISTAT_DIR, "ATS MONTAGNA", "BRESCIA")
@@ -511,8 +458,6 @@ for stagione, anno in STAGIONI.items():
         print(f"  ⚠ No file for year {anno} in {folder_so}")
         pop_sondrio[stagione] = 0
         continue
-    # Sondrio: entire province = ATS Montagna → sum all comuni
-    # get_population_total() auto-detects per-comune vs per-età format
     pop = get_population_total(filepath)
     pop_sondrio[stagione] = pop if pop else 0
     print(f"  ✓ {stagione} ({anno}): Sondrio population = {pop_sondrio[stagione]:,}")
@@ -532,12 +477,10 @@ for stagione in STAGIONI:
     else:
         print(f"  ⚠ {stagione}: no data available")
 
-# Save per-season CSVs for ATS Montagna
 print("\n  Saving per-season CSVs (ATS Montagna)...")
 for stagione, pop in pop_montagna.items():
     anno_usato = STAGIONI[stagione]
     if anno_usato == 2026:
-        # Check if 2026 was available in at least one folder
         has_2026 = any([
             _find_year_file(folder_bs, 2026),
             _find_year_file(folder_co, 2026),
@@ -546,28 +489,20 @@ for stagione, pop in pop_montagna.items():
         if not has_2026:
             anno_usato = 2025
 
-    os.makedirs(OUT_STAGIONI_MT, exist_ok=True)
-    fname = f"popolazione_montagna_{stagione}.csv"
-    fpath = os.path.join(OUT_STAGIONI_MT, fname)
-    df_out = pd.DataFrame([{
-        "STAGIONE":          stagione,
-        "ATS":               "ATS_MONTAGNA",
-        "ANNO_ISTAT":        anno_usato,
-        "POP_BRESCIA_SUBSET": pop_brescia.get(stagione, "N/A"),
-        "POP_COMO_SUBSET":   pop_como.get(stagione, "N/A"),
-        "POP_SONDRIO_TOT":   pop_sondrio.get(stagione, "N/A"),
-        "POPOLAZIONE_TOT":   pop if pop is not None else "N/A",
-    }])
-    df_out.to_csv(fpath, index=False)
-    print(f"  ✓ Saved: {fpath}")
+    salva_csv_stagione(
+        pop, anno_usato, stagione, "ATS_MONTAGNA", OUT_STAGIONI_MT,
+        extra_cols={
+            "POP_BRESCIA_SUBSET": pop_brescia.get(stagione, "N/A"),
+            "POP_COMO_SUBSET":   pop_como.get(stagione, "N/A"),
+            "POP_SONDRIO_TOT":   pop_sondrio.get(stagione, "N/A"),
+        }
+    )
 
-
-# --- 3f: SAVE WHOLE ATS MONTAGNA PER-COMUNE CSV (one per year) ---
+# --- 3f: SAVE WHOLE ATS MONTAGNA PER-COMUNE CSV ---
 print("\n[3f] ATS MONTAGNA — per-comune CSV (whole territory, one per year)")
 print("     Output folder: " + OUT_MONTAGNA_ALL)
 
 for anno in ANNI_DISPONIBILI:
-    # Find source files for this year (None if not available)
     fp_bs = _find_year_file(folder_bs, anno)
     fp_co = _find_year_file(folder_co, anno)
     fp_so = _find_year_file(folder_so, anno)
@@ -586,6 +521,91 @@ for anno in ANNI_DISPONIBILI:
         output_dir  = OUT_MONTAGNA_ALL,
     )
 
+# ==============================================================
+# --- 3g: ATS BRIANZA — LECCO (whole province)              ---
+# ==============================================================
+# PERCHÉ nessun filtro per comuni:
+#   La Provincia di Lecco coincide interamente con il territorio
+#   dell'ATS Brianza, quindi si somma l'intera colonna 'Totale'
+#   del file provinciale. Stessa logica di Sondrio in ATS Montagna.
+# ==============================================================
+print("\n[3g] ATS BRIANZA — Lecco (whole province)")
+
+folder_lc = os.path.join(ISTAT_DIR, "ATS BRIANZA", "LECCO")
+pop_lecco = {}
+
+for stagione, anno in STAGIONI.items():
+    filepath = _find_year_file(folder_lc, anno)
+    if filepath is None and anno == 2026:
+        filepath = _find_year_file(folder_lc, 2025)
+        if filepath:
+            print(f"  ℹ Season {stagione}: 2026 not found, using 2025.")
+    if filepath is None:
+        print(f"  ⚠ No file for year {anno} in {folder_lc}")
+        pop_lecco[stagione] = 0
+        continue
+    pop = get_population_total(filepath)
+    pop_lecco[stagione] = pop if pop else 0
+    print(f"  ✓ {stagione} ({anno}): Lecco population = {pop_lecco[stagione]:,}")
+
+# ==============================================================
+# --- 3h: ATS BRIANZA — MONZA (whole province)              ---
+# ==============================================================
+print("\n[3h] ATS BRIANZA — Monza e Brianza (whole province)")
+
+folder_mb = os.path.join(ISTAT_DIR, "ATS BRIANZA", "MONZA")
+pop_monza = {}
+
+for stagione, anno in STAGIONI.items():
+    filepath = _find_year_file(folder_mb, anno)
+    if filepath is None and anno == 2026:
+        filepath = _find_year_file(folder_mb, 2025)
+        if filepath:
+            print(f"  ℹ Season {stagione}: 2026 not found, using 2025.")
+    if filepath is None:
+        print(f"  ⚠ No file for year {anno} in {folder_mb}")
+        pop_monza[stagione] = 0
+        continue
+    pop = get_population_total(filepath)
+    pop_monza[stagione] = pop if pop else 0
+    print(f"  ✓ {stagione} ({anno}): Monza e Brianza population = {pop_monza[stagione]:,}")
+
+# ==============================================================
+# --- 3i: SUM → ATS Brianza total (Lecco + Monza)          ---
+# ==============================================================
+print("\n[3i] ATS BRIANZA — total (Lecco + Monza e Brianza)")
+
+pop_brianza = {}
+for stagione in STAGIONI:
+    lc  = pop_lecco.get(stagione, 0) or 0
+    mb  = pop_monza.get(stagione, 0) or 0
+    tot = lc + mb
+    pop_brianza[stagione] = tot if tot > 0 else None
+    if tot > 0:
+        print(f"  ✓ {stagione}: {lc:,} (LC) + {mb:,} (MB) = {tot:,}")
+    else:
+        print(f"  ⚠ {stagione}: no data available")
+
+print("\n  Saving per-season CSVs (ATS Brianza)...")
+for stagione, pop in pop_brianza.items():
+    anno_usato = STAGIONI[stagione]
+    if anno_usato == 2026:
+        has_2026 = any([
+            _find_year_file(folder_lc, 2026),
+            _find_year_file(folder_mb, 2026),
+        ])
+        if not has_2026:
+            anno_usato = 2025
+
+    salva_csv_stagione(
+        pop, anno_usato, stagione, "ATS_BRIANZA", OUT_STAGIONI_BR,
+        extra_cols={
+            "POP_LECCO_TOT": pop_lecco.get(stagione, "N/A"),
+            "POP_MONZA_TOT": pop_monza.get(stagione, "N/A"),
+        }
+    )
+
+
 # -------------------------------------------------------
 # SECTION 4 — LOAD ILI DATA (from Script 1 output)
 # -------------------------------------------------------
@@ -594,48 +614,47 @@ print("\n" + "=" * 65)
 print("SECTION 4: LOADING ILI DATA (Script 1 output)")
 print("=" * 65)
 
-# --- DEBUG: stampa working directory e verifica i path ---
-# Questo blocco aiuta a diagnosticare problemi di path.
-# Commentalo una volta che lo script gira correttamente.
 print(f"\n  [DEBUG] Working directory     : {os.getcwd()}")
 print(f"  [DEBUG] ILI_DIR_BG (assoluto) : {os.path.abspath(ILI_DIR_BG)}")
 print(f"  [DEBUG] ILI_DIR_MT (assoluto) : {os.path.abspath(ILI_DIR_MT)}")
-print(f"  [DEBUG] Dir BG esiste         : {os.path.isdir(ILI_DIR_BG)}")
-print(f"  [DEBUG] Dir MT esiste         : {os.path.isdir(ILI_DIR_MT)}")
-for _lbl, _d in [("BG", ILI_DIR_BG), ("MT", ILI_DIR_MT)]:
+print(f"  [DEBUG] ILI_DIR_BR (assoluto) : {os.path.abspath(ILI_DIR_BR)}")
+for _lbl, _d in [("BG", ILI_DIR_BG), ("MT", ILI_DIR_MT), ("BR", ILI_DIR_BR)]:
     if os.path.isdir(_d):
         print(f"  [DEBUG] Contenuto {_lbl}           : {sorted(os.listdir(_d))}")
     else:
-        print(f"  [DEBUG] '{_d}' non trovata. Cerco candidate...")
-        _found = False
-        for _root, _dirs, _files in os.walk("."):
-            for _dn in _dirs:
-                if "ATS_BERGAMO" in _dn or "ATS_MONTAGNA" in _dn:
-                    print(f"           -> Trovata: {os.path.join(_root, _dn)}")
-                    _found = True
-        if not _found:
-            print(f"           -> Nessuna cartella trovata sotto la cwd.")
+        print(f"  [DEBUG] '{_d}' non trovata.")
 print()
 
-
-# ATS Bergamo — total ER and ILI visits
-df_tot_bg  = load_ili_csv(
+# ATS Bergamo
+df_tot_bg = load_ili_csv(
     os.path.join(ILI_DIR_BG, "access_tot_bergamo_stagionale.csv"),
     "ACCESSI_TOTALI_ER_BERGAMO"
 )
-df_ili_bg  = load_ili_csv(
+df_ili_bg = load_ili_csv(
     os.path.join(ILI_DIR_BG, "ili_ats_bergamo_stagionale.csv"),
     "ACCESSI_ILI_ATS_BERGAMO"
 )
 
-# ATS Montagna — total ER and ILI visits
-df_tot_mt  = load_ili_csv(
+# ATS Montagna
+df_tot_mt = load_ili_csv(
     os.path.join(ILI_DIR_MT, "access_tot_montagna_stagionale.csv"),
     "ACCESSI_TOTALI_ER_MONTAGNA"
 )
-df_ili_mt  = load_ili_csv(
+df_ili_mt = load_ili_csv(
     os.path.join(ILI_DIR_MT, "ili_ats_montagna_stagionale.csv"),
     "ACCESSI_ILI_ATS_MONTAGNA"
+)
+
+# ATS Brianza  ← NUOVO
+# Adatta i nomi dei file al pattern usato da Script 1 per questa ATS.
+# Se Script 1 usa nomi diversi, aggiorna le stringhe qui sotto.
+df_tot_br = load_ili_csv(
+    os.path.join(ILI_DIR_BR, "access_tot_brianza_stagionale.csv"),
+    "ACCESSI_TOTALI_ER_BRIANZA"
+)
+df_ili_br = load_ili_csv(
+    os.path.join(ILI_DIR_BR, "ili_ats_brianza_stagionale.csv"),
+    "ACCESSI_ILI_ATS_BRIANZA"
 )
 
 print("  ✓ ILI dataframes loaded.")
@@ -651,50 +670,34 @@ print("=" * 65)
 
 """
 WHAT WE PLOT:
-    For each influenza season, one figure with two subplots side by side
-    (one per ATS), each showing:
+    For each influenza season, one figure with THREE subplots side by
+    side (one per ATS: Bergamo, Montagna, Brianza), each showing:
 
-        Rate 1 — Total ER / Population:
-            = (total ER visits in week W) / population
-            Interpreted as: weekly ER utilisation rate (all causes)
-
-        Rate 2 — ILI ER / Population:
-            = (ILI ER visits in week W) / population
-            Interpreted as: weekly ILI attack rate seen through the ER
+        Rate 1 — Total ER / Population  (solid line)
+        Rate 2 — ILI ER  / Population   (dashed line)
 
     WHY rates and not absolute counts?
-        ATS Bergamo has ~1.1 million residents; ATS Montagna has far
-        fewer (~200–250k). Plotting raw counts on the same axes would
-        make Montagna's curve nearly invisible. Dividing by population
-        puts both on a comparable scale (visits per person), enabling
-        direct visual comparison.
-
-    WHY not use %ILI (like Script 1's percentage plot)?
-        %ILI = ILI / total ER tells us "of all ER users, what fraction
-        had ILI?". The rate = ILI / population tells us "of all
-        residents, what fraction accessed the ER for ILI?". The latter
-        is the epidemiologically meaningful attack rate analogue.
-        Both are useful; this script prioritises the population-based
-        rate. Script 1's %ILI plot remains available for comparison.
-
-    SCALE NOTE:
-        Rates will be small numbers (e.g. 0.002 = 0.2% per week). The
-        Y-axis shows the rate as a decimal. 
+        The three ATS have very different population sizes:
+            ATS Bergamo  ≈ 1.1 M
+            ATS Brianza  ≈ 870 K (LC ~340K + MB ~870K → verify)
+            ATS Montagna ≈ 200–250 K
+        Plotting raw counts on the same axes would make Montagna's curve
+        nearly invisible. Dividing by population puts all three on a
+        comparable scale.
 """
 
 os.makedirs(OUT_GRAFICI, exist_ok=True)
 
 for stagione in STAGIONI:
 
-    # --- Retrieve population denominators ---
     pop_bg = pop_bergamo.get(stagione)
     pop_mt = pop_montagna.get(stagione)
+    pop_br = pop_brianza.get(stagione)
 
-    if pop_bg is None and pop_mt is None:
+    if pop_bg is None and pop_mt is None and pop_br is None:
         print(f"  ⚠ Season {stagione}: no population data — plot skipped.")
         continue
 
-    # --- Filter ILI dataframes to this season ---
     def season_subset(df, stagione):
         """Returns rows for a given season, sorted by ORDINE."""
         if df.empty or 'STAGIONE' not in df.columns:
@@ -705,12 +708,13 @@ for stagione in STAGIONI:
     ili_bg_s = season_subset(df_ili_bg, stagione)
     tot_mt_s = season_subset(df_tot_mt, stagione)
     ili_mt_s = season_subset(df_ili_mt, stagione)
+    tot_br_s = season_subset(df_tot_br, stagione)   # ← NUOVO
+    ili_br_s = season_subset(df_ili_br, stagione)   # ← NUOVO
 
-    # --- Compute rates ---
     def compute_rate(df_visits, col_visits, population):
         """
         Computes visit_rate = visits / population for each week.
-        Returns a DataFrame with columns [ORDINE, WEEK, RATE].
+        Returns DataFrame with columns [ORDINE, WEEK, RATE].
         Returns empty DataFrame if inputs are invalid.
         """
         if df_visits.empty or population is None or population == 0:
@@ -724,45 +728,39 @@ for stagione in STAGIONI:
     rate_ili_bg = compute_rate(ili_bg_s, 'ACCESSI_ILI_ATS_BERGAMO',   pop_bg)
     rate_tot_mt = compute_rate(tot_mt_s, 'ACCESSI_TOTALI_ER_MONTAGNA', pop_mt)
     rate_ili_mt = compute_rate(ili_mt_s, 'ACCESSI_ILI_ATS_MONTAGNA',  pop_mt)
+    rate_tot_br = compute_rate(tot_br_s, 'ACCESSI_TOTALI_ER_BRIANZA',  pop_br)  # ← NUOVO
+    rate_ili_br = compute_rate(ili_br_s, 'ACCESSI_ILI_ATS_BRIANZA',   pop_br)  # ← NUOVO
 
-    # --- Check if we have at least one ATS with data ---
     has_bg = not rate_tot_bg.empty or not rate_ili_bg.empty
     has_mt = not rate_tot_mt.empty or not rate_ili_mt.empty
-    if not has_bg and not has_mt:
+    has_br = not rate_tot_br.empty or not rate_ili_br.empty
+
+    if not has_bg and not has_mt and not has_br:
         print(f"  ⚠ Season {stagione}: no rate data computable — plot skipped.")
         continue
 
-    # --- Build common x-axis tick map (week → ordine) ---
+    # Build common x-axis tick map across all three ATS
     all_ticks = pd.concat([
-        rate_tot_bg[['ORDINE', 'WEEK']] if not rate_tot_bg.empty else pd.DataFrame(),
-        rate_ili_bg[['ORDINE', 'WEEK']] if not rate_ili_bg.empty else pd.DataFrame(),
-        rate_tot_mt[['ORDINE', 'WEEK']] if not rate_tot_mt.empty else pd.DataFrame(),
-        rate_ili_mt[['ORDINE', 'WEEK']] if not rate_ili_mt.empty else pd.DataFrame(),
-    ]).drop_duplicates().sort_values('ORDINE') if any([
-        not rate_tot_bg.empty, not rate_ili_bg.empty,
-        not rate_tot_mt.empty, not rate_ili_mt.empty
-    ]) else pd.DataFrame()
+        df[['ORDINE', 'WEEK']] for df in [
+            rate_tot_bg, rate_ili_bg,
+            rate_tot_mt, rate_ili_mt,
+            rate_tot_br, rate_ili_br,
+        ] if not df.empty
+    ]).drop_duplicates().sort_values('ORDINE') if any(
+        [has_bg, has_mt, has_br]
+    ) else pd.DataFrame()
 
-    # --- Draw figure ---
-    fig, axes = plt.subplots(1, 2, figsize=(16, 6), sharey=False)
+    # ── Figure: 1 row × 3 columns (Bergamo | Montagna | Brianza) ──
+    fig, axes = plt.subplots(1, 3, figsize=(22, 6), sharey=False)
     fig.suptitle(
         f"ER Visits / Population — Influenza Season {stagione}\n"
         f"(solid = total ER rate, dashed = ILI-specific rate)",
         fontsize=13, fontweight='bold'
     )
 
-    # --- Helper: plot one ATS panel ---
     def plot_panel(ax, rate_tot, rate_ili, label_ats, pop_val, tick_map):
         """
         Draws the total ER rate and the ILI rate on a single axis.
-
-        Parameters:
-            ax:        matplotlib Axes object
-            rate_tot:  DataFrame with total ER rates
-            rate_ili:  DataFrame with ILI rates
-            label_ats: ATS name string for title
-            pop_val:   population denominator (int)
-            tick_map:  DataFrame [ORDINE, WEEK] for x-axis labels
         """
         pop_str = f"{pop_val:,}" if pop_val else "N/A"
 
@@ -770,17 +768,16 @@ for stagione in STAGIONI:
             ax.plot(
                 rate_tot['ORDINE'], rate_tot['RATE'],
                 color='steelblue', linewidth=2, marker='o', markersize=5,
-                label=f"Total ER / pop"
+                label="Total ER / pop"
             )
         if not rate_ili.empty:
             ax.plot(
                 rate_ili['ORDINE'], rate_ili['RATE'],
                 color='firebrick', linewidth=2, linestyle='--',
                 marker='s', markersize=5,
-                label=f"ILI ER / pop"
+                label="ILI ER / pop"
             )
 
-        # X-axis ticks
         if not tick_map.empty:
             ax.set_xticks(tick_map['ORDINE'])
             ax.set_xticklabels(tick_map['WEEK'], rotation=45, fontsize=9)
@@ -791,16 +788,14 @@ for stagione in STAGIONI:
         ax.legend(fontsize=9)
         ax.grid(True, linestyle='--', alpha=0.6)
 
-        # Annotate if no data available
         if rate_tot.empty and rate_ili.empty:
             ax.text(0.5, 0.5, "No data available",
                     transform=ax.transAxes, ha='center', va='center',
                     fontsize=12, color='gray')
 
-    plot_panel(axes[0], rate_tot_bg, rate_ili_bg,
-               "ATS Bergamo", pop_bg, all_ticks)
-    plot_panel(axes[1], rate_tot_mt, rate_ili_mt,
-               "ATS Montagna", pop_mt, all_ticks)
+    plot_panel(axes[0], rate_tot_bg, rate_ili_bg, "ATS Bergamo",  pop_bg, all_ticks)
+    plot_panel(axes[1], rate_tot_mt, rate_ili_mt, "ATS Montagna", pop_mt, all_ticks)
+    plot_panel(axes[2], rate_tot_br, rate_ili_br, "ATS Brianza",  pop_br, all_ticks)  # ← NUOVO
 
     plt.tight_layout()
     fname_out = f"ratio_ili_population_{stagione}.png"
@@ -818,7 +813,7 @@ print("\n" + "=" * 65)
 print("✅ SCRIPT 6 COMPLETE!")
 print()
 print("CSV files produced:")
-for folder in [OUT_STAGIONI_BG, OUT_STAGIONI_MT, OUT_MONTAGNA_ALL]:
+for folder in [OUT_STAGIONI_BG, OUT_STAGIONI_MT, OUT_STAGIONI_BR, OUT_MONTAGNA_ALL]:
     if os.path.isdir(folder):
         files = sorted(os.listdir(folder))
         print(f"  {folder}/")
