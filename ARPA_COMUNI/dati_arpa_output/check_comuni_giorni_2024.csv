@@ -1,0 +1,1543 @@
+anno_label,parametro,provincia,comune,giorni_presenti,giorni_attesi,completezza_pct
+2024,PM10,LC,Abbadia Lariana,366,366,100.0
+2024,PM10,BG,Adrara San Martino,366,366,100.0
+2024,PM10,BG,Adrara San Rocco,366,366,100.0
+2024,PM10,MB,Agrate Brianza,366,366,100.0
+2024,PM10,MB,Aicurzio,333,366,91.0
+2024,PM10,LC,Airuno,341,366,93.2
+2024,PM10,BG,Albano Sant'Alessandro,366,366,100.0
+2024,PM10,SO,Albaredo Per San Marco,366,366,100.0
+2024,PM10,MB,Albiate,366,366,100.0
+2024,PM10,BG,Albino,366,366,100.0
+2024,PM10,SO,Albosaggia,366,366,100.0
+2024,PM10,BG,Algua,366,366,100.0
+2024,PM10,BG,Almenno San Bartolomeo,366,366,100.0
+2024,PM10,BG,Almenno San Salvatore,366,366,100.0
+2024,PM10,BG,Almè,366,366,100.0
+2024,PM10,BG,Alzano Lombardo,366,366,100.0
+2024,PM10,BG,Ambivere,366,366,100.0
+2024,PM10,SO,Andalo Valtellino,366,366,100.0
+2024,PM10,BS,Angolo Terme,366,366,100.0
+2024,PM10,LC,Annone Di Brianza,366,366,100.0
+2024,PM10,BG,Antegnate,366,366,100.0
+2024,PM10,SO,Aprica,366,366,100.0
+2024,PM10,BG,Arcene,366,366,100.0
+2024,PM10,MB,Arcore,366,366,100.0
+2024,PM10,SO,Ardenno,366,366,100.0
+2024,PM10,BG,Ardesio,366,366,100.0
+2024,PM10,BS,Artogne,366,366,100.0
+2024,PM10,BG,Arzago D'Adda,366,366,100.0
+2024,PM10,BG,Averara,366,366,100.0
+2024,PM10,BG,Aviatico,366,366,100.0
+2024,PM10,BG,Azzano San Paolo,366,366,100.0
+2024,PM10,BG,Azzone,366,366,100.0
+2024,PM10,BG,Bagnatica,366,366,100.0
+2024,PM10,LC,Ballabio,366,366,100.0
+2024,PM10,BG,Barbata,366,366,100.0
+2024,PM10,BG,Bariano,366,366,100.0
+2024,PM10,MB,Barlassina,366,366,100.0
+2024,PM10,LC,Barzago,366,366,100.0
+2024,PM10,BG,Barzana,366,366,100.0
+2024,PM10,LC,Barzanò,366,366,100.0
+2024,PM10,LC,Barzio,366,366,100.0
+2024,PM10,BG,Bedulita,366,366,100.0
+2024,PM10,LC,Bellano,366,366,100.0
+2024,PM10,MB,Bellusco,366,366,100.0
+2024,PM10,SO,Bema,366,366,100.0
+2024,PM10,BG,Berbenno,366,366,100.0
+2024,PM10,SO,Berbenno Di Valtellina,366,366,100.0
+2024,PM10,BG,Bergamo,366,366,100.0
+2024,PM10,MB,Bernareggio,366,366,100.0
+2024,PM10,BS,Berzo Demo,366,366,100.0
+2024,PM10,BS,Berzo Inferiore,366,366,100.0
+2024,PM10,BG,Berzo San Fermo,366,366,100.0
+2024,PM10,MB,Besana In Brianza,366,366,100.0
+2024,PM10,BG,Bianzano,366,366,100.0
+2024,PM10,SO,Bianzone,366,366,100.0
+2024,PM10,MB,Biassono,366,366,100.0
+2024,PM10,BS,Bienno,366,366,100.0
+2024,PM10,BG,Blello,366,366,100.0
+2024,PM10,BG,Bolgare,366,366,100.0
+2024,PM10,BG,Boltiere,366,366,100.0
+2024,PM10,BG,Bonate Sopra,366,366,100.0
+2024,PM10,BG,Bonate Sotto,366,366,100.0
+2024,PM10,BG,Borgo Di Terzo,366,366,100.0
+2024,PM10,SO,Bormio,366,366,100.0
+2024,PM10,BS,Borno,366,366,100.0
+2024,PM10,LC,Bosisio Parini,366,366,100.0
+2024,PM10,BG,Bossico,366,366,100.0
+2024,PM10,BG,Bottanuco,366,366,100.0
+2024,PM10,MB,Bovisio-Masciago,366,366,100.0
+2024,PM10,BG,Bracca,366,366,100.0
+2024,PM10,BG,Branzi,366,366,100.0
+2024,PM10,BS,Braone,366,366,100.0
+2024,PM10,BG,Brembate,366,366,100.0
+2024,PM10,BG,Brembate Di Sopra,366,366,100.0
+2024,PM10,BS,Breno,366,366,100.0
+2024,PM10,BG,Brignano Gera D'Adda,366,366,100.0
+2024,PM10,MB,Briosco,366,366,100.0
+2024,PM10,LC,Brivio,366,366,100.0
+2024,PM10,MB,Brugherio,366,366,100.0
+2024,PM10,BG,Brumano,366,366,100.0
+2024,PM10,BG,Brusaporto,366,366,100.0
+2024,PM10,SO,Buglio In Monte,366,366,100.0
+2024,PM10,LC,Bulciago,366,366,100.0
+2024,PM10,MB,Burago Di Molgora,366,366,100.0
+2024,PM10,MB,Busnago,366,366,100.0
+2024,PM10,SO,Caiolo,366,366,100.0
+2024,PM10,BG,Calcinate,366,366,100.0
+2024,PM10,BG,Calcio,366,366,100.0
+2024,PM10,LC,Calco,366,366,100.0
+2024,PM10,LC,Calolziocorte,366,366,100.0
+2024,PM10,BG,Calusco D'Adda,366,366,100.0
+2024,PM10,BG,Calvenzano,366,366,100.0
+2024,PM10,BG,Camerata Cornello,366,366,100.0
+2024,PM10,MB,Camparada,366,366,100.0
+2024,PM10,SO,Campodolcino,366,366,100.0
+2024,PM10,BG,Canonica D'Adda,366,366,100.0
+2024,PM10,BG,Capizzone,366,366,100.0
+2024,PM10,BS,Capo Di Ponte,366,366,100.0
+2024,PM10,MB,Caponago,366,366,100.0
+2024,PM10,BG,Capriate San Gervasio,366,366,100.0
+2024,PM10,BG,Caprino Bergamasco,366,366,100.0
+2024,PM10,MB,Carate Brianza,366,366,100.0
+2024,PM10,BG,Caravaggio,366,366,100.0
+2024,PM10,LC,Carenno,366,366,100.0
+2024,PM10,MB,Carnate,366,366,100.0
+2024,PM10,BG,Carobbio Degli Angeli,366,366,100.0
+2024,PM10,BG,Carona,366,366,100.0
+2024,PM10,BG,Carvico,366,366,100.0
+2024,PM10,LC,Casargo,366,366,100.0
+2024,PM10,LC,Casatenovo,366,366,100.0
+2024,PM10,BG,Casazza,366,366,100.0
+2024,PM10,BG,Casirate D'Adda,366,366,100.0
+2024,PM10,BG,Casnigo,366,366,100.0
+2024,PM10,SO,Caspoggio,366,366,100.0
+2024,PM10,LC,Cassago Brianza,366,366,100.0
+2024,PM10,BG,Cassiglio,366,366,100.0
+2024,PM10,LC,Cassina Valsassina,366,366,100.0
+2024,PM10,BG,Castel Rozzone,366,366,100.0
+2024,PM10,BG,Castelli Calepio,366,366,100.0
+2024,PM10,SO,Castello Dell'Acqua,366,366,100.0
+2024,PM10,LC,Castello Di Brianza,366,366,100.0
+2024,PM10,SO,Castione Andevenno,366,366,100.0
+2024,PM10,BG,Castione Della Presolana,366,366,100.0
+2024,PM10,BG,Castro,366,366,100.0
+2024,PM10,MB,Cavenago Di Brianza,366,366,100.0
+2024,PM10,BG,Cavernago,366,366,100.0
+2024,PM10,BG,Cazzano Sant'Andrea,366,366,100.0
+2024,PM10,BS,Cedegolo,366,366,100.0
+2024,PM10,SO,Cedrasco,366,366,100.0
+2024,PM10,BG,Cenate Sopra,366,366,100.0
+2024,PM10,BG,Cenate Sotto,366,366,100.0
+2024,PM10,BG,Cene,366,366,100.0
+2024,PM10,SO,Cercino,366,366,100.0
+2024,PM10,BG,Cerete,366,366,100.0
+2024,PM10,MB,Ceriano Laghetto,366,366,100.0
+2024,PM10,LC,Cernusco Lombardone,366,366,100.0
+2024,PM10,BS,Cerveno,366,366,100.0
+2024,PM10,LC,Cesana Brianza,366,366,100.0
+2024,PM10,MB,Cesano Maderno,366,366,100.0
+2024,PM10,BS,Ceto,366,366,100.0
+2024,PM10,BS,Cevo,366,366,100.0
+2024,PM10,SO,Chiavenna,366,366,100.0
+2024,PM10,SO,Chiesa In Valmalenco,366,366,100.0
+2024,PM10,BG,Chignolo D'Isola,366,366,100.0
+2024,PM10,BG,Chiuduno,366,366,100.0
+2024,PM10,SO,Chiuro,366,366,100.0
+2024,PM10,BS,Cimbergo,366,366,100.0
+2024,PM10,SO,Cino,366,366,100.0
+2024,PM10,BG,Cisano Bergamasco,366,366,100.0
+2024,PM10,BG,Ciserano,366,366,100.0
+2024,PM10,LC,Civate,366,366,100.0
+2024,PM10,BG,Cividate Al Piano,366,366,100.0
+2024,PM10,BS,Cividate Camuno,366,366,100.0
+2024,PM10,SO,Civo,366,366,100.0
+2024,PM10,BG,Clusone,366,366,100.0
+2024,PM10,MB,Cogliate,366,366,100.0
+2024,PM10,BG,Colere,366,366,100.0
+2024,PM10,LC,Colico,366,366,100.0
+2024,PM10,LC,Colle Brianza,366,366,100.0
+2024,PM10,BG,Cologno Al Serio,366,366,100.0
+2024,PM10,SO,Colorina,366,366,100.0
+2024,PM10,BG,Colzate,366,366,100.0
+2024,PM10,BG,Comun Nuovo,366,366,100.0
+2024,PM10,MB,Concorezzo,366,366,100.0
+2024,PM10,BG,Corna Imagna,366,366,100.0
+2024,PM10,BG,Cornalba,366,366,100.0
+2024,PM10,MB,Cornate D'Adda,366,366,100.0
+2024,PM10,MB,Correzzana,366,366,100.0
+2024,PM10,BS,Corteno Golgi,366,366,100.0
+2024,PM10,LC,Cortenova,366,366,100.0
+2024,PM10,BG,Cortenuova,366,366,100.0
+2024,PM10,SO,Cosio Valtellino,366,366,100.0
+2024,PM10,BG,Costa Di Mezzate,366,366,100.0
+2024,PM10,LC,Costa Masnaga,366,366,100.0
+2024,PM10,BG,Costa Serina,366,366,100.0
+2024,PM10,BG,Costa Valle Imagna,366,366,100.0
+2024,PM10,BG,Costa Volpino,366,366,100.0
+2024,PM10,BG,Covo,366,366,100.0
+2024,PM10,LC,Crandola Valsassina,366,366,100.0
+2024,PM10,BG,Credaro,366,366,100.0
+2024,PM10,LC,Cremella,366,366,100.0
+2024,PM10,LC,Cremeno,191,366,52.2
+2024,PM10,CO,Cremia,366,366,100.0
+2024,PM10,BG,Curno,366,366,100.0
+2024,PM10,BG,Cusio,366,366,100.0
+2024,PM10,BG,Dalmine,366,366,100.0
+2024,PM10,BS,Darfo Boario Terme,366,366,100.0
+2024,PM10,SO,Dazio,366,366,100.0
+2024,PM10,SO,Delebio,366,366,100.0
+2024,PM10,LC,Dervio,366,366,100.0
+2024,PM10,MB,Desio,366,366,100.0
+2024,PM10,LC,Dolzago,366,366,100.0
+2024,PM10,CO,Domaso,366,366,100.0
+2024,PM10,CO,Dongo,366,366,100.0
+2024,PM10,LC,Dorio,366,366,100.0
+2024,PM10,BG,Dossena,366,366,100.0
+2024,PM10,CO,Dosso Del Liro,366,366,100.0
+2024,PM10,SO,Dubino,366,366,100.0
+2024,PM10,BS,Edolo,366,366,100.0
+2024,PM10,LC,Ello,366,366,100.0
+2024,PM10,BG,Endine Gaiano,366,366,100.0
+2024,PM10,BG,Entratico,366,366,100.0
+2024,PM10,LC,Erve,366,366,100.0
+2024,PM10,BS,Esine,366,366,100.0
+2024,PM10,LC,Esino Lario,366,366,100.0
+2024,PM10,SO,Faedo Valtellino,366,366,100.0
+2024,PM10,BG,Fara Gera D'Adda,366,366,100.0
+2024,PM10,BG,Fara Olivana Con Sola,366,366,100.0
+2024,PM10,BG,Filago,366,366,100.0
+2024,PM10,BG,Fino Del Monte,366,366,100.0
+2024,PM10,BG,Fiorano Al Serio,366,366,100.0
+2024,PM10,BG,Fontanella,366,366,100.0
+2024,PM10,BG,Fonteno,366,366,100.0
+2024,PM10,BG,Foppolo,366,366,100.0
+2024,PM10,SO,Forcola,366,366,100.0
+2024,PM10,BG,Foresto Sparso,366,366,100.0
+2024,PM10,BG,Fornovo San Giovanni,366,366,100.0
+2024,PM10,BG,Fuipiano Valle Imagna,366,366,100.0
+2024,PM10,SO,Fusine,366,366,100.0
+2024,PM10,LC,Galbiate,366,366,100.0
+2024,PM10,BG,Gandellino,366,366,100.0
+2024,PM10,BG,Gandino,366,366,100.0
+2024,PM10,BG,Gandosso,366,366,100.0
+2024,PM10,LC,Garbagnate Monastero,366,366,100.0
+2024,PM10,LC,Garlate,366,366,100.0
+2024,PM10,CO,Garzeno,366,366,100.0
+2024,PM10,BG,Gaverina Terme,366,366,100.0
+2024,PM10,BG,Gazzaniga,366,366,100.0
+2024,PM10,CO,Gera Lario,366,366,100.0
+2024,PM10,SO,Gerola Alta,366,366,100.0
+2024,PM10,BG,Ghisalba,366,366,100.0
+2024,PM10,BS,Gianico,366,366,100.0
+2024,PM10,MB,Giussano,366,366,100.0
+2024,PM10,SO,Gordona,366,366,100.0
+2024,PM10,BG,Gorlago,366,366,100.0
+2024,PM10,BG,Gorle,366,366,100.0
+2024,PM10,BG,Gorno,366,366,100.0
+2024,PM10,BG,Grassobbio,366,366,100.0
+2024,PM10,CO,Gravedona Ed Uniti,366,366,100.0
+2024,PM10,BG,Gromo,366,366,100.0
+2024,PM10,BG,Grone,366,366,100.0
+2024,PM10,SO,Grosio,366,366,100.0
+2024,PM10,SO,Grosotto,366,366,100.0
+2024,PM10,BG,Grumello Del Monte,366,366,100.0
+2024,PM10,LC,Imbersago,366,366,100.0
+2024,PM10,BS,Incudine,366,366,100.0
+2024,PM10,LC,Introbio,366,366,100.0
+2024,PM10,BG,Isola Di Fondra,366,366,100.0
+2024,PM10,BG,Isso,366,366,100.0
+2024,PM10,LC,La Valletta Brianza,366,366,100.0
+2024,PM10,BG,Lallio,366,366,100.0
+2024,PM10,SO,Lanzada,366,366,100.0
+2024,PM10,MB,Lazzate,366,366,100.0
+2024,PM10,LC,Lecco,366,366,100.0
+2024,PM10,BG,Leffe,366,366,100.0
+2024,PM10,BG,Lenna,366,366,100.0
+2024,PM10,MB,Lentate Sul Seveso,366,366,100.0
+2024,PM10,MB,Lesmo,366,366,100.0
+2024,PM10,BG,Levate,366,366,100.0
+2024,PM10,LC,Lierna,366,366,100.0
+2024,PM10,MB,Limbiate,366,366,100.0
+2024,PM10,MB,Lissone,366,366,100.0
+2024,PM10,SO,Livigno,366,366,100.0
+2024,PM10,CO,Livo,366,366,100.0
+2024,PM10,BG,Locatello,366,366,100.0
+2024,PM10,LC,Lomagna,366,366,100.0
+2024,PM10,BS,Losine,366,366,100.0
+2024,PM10,BG,Lovere,366,366,100.0
+2024,PM10,SO,Lovero,366,366,100.0
+2024,PM10,BS,Lozio,366,366,100.0
+2024,PM10,BG,Lurano,366,366,100.0
+2024,PM10,BG,Luzzana,366,366,100.0
+2024,PM10,MB,Macherio,366,366,100.0
+2024,PM10,SO,Madesimo,366,366,100.0
+2024,PM10,BG,Madone,366,366,100.0
+2024,PM10,BS,Malegno,366,366,100.0
+2024,PM10,LC,Malgrate,366,366,100.0
+2024,PM10,BS,Malonno,366,366,100.0
+2024,PM10,LC,Mandello Del Lario,366,366,100.0
+2024,PM10,SO,Mantello,366,366,100.0
+2024,PM10,BG,Mapello,366,366,100.0
+2024,PM10,LC,Margno,366,366,100.0
+2024,PM10,BG,Martinengo,366,366,100.0
+2024,PM10,SO,Mazzo Di Valtellina,366,366,100.0
+2024,PM10,MB,Meda,366,366,100.0
+2024,PM10,BG,Medolago,366,366,100.0
+2024,PM10,SO,Mello,366,366,100.0
+2024,PM10,LC,Merate,366,366,100.0
+2024,PM10,SO,Mese,366,366,100.0
+2024,PM10,MB,Mezzago,366,366,100.0
+2024,PM10,BG,Mezzoldo,366,366,100.0
+2024,PM10,BG,Misano Di Gera D'Adda,366,366,100.0
+2024,PM10,MB,Misinto,366,366,100.0
+2024,PM10,LC,Missaglia,366,366,100.0
+2024,PM10,LC,Moggio,366,366,100.0
+2024,PM10,BG,Moio De' Calvi,366,366,100.0
+2024,PM10,LC,Molteno,366,366,100.0
+2024,PM10,BG,Monasterolo Del Castello,366,366,100.0
+2024,PM10,BS,Monno,366,366,100.0
+2024,PM10,SO,Montagna In Valtellina,366,366,100.0
+2024,PM10,LC,Monte Marenzo,366,366,100.0
+2024,PM10,BG,Montello,366,366,100.0
+2024,PM10,CO,Montemezzo,366,366,100.0
+2024,PM10,LC,Montevecchia,366,366,100.0
+2024,PM10,LC,Monticello Brianza,366,366,100.0
+2024,PM10,MB,Monza,366,366,100.0
+2024,PM10,SO,Morbegno,366,366,100.0
+2024,PM10,BG,Morengo,366,366,100.0
+2024,PM10,BG,Mornico Al Serio,366,366,100.0
+2024,PM10,LC,Morterone,366,366,100.0
+2024,PM10,BG,Mozzanica,366,366,100.0
+2024,PM10,BG,Mozzo,366,366,100.0
+2024,PM10,MB,Muggiò,366,366,100.0
+2024,PM10,CO,Musso,366,366,100.0
+2024,PM10,BG,Nembro,366,366,100.0
+2024,PM10,BS,Niardo,366,366,100.0
+2024,PM10,LC,Nibionno,366,366,100.0
+2024,PM10,MB,Nova Milanese,366,366,100.0
+2024,PM10,SO,Novate Mezzola,366,366,100.0
+2024,PM10,LC,Oggiono,366,366,100.0
+2024,PM10,LC,Olgiate Molgora,366,366,100.0
+2024,PM10,LC,Olginate,366,366,100.0
+2024,PM10,LC,Oliveto Lario,366,366,100.0
+2024,PM10,BG,Olmo Al Brembo,366,366,100.0
+2024,PM10,BG,Oltre Il Colle,366,366,100.0
+2024,PM10,BG,Oltressenda Alta,366,366,100.0
+2024,PM10,BG,Oneta,366,366,100.0
+2024,PM10,BS,Ono San Pietro,366,366,100.0
+2024,PM10,BG,Onore,366,366,100.0
+2024,PM10,BG,Orio Al Serio,366,366,100.0
+2024,PM10,MB,Ornago,366,366,100.0
+2024,PM10,BG,Ornica,366,366,100.0
+2024,PM10,BG,Osio Sopra,366,366,100.0
+2024,PM10,BG,Osio Sotto,366,366,100.0
+2024,PM10,LC,Osnago,366,366,100.0
+2024,PM10,BS,Ossimo,366,366,100.0
+2024,PM10,LC,Paderno D'Adda,366,366,100.0
+2024,PM10,BG,Pagazzano,366,366,100.0
+2024,PM10,LC,Pagnona,366,366,100.0
+2024,PM10,BS,Paisco Loveno,366,366,100.0
+2024,PM10,BG,Paladina,366,366,100.0
+2024,PM10,BG,Palazzago,366,366,100.0
+2024,PM10,BG,Palosco,366,366,100.0
+2024,PM10,LC,Parlasco,366,366,100.0
+2024,PM10,BG,Parre,366,366,100.0
+2024,PM10,BG,Parzanica,366,366,100.0
+2024,PM10,BS,Paspardo,366,366,100.0
+2024,PM10,LC,Pasturo,366,366,100.0
+2024,PM10,SO,Pedesina,366,366,100.0
+2024,PM10,BG,Pedrengo,366,366,100.0
+2024,PM10,CO,Peglio,366,366,100.0
+2024,PM10,BG,Peia,366,366,100.0
+2024,PM10,LC,Perledo,366,366,100.0
+2024,PM10,LC,Pescate,366,366,100.0
+2024,PM10,BS,Pian Camuno,366,366,100.0
+2024,PM10,BS,Piancogno,366,366,100.0
+2024,PM10,CO,Pianello Del Lario,366,366,100.0
+2024,PM10,BG,Pianico,366,366,100.0
+2024,PM10,SO,Piantedo,366,366,100.0
+2024,PM10,BG,Piario,366,366,100.0
+2024,PM10,SO,Piateda,366,366,100.0
+2024,PM10,BG,Piazza Brembana,366,366,100.0
+2024,PM10,BG,Piazzatorre,366,366,100.0
+2024,PM10,BG,Piazzolo,366,366,100.0
+2024,PM10,BS,Pisogne,366,366,100.0
+2024,PM10,SO,Piuro,366,366,100.0
+2024,PM10,SO,Poggiridenti,366,366,100.0
+2024,PM10,BG,Pognano,366,366,100.0
+2024,PM10,BS,Ponte Di Legno,366,366,100.0
+2024,PM10,SO,Ponte In Valtellina,366,366,100.0
+2024,PM10,BG,Ponte Nossa,366,366,100.0
+2024,PM10,BG,Ponte San Pietro,366,366,100.0
+2024,PM10,BG,Ponteranica,366,366,100.0
+2024,PM10,BG,Pontida,366,366,100.0
+2024,PM10,BG,Pontirolo Nuovo,366,366,100.0
+2024,PM10,SO,Postalesio,366,366,100.0
+2024,PM10,BG,Pradalunga,366,366,100.0
+2024,PM10,SO,Prata Camportaccio,366,366,100.0
+2024,PM10,BG,Predore,366,366,100.0
+2024,PM10,LC,Premana,366,366,100.0
+2024,PM10,BG,Premolo,366,366,100.0
+2024,PM10,BG,Presezzo,366,366,100.0
+2024,PM10,LC,Primaluna,366,366,100.0
+2024,PM10,BG,Pumenengo,366,366,100.0
+2024,PM10,BG,Ranica,366,366,100.0
+2024,PM10,BG,Ranzanico,366,366,100.0
+2024,PM10,SO,Rasura,366,366,100.0
+2024,PM10,MB,Renate,366,366,100.0
+2024,PM10,BG,Riva Di Solto,366,366,100.0
+2024,PM10,LC,Robbiate,366,366,100.0
+2024,PM10,LC,Rogeno,366,366,100.0
+2024,PM10,BG,Rogno,366,366,100.0
+2024,PM10,SO,Rogolo,366,366,100.0
+2024,PM10,BG,Romano Di Lombardia,366,366,100.0
+2024,PM10,MB,Roncello,366,366,100.0
+2024,PM10,MB,Ronco Briantino,366,366,100.0
+2024,PM10,BG,Roncobello,366,366,100.0
+2024,PM10,BG,Roncola,366,366,100.0
+2024,PM10,BG,Rota D'Imagna,366,366,100.0
+2024,PM10,BG,Rovetta,366,366,100.0
+2024,PM10,SO,Samolaco,366,366,100.0
+2024,PM10,SO,San Giacomo Filippo,366,366,100.0
+2024,PM10,BG,San Giovanni Bianco,366,366,100.0
+2024,PM10,BG,San Paolo D'Argon,366,366,100.0
+2024,PM10,BG,San Pellegrino Terme,366,366,100.0
+2024,PM10,BG,Sant'Omobono Terme,366,366,100.0
+2024,PM10,BG,Santa Brigida,366,366,100.0
+2024,PM10,LC,Santa Maria Hoè,366,366,100.0
+2024,PM10,BG,Sarnico,366,366,100.0
+2024,PM10,BS,Saviore Dell'Adamello,366,366,100.0
+2024,PM10,BG,Scanzorosciate,366,366,100.0
+2024,PM10,BG,Schilpario,366,366,100.0
+2024,PM10,BG,Sedrina,366,366,100.0
+2024,PM10,BS,Sellero,366,366,100.0
+2024,PM10,BG,Selvino,366,366,100.0
+2024,PM10,MB,Seregno,366,366,100.0
+2024,PM10,BG,Seriate,366,366,100.0
+2024,PM10,BG,Serina,366,366,100.0
+2024,PM10,SO,Sernio,366,366,100.0
+2024,PM10,MB,Seveso,366,366,100.0
+2024,PM10,LC,Sirone,366,366,100.0
+2024,PM10,LC,Sirtori,366,366,100.0
+2024,PM10,BG,Solto Collina,366,366,100.0
+2024,PM10,BG,Solza,366,366,100.0
+2024,PM10,SO,Sondalo,366,366,100.0
+2024,PM10,SO,Sondrio,366,366,100.0
+2024,PM10,BG,Songavazzo,366,366,100.0
+2024,PM10,BS,Sonico,366,366,100.0
+2024,PM10,CO,Sorico,366,366,100.0
+2024,PM10,BG,Sorisole,366,366,100.0
+2024,PM10,BG,Sotto Il Monte Giovanni Xxiii,366,366,100.0
+2024,PM10,BG,Sovere,366,366,100.0
+2024,PM10,MB,Sovico,366,366,100.0
+2024,PM10,BG,Spinone Al Lago,366,366,100.0
+2024,PM10,BG,Spirano,366,366,100.0
+2024,PM10,SO,Spriana,366,366,100.0
+2024,PM10,CO,Stazzona,366,366,100.0
+2024,PM10,BG,Stezzano,366,366,100.0
+2024,PM10,BG,Strozza,366,366,100.0
+2024,PM10,LC,Sueglio,366,366,100.0
+2024,PM10,LC,Suello,366,366,100.0
+2024,PM10,BG,Suisio,366,366,100.0
+2024,PM10,MB,Sulbiate,366,366,100.0
+2024,PM10,LC,Taceno,366,366,100.0
+2024,PM10,SO,Talamona,366,366,100.0
+2024,PM10,BG,Taleggio,366,366,100.0
+2024,PM10,SO,Tartano,366,366,100.0
+2024,PM10,BG,Tavernola Bergamasca,366,366,100.0
+2024,PM10,SO,Teglio,366,366,100.0
+2024,PM10,BG,Telgate,366,366,100.0
+2024,PM10,BS,Temù,366,366,100.0
+2024,PM10,BG,Terno D'Isola,366,366,100.0
+2024,PM10,SO,Tirano,366,366,100.0
+2024,PM10,BG,Torre Boldone,366,366,100.0
+2024,PM10,BG,Torre De' Roveri,366,366,100.0
+2024,PM10,SO,Torre Di Santa Maria,366,366,100.0
+2024,PM10,BG,Torre Pallavicina,366,366,100.0
+2024,PM10,SO,Tovo Di Sant'Agata,366,366,100.0
+2024,PM10,SO,Traona,366,366,100.0
+2024,PM10,BG,Trescore Balneario,366,366,100.0
+2024,PM10,SO,Tresivio,366,366,100.0
+2024,PM10,BG,Treviglio,366,366,100.0
+2024,PM10,BG,Treviolo,366,366,100.0
+2024,PM10,CO,Trezzone,366,366,100.0
+2024,PM10,MB,Triuggio,366,366,100.0
+2024,PM10,BG,Ubiale Clanezzo,366,366,100.0
+2024,PM10,BG,Urgnano,366,366,100.0
+2024,PM10,MB,Usmate Velate,366,366,100.0
+2024,PM10,BG,Val Brembilla,366,366,100.0
+2024,PM10,SO,Val Masino,366,366,100.0
+2024,PM10,BG,Valbondione,366,366,100.0
+2024,PM10,BG,Valbrembo,366,366,100.0
+2024,PM10,SO,Valdidentro,366,366,100.0
+2024,PM10,SO,Valdisotto,366,366,100.0
+2024,PM10,SO,Valfurva,366,366,100.0
+2024,PM10,BG,Valgoglio,366,366,100.0
+2024,PM10,LC,Valgreghentino,366,366,100.0
+2024,PM10,BG,Valleve,366,366,100.0
+2024,PM10,LC,Valmadrera,366,366,100.0
+2024,PM10,BG,Valnegra,366,366,100.0
+2024,PM10,BG,Valtorta,366,366,100.0
+2024,PM10,MB,Varedo,366,366,100.0
+2024,PM10,LC,Varenna,366,366,100.0
+2024,PM10,MB,Vedano Al Lambro,366,366,100.0
+2024,PM10,BG,Vedeseta,366,366,100.0
+2024,PM10,MB,Veduggio Con Colzano,366,366,100.0
+2024,PM10,MB,Verano Brianza,366,366,100.0
+2024,PM10,CO,Vercana,366,366,100.0
+2024,PM10,SO,Verceia,366,366,100.0
+2024,PM10,LC,Vercurago,366,366,100.0
+2024,PM10,BG,Verdellino,366,366,100.0
+2024,PM10,BG,Verdello,366,366,100.0
+2024,PM10,LC,Verderio,366,366,100.0
+2024,PM10,BG,Vertova,366,366,100.0
+2024,PM10,SO,Vervio,366,366,100.0
+2024,PM10,BS,Vezza D'Oglio,366,366,100.0
+2024,PM10,BG,Viadanica,366,366,100.0
+2024,PM10,BG,Vigano San Martino,366,366,100.0
+2024,PM10,LC,Viganò,366,366,100.0
+2024,PM10,BG,Vigolo,366,366,100.0
+2024,PM10,BG,Villa D'Adda,366,366,100.0
+2024,PM10,BG,Villa D'Almè,366,366,100.0
+2024,PM10,BG,Villa D'Ogna,366,366,100.0
+2024,PM10,SO,Villa Di Chiavenna,366,366,100.0
+2024,PM10,BG,Villa Di Serio,366,366,100.0
+2024,PM10,SO,Villa Di Tirano,366,366,100.0
+2024,PM10,MB,Villasanta,366,366,100.0
+2024,PM10,BG,Villongo,366,366,100.0
+2024,PM10,BG,Vilminore Di Scalve,366,366,100.0
+2024,PM10,MB,Vimercate,366,366,100.0
+2024,PM10,BS,Vione,366,366,100.0
+2024,PM10,BG,Zandobbio,366,366,100.0
+2024,PM10,BG,Zanica,366,366,100.0
+2024,PM10,BG,Zogno,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Abbadia Lariana,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Adrara San Martino,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Adrara San Rocco,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Agrate Brianza,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Aicurzio,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Airuno,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Albano Sant'Alessandro,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Albaredo Per San Marco,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Albiate,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Albino,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Albosaggia,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Algua,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Almenno San Bartolomeo,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Almenno San Salvatore,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Almè,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Alzano Lombardo,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Ambivere,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Andalo Valtellino,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Angolo Terme,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Annone Di Brianza,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Antegnate,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Aprica,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Arcene,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Arcore,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Ardenno,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Ardesio,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Artogne,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Arzago D'Adda,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Averara,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Aviatico,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Azzano San Paolo,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Azzone,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Bagnatica,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Ballabio,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Barbata,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Bariano,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Barlassina,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Barzago,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Barzana,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Barzanò,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Barzio,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Bedulita,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Bellano,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Bellusco,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Bema,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Berbenno,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Berbenno Di Valtellina,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Bergamo,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Bernareggio,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Berzo Demo,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Berzo Inferiore,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Berzo San Fermo,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Besana In Brianza,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Bianzano,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Bianzone,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Biassono,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Bienno,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Blello,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Bolgare,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Boltiere,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Bonate Sopra,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Bonate Sotto,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Borgo Di Terzo,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Bormio,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Borno,363,366,99.2
+2024,Particelle sospese PM2.5,LC,Bosisio Parini,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Bossico,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Bottanuco,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Bovisio-Masciago,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Bracca,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Branzi,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Braone,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Brembate,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Brembate Di Sopra,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Breno,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Brignano Gera D'Adda,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Briosco,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Brivio,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Brugherio,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Brumano,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Brusaporto,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Buglio In Monte,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Bulciago,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Burago Di Molgora,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Busnago,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Caiolo,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Calcinate,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Calcio,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Calco,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Calolziocorte,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Calusco D'Adda,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Calvenzano,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Camerata Cornello,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Camparada,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Campodolcino,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Canonica D'Adda,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Capizzone,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Capo Di Ponte,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Caponago,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Capriate San Gervasio,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Caprino Bergamasco,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Carate Brianza,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Caravaggio,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Carenno,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Carnate,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Carobbio Degli Angeli,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Carona,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Carvico,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Casargo,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Casatenovo,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Casazza,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Casirate D'Adda,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Casnigo,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Caspoggio,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Cassago Brianza,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Cassiglio,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Cassina Valsassina,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Castel Rozzone,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Castelli Calepio,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Castello Dell'Acqua,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Castello Di Brianza,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Castione Andevenno,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Castione Della Presolana,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Castro,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Cavenago Di Brianza,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Cavernago,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Cazzano Sant'Andrea,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Cedegolo,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Cedrasco,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Cenate Sopra,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Cenate Sotto,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Cene,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Cercino,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Cerete,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Ceriano Laghetto,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Cernusco Lombardone,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Cerveno,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Cesana Brianza,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Cesano Maderno,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Ceto,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Cevo,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Chiavenna,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Chiesa In Valmalenco,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Chignolo D'Isola,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Chiuduno,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Chiuro,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Cimbergo,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Cino,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Cisano Bergamasco,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Ciserano,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Civate,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Cividate Al Piano,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Cividate Camuno,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Civo,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Clusone,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Cogliate,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Colere,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Colico,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Colle Brianza,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Cologno Al Serio,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Colorina,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Colzate,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Comun Nuovo,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Concorezzo,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Corna Imagna,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Cornalba,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Cornate D'Adda,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Correzzana,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Corteno Golgi,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Cortenova,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Cortenuova,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Cosio Valtellino,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Costa Di Mezzate,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Costa Masnaga,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Costa Serina,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Costa Valle Imagna,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Costa Volpino,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Covo,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Crandola Valsassina,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Credaro,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Cremella,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Cremeno,366,366,100.0
+2024,Particelle sospese PM2.5,CO,Cremia,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Curno,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Cusio,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Dalmine,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Darfo Boario Terme,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Dazio,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Delebio,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Dervio,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Desio,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Dolzago,366,366,100.0
+2024,Particelle sospese PM2.5,CO,Domaso,366,366,100.0
+2024,Particelle sospese PM2.5,CO,Dongo,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Dorio,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Dossena,366,366,100.0
+2024,Particelle sospese PM2.5,CO,Dosso Del Liro,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Dubino,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Edolo,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Ello,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Endine Gaiano,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Entratico,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Erve,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Esine,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Esino Lario,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Faedo Valtellino,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Fara Gera D'Adda,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Fara Olivana Con Sola,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Filago,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Fino Del Monte,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Fiorano Al Serio,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Fontanella,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Fonteno,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Foppolo,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Forcola,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Foresto Sparso,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Fornovo San Giovanni,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Fuipiano Valle Imagna,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Fusine,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Galbiate,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Gandellino,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Gandino,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Gandosso,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Garbagnate Monastero,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Garlate,366,366,100.0
+2024,Particelle sospese PM2.5,CO,Garzeno,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Gaverina Terme,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Gazzaniga,366,366,100.0
+2024,Particelle sospese PM2.5,CO,Gera Lario,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Gerola Alta,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Ghisalba,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Gianico,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Giussano,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Gordona,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Gorlago,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Gorle,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Gorno,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Grassobbio,366,366,100.0
+2024,Particelle sospese PM2.5,CO,Gravedona Ed Uniti,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Gromo,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Grone,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Grosio,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Grosotto,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Grumello Del Monte,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Imbersago,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Incudine,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Introbio,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Isola Di Fondra,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Isso,366,366,100.0
+2024,Particelle sospese PM2.5,LC,La Valletta Brianza,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Lallio,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Lanzada,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Lazzate,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Lecco,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Leffe,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Lenna,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Lentate Sul Seveso,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Lesmo,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Levate,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Lierna,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Limbiate,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Lissone,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Livigno,366,366,100.0
+2024,Particelle sospese PM2.5,CO,Livo,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Locatello,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Lomagna,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Losine,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Lovere,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Lovero,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Lozio,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Lurano,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Luzzana,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Macherio,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Madesimo,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Madone,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Malegno,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Malgrate,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Malonno,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Mandello Del Lario,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Mantello,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Mapello,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Margno,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Martinengo,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Mazzo Di Valtellina,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Meda,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Medolago,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Mello,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Merate,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Mese,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Mezzago,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Mezzoldo,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Misano Di Gera D'Adda,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Misinto,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Missaglia,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Moggio,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Moio De' Calvi,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Molteno,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Monasterolo Del Castello,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Monno,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Montagna In Valtellina,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Monte Marenzo,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Montello,366,366,100.0
+2024,Particelle sospese PM2.5,CO,Montemezzo,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Montevecchia,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Monticello Brianza,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Monza,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Morbegno,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Morengo,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Mornico Al Serio,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Morterone,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Mozzanica,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Mozzo,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Muggiò,366,366,100.0
+2024,Particelle sospese PM2.5,CO,Musso,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Nembro,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Niardo,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Nibionno,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Nova Milanese,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Novate Mezzola,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Oggiono,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Olgiate Molgora,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Olginate,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Oliveto Lario,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Olmo Al Brembo,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Oltre Il Colle,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Oltressenda Alta,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Oneta,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Ono San Pietro,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Onore,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Orio Al Serio,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Ornago,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Ornica,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Osio Sopra,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Osio Sotto,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Osnago,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Ossimo,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Paderno D'Adda,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Pagazzano,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Pagnona,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Paisco Loveno,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Paladina,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Palazzago,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Palosco,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Parlasco,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Parre,194,366,53.0
+2024,Particelle sospese PM2.5,BG,Parzanica,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Paspardo,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Pasturo,346,366,94.5
+2024,Particelle sospese PM2.5,SO,Pedesina,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Pedrengo,366,366,100.0
+2024,Particelle sospese PM2.5,CO,Peglio,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Peia,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Perledo,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Pescate,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Pian Camuno,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Piancogno,366,366,100.0
+2024,Particelle sospese PM2.5,CO,Pianello Del Lario,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Pianico,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Piantedo,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Piario,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Piateda,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Piazza Brembana,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Piazzatorre,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Piazzolo,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Pisogne,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Piuro,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Poggiridenti,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Pognano,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Ponte Di Legno,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Ponte In Valtellina,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Ponte Nossa,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Ponte San Pietro,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Ponteranica,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Pontida,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Pontirolo Nuovo,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Postalesio,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Pradalunga,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Prata Camportaccio,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Predore,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Premana,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Premolo,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Presezzo,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Primaluna,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Pumenengo,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Ranica,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Ranzanico,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Rasura,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Renate,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Riva Di Solto,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Robbiate,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Rogeno,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Rogno,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Rogolo,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Romano Di Lombardia,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Roncello,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Ronco Briantino,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Roncobello,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Roncola,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Rota D'Imagna,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Rovetta,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Samolaco,366,366,100.0
+2024,Particelle sospese PM2.5,SO,San Giacomo Filippo,366,366,100.0
+2024,Particelle sospese PM2.5,BG,San Giovanni Bianco,366,366,100.0
+2024,Particelle sospese PM2.5,BG,San Paolo D'Argon,366,366,100.0
+2024,Particelle sospese PM2.5,BG,San Pellegrino Terme,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Sant'Omobono Terme,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Santa Brigida,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Santa Maria Hoè,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Sarnico,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Saviore Dell'Adamello,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Scanzorosciate,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Schilpario,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Sedrina,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Sellero,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Selvino,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Seregno,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Seriate,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Serina,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Sernio,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Seveso,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Sirone,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Sirtori,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Solto Collina,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Solza,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Sondalo,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Sondrio,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Songavazzo,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Sonico,366,366,100.0
+2024,Particelle sospese PM2.5,CO,Sorico,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Sorisole,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Sotto Il Monte Giovanni Xxiii,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Sovere,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Sovico,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Spinone Al Lago,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Spirano,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Spriana,366,366,100.0
+2024,Particelle sospese PM2.5,CO,Stazzona,46,366,12.6
+2024,Particelle sospese PM2.5,BG,Stezzano,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Strozza,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Sueglio,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Suello,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Suisio,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Sulbiate,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Taceno,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Talamona,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Taleggio,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Tartano,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Tavernola Bergamasca,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Teglio,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Telgate,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Temù,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Terno D'Isola,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Tirano,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Torre Boldone,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Torre De' Roveri,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Torre Di Santa Maria,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Torre Pallavicina,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Tovo Di Sant'Agata,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Traona,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Trescore Balneario,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Tresivio,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Treviglio,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Treviolo,366,366,100.0
+2024,Particelle sospese PM2.5,CO,Trezzone,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Triuggio,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Ubiale Clanezzo,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Urgnano,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Usmate Velate,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Val Brembilla,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Val Masino,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Valbondione,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Valbrembo,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Valdidentro,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Valdisotto,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Valfurva,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Valgoglio,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Valgreghentino,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Valleve,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Valmadrera,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Valnegra,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Valtorta,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Varedo,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Varenna,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Vedano Al Lambro,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Vedeseta,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Veduggio Con Colzano,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Verano Brianza,366,366,100.0
+2024,Particelle sospese PM2.5,CO,Vercana,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Verceia,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Vercurago,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Verdellino,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Verdello,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Verderio,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Vertova,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Vervio,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Vezza D'Oglio,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Viadanica,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Vigano San Martino,366,366,100.0
+2024,Particelle sospese PM2.5,LC,Viganò,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Vigolo,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Villa D'Adda,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Villa D'Almè,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Villa D'Ogna,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Villa Di Chiavenna,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Villa Di Serio,366,366,100.0
+2024,Particelle sospese PM2.5,SO,Villa Di Tirano,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Villasanta,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Villongo,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Vilminore Di Scalve,366,366,100.0
+2024,Particelle sospese PM2.5,MB,Vimercate,366,366,100.0
+2024,Particelle sospese PM2.5,BS,Vione,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Zandobbio,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Zanica,366,366,100.0
+2024,Particelle sospese PM2.5,BG,Zogno,366,366,100.0
+2024,Biossido di Azoto,LC,Abbadia Lariana,366,366,100.0
+2024,Biossido di Azoto,BG,Adrara San Martino,366,366,100.0
+2024,Biossido di Azoto,BG,Adrara San Rocco,366,366,100.0
+2024,Biossido di Azoto,MB,Agrate Brianza,366,366,100.0
+2024,Biossido di Azoto,MB,Aicurzio,366,366,100.0
+2024,Biossido di Azoto,LC,Airuno,366,366,100.0
+2024,Biossido di Azoto,BG,Albano Sant'Alessandro,366,366,100.0
+2024,Biossido di Azoto,SO,Albaredo Per San Marco,366,366,100.0
+2024,Biossido di Azoto,MB,Albiate,366,366,100.0
+2024,Biossido di Azoto,BG,Albino,366,366,100.0
+2024,Biossido di Azoto,SO,Albosaggia,366,366,100.0
+2024,Biossido di Azoto,BG,Algua,366,366,100.0
+2024,Biossido di Azoto,BG,Almenno San Bartolomeo,366,366,100.0
+2024,Biossido di Azoto,BG,Almenno San Salvatore,366,366,100.0
+2024,Biossido di Azoto,BG,Almè,366,366,100.0
+2024,Biossido di Azoto,BG,Alzano Lombardo,366,366,100.0
+2024,Biossido di Azoto,BG,Ambivere,366,366,100.0
+2024,Biossido di Azoto,SO,Andalo Valtellino,366,366,100.0
+2024,Biossido di Azoto,BS,Angolo Terme,366,366,100.0
+2024,Biossido di Azoto,LC,Annone Di Brianza,366,366,100.0
+2024,Biossido di Azoto,BG,Antegnate,366,366,100.0
+2024,Biossido di Azoto,SO,Aprica,366,366,100.0
+2024,Biossido di Azoto,BG,Arcene,366,366,100.0
+2024,Biossido di Azoto,MB,Arcore,366,366,100.0
+2024,Biossido di Azoto,SO,Ardenno,366,366,100.0
+2024,Biossido di Azoto,BG,Ardesio,366,366,100.0
+2024,Biossido di Azoto,BS,Artogne,366,366,100.0
+2024,Biossido di Azoto,BG,Arzago D'Adda,366,366,100.0
+2024,Biossido di Azoto,BG,Averara,366,366,100.0
+2024,Biossido di Azoto,BG,Aviatico,366,366,100.0
+2024,Biossido di Azoto,BG,Azzano San Paolo,366,366,100.0
+2024,Biossido di Azoto,BG,Azzone,366,366,100.0
+2024,Biossido di Azoto,BG,Bagnatica,366,366,100.0
+2024,Biossido di Azoto,LC,Ballabio,366,366,100.0
+2024,Biossido di Azoto,BG,Barbata,366,366,100.0
+2024,Biossido di Azoto,BG,Bariano,366,366,100.0
+2024,Biossido di Azoto,MB,Barlassina,366,366,100.0
+2024,Biossido di Azoto,LC,Barzago,366,366,100.0
+2024,Biossido di Azoto,BG,Barzana,366,366,100.0
+2024,Biossido di Azoto,LC,Barzanò,366,366,100.0
+2024,Biossido di Azoto,LC,Barzio,366,366,100.0
+2024,Biossido di Azoto,BG,Bedulita,366,366,100.0
+2024,Biossido di Azoto,LC,Bellano,366,366,100.0
+2024,Biossido di Azoto,MB,Bellusco,366,366,100.0
+2024,Biossido di Azoto,SO,Bema,366,366,100.0
+2024,Biossido di Azoto,BG,Berbenno,366,366,100.0
+2024,Biossido di Azoto,SO,Berbenno Di Valtellina,366,366,100.0
+2024,Biossido di Azoto,BG,Bergamo,366,366,100.0
+2024,Biossido di Azoto,MB,Bernareggio,366,366,100.0
+2024,Biossido di Azoto,BS,Berzo Demo,366,366,100.0
+2024,Biossido di Azoto,BS,Berzo Inferiore,366,366,100.0
+2024,Biossido di Azoto,BG,Berzo San Fermo,366,366,100.0
+2024,Biossido di Azoto,MB,Besana In Brianza,336,366,91.8
+2024,Biossido di Azoto,BG,Bianzano,366,366,100.0
+2024,Biossido di Azoto,SO,Bianzone,366,366,100.0
+2024,Biossido di Azoto,MB,Biassono,366,366,100.0
+2024,Biossido di Azoto,BS,Bienno,366,366,100.0
+2024,Biossido di Azoto,BG,Blello,366,366,100.0
+2024,Biossido di Azoto,BG,Bolgare,366,366,100.0
+2024,Biossido di Azoto,BG,Boltiere,366,366,100.0
+2024,Biossido di Azoto,BG,Bonate Sopra,366,366,100.0
+2024,Biossido di Azoto,BG,Bonate Sotto,366,366,100.0
+2024,Biossido di Azoto,BG,Borgo Di Terzo,366,366,100.0
+2024,Biossido di Azoto,SO,Bormio,366,366,100.0
+2024,Biossido di Azoto,BS,Borno,366,366,100.0
+2024,Biossido di Azoto,LC,Bosisio Parini,366,366,100.0
+2024,Biossido di Azoto,BG,Bossico,366,366,100.0
+2024,Biossido di Azoto,BG,Bottanuco,366,366,100.0
+2024,Biossido di Azoto,MB,Bovisio-Masciago,366,366,100.0
+2024,Biossido di Azoto,BG,Bracca,366,366,100.0
+2024,Biossido di Azoto,BG,Branzi,366,366,100.0
+2024,Biossido di Azoto,BS,Braone,366,366,100.0
+2024,Biossido di Azoto,BG,Brembate,366,366,100.0
+2024,Biossido di Azoto,BG,Brembate Di Sopra,366,366,100.0
+2024,Biossido di Azoto,BS,Breno,366,366,100.0
+2024,Biossido di Azoto,BG,Brignano Gera D'Adda,366,366,100.0
+2024,Biossido di Azoto,MB,Briosco,366,366,100.0
+2024,Biossido di Azoto,LC,Brivio,366,366,100.0
+2024,Biossido di Azoto,MB,Brugherio,366,366,100.0
+2024,Biossido di Azoto,BG,Brumano,366,366,100.0
+2024,Biossido di Azoto,BG,Brusaporto,366,366,100.0
+2024,Biossido di Azoto,SO,Buglio In Monte,366,366,100.0
+2024,Biossido di Azoto,LC,Bulciago,366,366,100.0
+2024,Biossido di Azoto,MB,Burago Di Molgora,366,366,100.0
+2024,Biossido di Azoto,MB,Busnago,366,366,100.0
+2024,Biossido di Azoto,SO,Caiolo,366,366,100.0
+2024,Biossido di Azoto,BG,Calcinate,366,366,100.0
+2024,Biossido di Azoto,BG,Calcio,366,366,100.0
+2024,Biossido di Azoto,LC,Calco,366,366,100.0
+2024,Biossido di Azoto,LC,Calolziocorte,366,366,100.0
+2024,Biossido di Azoto,BG,Calusco D'Adda,366,366,100.0
+2024,Biossido di Azoto,BG,Calvenzano,366,366,100.0
+2024,Biossido di Azoto,BG,Camerata Cornello,366,366,100.0
+2024,Biossido di Azoto,MB,Camparada,366,366,100.0
+2024,Biossido di Azoto,SO,Campodolcino,366,366,100.0
+2024,Biossido di Azoto,BG,Canonica D'Adda,366,366,100.0
+2024,Biossido di Azoto,BG,Capizzone,366,366,100.0
+2024,Biossido di Azoto,BS,Capo Di Ponte,366,366,100.0
+2024,Biossido di Azoto,MB,Caponago,366,366,100.0
+2024,Biossido di Azoto,BG,Capriate San Gervasio,366,366,100.0
+2024,Biossido di Azoto,BG,Caprino Bergamasco,366,366,100.0
+2024,Biossido di Azoto,MB,Carate Brianza,366,366,100.0
+2024,Biossido di Azoto,BG,Caravaggio,366,366,100.0
+2024,Biossido di Azoto,LC,Carenno,366,366,100.0
+2024,Biossido di Azoto,MB,Carnate,366,366,100.0
+2024,Biossido di Azoto,BG,Carobbio Degli Angeli,366,366,100.0
+2024,Biossido di Azoto,BG,Carona,366,366,100.0
+2024,Biossido di Azoto,BG,Carvico,366,366,100.0
+2024,Biossido di Azoto,LC,Casargo,366,366,100.0
+2024,Biossido di Azoto,LC,Casatenovo,366,366,100.0
+2024,Biossido di Azoto,BG,Casazza,366,366,100.0
+2024,Biossido di Azoto,BG,Casirate D'Adda,366,366,100.0
+2024,Biossido di Azoto,BG,Casnigo,366,366,100.0
+2024,Biossido di Azoto,SO,Caspoggio,366,366,100.0
+2024,Biossido di Azoto,LC,Cassago Brianza,366,366,100.0
+2024,Biossido di Azoto,BG,Cassiglio,366,366,100.0
+2024,Biossido di Azoto,LC,Cassina Valsassina,366,366,100.0
+2024,Biossido di Azoto,BG,Castel Rozzone,366,366,100.0
+2024,Biossido di Azoto,BG,Castelli Calepio,366,366,100.0
+2024,Biossido di Azoto,SO,Castello Dell'Acqua,366,366,100.0
+2024,Biossido di Azoto,LC,Castello Di Brianza,366,366,100.0
+2024,Biossido di Azoto,SO,Castione Andevenno,366,366,100.0
+2024,Biossido di Azoto,BG,Castione Della Presolana,366,366,100.0
+2024,Biossido di Azoto,BG,Castro,366,366,100.0
+2024,Biossido di Azoto,MB,Cavenago Di Brianza,366,366,100.0
+2024,Biossido di Azoto,BG,Cavernago,366,366,100.0
+2024,Biossido di Azoto,BG,Cazzano Sant'Andrea,366,366,100.0
+2024,Biossido di Azoto,BS,Cedegolo,366,366,100.0
+2024,Biossido di Azoto,SO,Cedrasco,366,366,100.0
+2024,Biossido di Azoto,BG,Cenate Sopra,366,366,100.0
+2024,Biossido di Azoto,BG,Cenate Sotto,366,366,100.0
+2024,Biossido di Azoto,BG,Cene,366,366,100.0
+2024,Biossido di Azoto,SO,Cercino,366,366,100.0
+2024,Biossido di Azoto,BG,Cerete,366,366,100.0
+2024,Biossido di Azoto,MB,Ceriano Laghetto,366,366,100.0
+2024,Biossido di Azoto,LC,Cernusco Lombardone,366,366,100.0
+2024,Biossido di Azoto,BS,Cerveno,366,366,100.0
+2024,Biossido di Azoto,LC,Cesana Brianza,366,366,100.0
+2024,Biossido di Azoto,MB,Cesano Maderno,366,366,100.0
+2024,Biossido di Azoto,BS,Ceto,366,366,100.0
+2024,Biossido di Azoto,BS,Cevo,366,366,100.0
+2024,Biossido di Azoto,SO,Chiavenna,366,366,100.0
+2024,Biossido di Azoto,SO,Chiesa In Valmalenco,366,366,100.0
+2024,Biossido di Azoto,BG,Chignolo D'Isola,366,366,100.0
+2024,Biossido di Azoto,BG,Chiuduno,366,366,100.0
+2024,Biossido di Azoto,SO,Chiuro,366,366,100.0
+2024,Biossido di Azoto,BS,Cimbergo,366,366,100.0
+2024,Biossido di Azoto,SO,Cino,366,366,100.0
+2024,Biossido di Azoto,BG,Cisano Bergamasco,366,366,100.0
+2024,Biossido di Azoto,BG,Ciserano,366,366,100.0
+2024,Biossido di Azoto,LC,Civate,366,366,100.0
+2024,Biossido di Azoto,BG,Cividate Al Piano,366,366,100.0
+2024,Biossido di Azoto,BS,Cividate Camuno,366,366,100.0
+2024,Biossido di Azoto,SO,Civo,366,366,100.0
+2024,Biossido di Azoto,BG,Clusone,366,366,100.0
+2024,Biossido di Azoto,MB,Cogliate,366,366,100.0
+2024,Biossido di Azoto,BG,Colere,366,366,100.0
+2024,Biossido di Azoto,LC,Colico,366,366,100.0
+2024,Biossido di Azoto,LC,Colle Brianza,366,366,100.0
+2024,Biossido di Azoto,BG,Cologno Al Serio,366,366,100.0
+2024,Biossido di Azoto,SO,Colorina,366,366,100.0
+2024,Biossido di Azoto,BG,Colzate,366,366,100.0
+2024,Biossido di Azoto,BG,Comun Nuovo,366,366,100.0
+2024,Biossido di Azoto,MB,Concorezzo,366,366,100.0
+2024,Biossido di Azoto,BG,Corna Imagna,366,366,100.0
+2024,Biossido di Azoto,BG,Cornalba,366,366,100.0
+2024,Biossido di Azoto,MB,Cornate D'Adda,366,366,100.0
+2024,Biossido di Azoto,MB,Correzzana,366,366,100.0
+2024,Biossido di Azoto,BS,Corteno Golgi,366,366,100.0
+2024,Biossido di Azoto,LC,Cortenova,366,366,100.0
+2024,Biossido di Azoto,BG,Cortenuova,366,366,100.0
+2024,Biossido di Azoto,SO,Cosio Valtellino,366,366,100.0
+2024,Biossido di Azoto,BG,Costa Di Mezzate,366,366,100.0
+2024,Biossido di Azoto,LC,Costa Masnaga,366,366,100.0
+2024,Biossido di Azoto,BG,Costa Serina,366,366,100.0
+2024,Biossido di Azoto,BG,Costa Valle Imagna,366,366,100.0
+2024,Biossido di Azoto,BG,Costa Volpino,366,366,100.0
+2024,Biossido di Azoto,BG,Covo,366,366,100.0
+2024,Biossido di Azoto,LC,Crandola Valsassina,366,366,100.0
+2024,Biossido di Azoto,BG,Credaro,366,366,100.0
+2024,Biossido di Azoto,LC,Cremella,366,366,100.0
+2024,Biossido di Azoto,LC,Cremeno,366,366,100.0
+2024,Biossido di Azoto,CO,Cremia,366,366,100.0
+2024,Biossido di Azoto,BG,Curno,366,366,100.0
+2024,Biossido di Azoto,BG,Cusio,366,366,100.0
+2024,Biossido di Azoto,BG,Dalmine,366,366,100.0
+2024,Biossido di Azoto,BS,Darfo Boario Terme,366,366,100.0
+2024,Biossido di Azoto,SO,Dazio,366,366,100.0
+2024,Biossido di Azoto,SO,Delebio,366,366,100.0
+2024,Biossido di Azoto,LC,Dervio,366,366,100.0
+2024,Biossido di Azoto,MB,Desio,366,366,100.0
+2024,Biossido di Azoto,LC,Dolzago,366,366,100.0
+2024,Biossido di Azoto,CO,Domaso,366,366,100.0
+2024,Biossido di Azoto,CO,Dongo,366,366,100.0
+2024,Biossido di Azoto,LC,Dorio,366,366,100.0
+2024,Biossido di Azoto,BG,Dossena,366,366,100.0
+2024,Biossido di Azoto,CO,Dosso Del Liro,366,366,100.0
+2024,Biossido di Azoto,SO,Dubino,366,366,100.0
+2024,Biossido di Azoto,BS,Edolo,366,366,100.0
+2024,Biossido di Azoto,LC,Ello,366,366,100.0
+2024,Biossido di Azoto,BG,Endine Gaiano,366,366,100.0
+2024,Biossido di Azoto,BG,Entratico,366,366,100.0
+2024,Biossido di Azoto,LC,Erve,366,366,100.0
+2024,Biossido di Azoto,BS,Esine,366,366,100.0
+2024,Biossido di Azoto,LC,Esino Lario,366,366,100.0
+2024,Biossido di Azoto,SO,Faedo Valtellino,366,366,100.0
+2024,Biossido di Azoto,BG,Fara Gera D'Adda,366,366,100.0
+2024,Biossido di Azoto,BG,Fara Olivana Con Sola,366,366,100.0
+2024,Biossido di Azoto,BG,Filago,366,366,100.0
+2024,Biossido di Azoto,BG,Fino Del Monte,366,366,100.0
+2024,Biossido di Azoto,BG,Fiorano Al Serio,366,366,100.0
+2024,Biossido di Azoto,BG,Fontanella,366,366,100.0
+2024,Biossido di Azoto,BG,Fonteno,366,366,100.0
+2024,Biossido di Azoto,BG,Foppolo,366,366,100.0
+2024,Biossido di Azoto,SO,Forcola,366,366,100.0
+2024,Biossido di Azoto,BG,Foresto Sparso,366,366,100.0
+2024,Biossido di Azoto,BG,Fornovo San Giovanni,366,366,100.0
+2024,Biossido di Azoto,BG,Fuipiano Valle Imagna,366,366,100.0
+2024,Biossido di Azoto,SO,Fusine,366,366,100.0
+2024,Biossido di Azoto,LC,Galbiate,366,366,100.0
+2024,Biossido di Azoto,BG,Gandellino,366,366,100.0
+2024,Biossido di Azoto,BG,Gandino,366,366,100.0
+2024,Biossido di Azoto,BG,Gandosso,366,366,100.0
+2024,Biossido di Azoto,LC,Garbagnate Monastero,366,366,100.0
+2024,Biossido di Azoto,LC,Garlate,366,366,100.0
+2024,Biossido di Azoto,CO,Garzeno,366,366,100.0
+2024,Biossido di Azoto,BG,Gaverina Terme,366,366,100.0
+2024,Biossido di Azoto,BG,Gazzaniga,366,366,100.0
+2024,Biossido di Azoto,CO,Gera Lario,366,366,100.0
+2024,Biossido di Azoto,SO,Gerola Alta,366,366,100.0
+2024,Biossido di Azoto,BG,Ghisalba,366,366,100.0
+2024,Biossido di Azoto,BS,Gianico,366,366,100.0
+2024,Biossido di Azoto,MB,Giussano,366,366,100.0
+2024,Biossido di Azoto,SO,Gordona,366,366,100.0
+2024,Biossido di Azoto,BG,Gorlago,366,366,100.0
+2024,Biossido di Azoto,BG,Gorle,366,366,100.0
+2024,Biossido di Azoto,BG,Gorno,366,366,100.0
+2024,Biossido di Azoto,BG,Grassobbio,366,366,100.0
+2024,Biossido di Azoto,CO,Gravedona Ed Uniti,366,366,100.0
+2024,Biossido di Azoto,BG,Gromo,366,366,100.0
+2024,Biossido di Azoto,BG,Grone,366,366,100.0
+2024,Biossido di Azoto,SO,Grosio,366,366,100.0
+2024,Biossido di Azoto,SO,Grosotto,366,366,100.0
+2024,Biossido di Azoto,BG,Grumello Del Monte,366,366,100.0
+2024,Biossido di Azoto,LC,Imbersago,366,366,100.0
+2024,Biossido di Azoto,BS,Incudine,366,366,100.0
+2024,Biossido di Azoto,LC,Introbio,366,366,100.0
+2024,Biossido di Azoto,BG,Isola Di Fondra,366,366,100.0
+2024,Biossido di Azoto,BG,Isso,366,366,100.0
+2024,Biossido di Azoto,LC,La Valletta Brianza,366,366,100.0
+2024,Biossido di Azoto,BG,Lallio,366,366,100.0
+2024,Biossido di Azoto,SO,Lanzada,366,366,100.0
+2024,Biossido di Azoto,MB,Lazzate,366,366,100.0
+2024,Biossido di Azoto,LC,Lecco,366,366,100.0
+2024,Biossido di Azoto,BG,Leffe,366,366,100.0
+2024,Biossido di Azoto,BG,Lenna,366,366,100.0
+2024,Biossido di Azoto,MB,Lentate Sul Seveso,366,366,100.0
+2024,Biossido di Azoto,MB,Lesmo,363,366,99.2
+2024,Biossido di Azoto,BG,Levate,366,366,100.0
+2024,Biossido di Azoto,LC,Lierna,366,366,100.0
+2024,Biossido di Azoto,MB,Limbiate,322,366,88.0
+2024,Biossido di Azoto,MB,Lissone,366,366,100.0
+2024,Biossido di Azoto,SO,Livigno,366,366,100.0
+2024,Biossido di Azoto,CO,Livo,366,366,100.0
+2024,Biossido di Azoto,BG,Locatello,366,366,100.0
+2024,Biossido di Azoto,LC,Lomagna,366,366,100.0
+2024,Biossido di Azoto,BS,Losine,366,366,100.0
+2024,Biossido di Azoto,BG,Lovere,366,366,100.0
+2024,Biossido di Azoto,SO,Lovero,366,366,100.0
+2024,Biossido di Azoto,BS,Lozio,366,366,100.0
+2024,Biossido di Azoto,BG,Lurano,366,366,100.0
+2024,Biossido di Azoto,BG,Luzzana,366,366,100.0
+2024,Biossido di Azoto,MB,Macherio,366,366,100.0
+2024,Biossido di Azoto,SO,Madesimo,366,366,100.0
+2024,Biossido di Azoto,BG,Madone,366,366,100.0
+2024,Biossido di Azoto,BS,Malegno,366,366,100.0
+2024,Biossido di Azoto,LC,Malgrate,366,366,100.0
+2024,Biossido di Azoto,BS,Malonno,366,366,100.0
+2024,Biossido di Azoto,LC,Mandello Del Lario,366,366,100.0
+2024,Biossido di Azoto,SO,Mantello,366,366,100.0
+2024,Biossido di Azoto,BG,Mapello,366,366,100.0
+2024,Biossido di Azoto,LC,Margno,366,366,100.0
+2024,Biossido di Azoto,BG,Martinengo,366,366,100.0
+2024,Biossido di Azoto,SO,Mazzo Di Valtellina,366,366,100.0
+2024,Biossido di Azoto,MB,Meda,366,366,100.0
+2024,Biossido di Azoto,BG,Medolago,366,366,100.0
+2024,Biossido di Azoto,SO,Mello,366,366,100.0
+2024,Biossido di Azoto,LC,Merate,366,366,100.0
+2024,Biossido di Azoto,SO,Mese,366,366,100.0
+2024,Biossido di Azoto,MB,Mezzago,366,366,100.0
+2024,Biossido di Azoto,BG,Mezzoldo,366,366,100.0
+2024,Biossido di Azoto,BG,Misano Di Gera D'Adda,366,366,100.0
+2024,Biossido di Azoto,MB,Misinto,366,366,100.0
+2024,Biossido di Azoto,LC,Missaglia,366,366,100.0
+2024,Biossido di Azoto,LC,Moggio,366,366,100.0
+2024,Biossido di Azoto,BG,Moio De' Calvi,366,366,100.0
+2024,Biossido di Azoto,LC,Molteno,366,366,100.0
+2024,Biossido di Azoto,BG,Monasterolo Del Castello,366,366,100.0
+2024,Biossido di Azoto,BS,Monno,366,366,100.0
+2024,Biossido di Azoto,SO,Montagna In Valtellina,366,366,100.0
+2024,Biossido di Azoto,LC,Monte Marenzo,366,366,100.0
+2024,Biossido di Azoto,BG,Montello,366,366,100.0
+2024,Biossido di Azoto,CO,Montemezzo,366,366,100.0
+2024,Biossido di Azoto,LC,Montevecchia,366,366,100.0
+2024,Biossido di Azoto,LC,Monticello Brianza,366,366,100.0
+2024,Biossido di Azoto,MB,Monza,366,366,100.0
+2024,Biossido di Azoto,SO,Morbegno,366,366,100.0
+2024,Biossido di Azoto,BG,Morengo,366,366,100.0
+2024,Biossido di Azoto,BG,Mornico Al Serio,366,366,100.0
+2024,Biossido di Azoto,LC,Morterone,366,366,100.0
+2024,Biossido di Azoto,BG,Mozzanica,366,366,100.0
+2024,Biossido di Azoto,BG,Mozzo,366,366,100.0
+2024,Biossido di Azoto,MB,Muggiò,366,366,100.0
+2024,Biossido di Azoto,CO,Musso,366,366,100.0
+2024,Biossido di Azoto,BG,Nembro,366,366,100.0
+2024,Biossido di Azoto,BS,Niardo,366,366,100.0
+2024,Biossido di Azoto,LC,Nibionno,366,366,100.0
+2024,Biossido di Azoto,MB,Nova Milanese,366,366,100.0
+2024,Biossido di Azoto,SO,Novate Mezzola,366,366,100.0
+2024,Biossido di Azoto,LC,Oggiono,366,366,100.0
+2024,Biossido di Azoto,LC,Olgiate Molgora,366,366,100.0
+2024,Biossido di Azoto,LC,Olginate,366,366,100.0
+2024,Biossido di Azoto,LC,Oliveto Lario,366,366,100.0
+2024,Biossido di Azoto,BG,Olmo Al Brembo,366,366,100.0
+2024,Biossido di Azoto,BG,Oltre Il Colle,366,366,100.0
+2024,Biossido di Azoto,BG,Oltressenda Alta,366,366,100.0
+2024,Biossido di Azoto,BG,Oneta,366,366,100.0
+2024,Biossido di Azoto,BS,Ono San Pietro,366,366,100.0
+2024,Biossido di Azoto,BG,Onore,366,366,100.0
+2024,Biossido di Azoto,BG,Orio Al Serio,366,366,100.0
+2024,Biossido di Azoto,MB,Ornago,366,366,100.0
+2024,Biossido di Azoto,BG,Ornica,366,366,100.0
+2024,Biossido di Azoto,BG,Osio Sopra,366,366,100.0
+2024,Biossido di Azoto,BG,Osio Sotto,366,366,100.0
+2024,Biossido di Azoto,LC,Osnago,366,366,100.0
+2024,Biossido di Azoto,BS,Ossimo,366,366,100.0
+2024,Biossido di Azoto,LC,Paderno D'Adda,366,366,100.0
+2024,Biossido di Azoto,BG,Pagazzano,366,366,100.0
+2024,Biossido di Azoto,LC,Pagnona,366,366,100.0
+2024,Biossido di Azoto,BS,Paisco Loveno,366,366,100.0
+2024,Biossido di Azoto,BG,Paladina,366,366,100.0
+2024,Biossido di Azoto,BG,Palazzago,366,366,100.0
+2024,Biossido di Azoto,BG,Palosco,366,366,100.0
+2024,Biossido di Azoto,LC,Parlasco,366,366,100.0
+2024,Biossido di Azoto,BG,Parre,366,366,100.0
+2024,Biossido di Azoto,BG,Parzanica,366,366,100.0
+2024,Biossido di Azoto,BS,Paspardo,366,366,100.0
+2024,Biossido di Azoto,LC,Pasturo,366,366,100.0
+2024,Biossido di Azoto,SO,Pedesina,366,366,100.0
+2024,Biossido di Azoto,BG,Pedrengo,366,366,100.0
+2024,Biossido di Azoto,CO,Peglio,366,366,100.0
+2024,Biossido di Azoto,BG,Peia,366,366,100.0
+2024,Biossido di Azoto,LC,Perledo,366,366,100.0
+2024,Biossido di Azoto,LC,Pescate,366,366,100.0
+2024,Biossido di Azoto,BS,Pian Camuno,366,366,100.0
+2024,Biossido di Azoto,BS,Piancogno,366,366,100.0
+2024,Biossido di Azoto,CO,Pianello Del Lario,366,366,100.0
+2024,Biossido di Azoto,BG,Pianico,366,366,100.0
+2024,Biossido di Azoto,SO,Piantedo,366,366,100.0
+2024,Biossido di Azoto,BG,Piario,366,366,100.0
+2024,Biossido di Azoto,SO,Piateda,366,366,100.0
+2024,Biossido di Azoto,BG,Piazza Brembana,366,366,100.0
+2024,Biossido di Azoto,BG,Piazzatorre,366,366,100.0
+2024,Biossido di Azoto,BG,Piazzolo,366,366,100.0
+2024,Biossido di Azoto,BS,Pisogne,366,366,100.0
+2024,Biossido di Azoto,SO,Piuro,366,366,100.0
+2024,Biossido di Azoto,SO,Poggiridenti,366,366,100.0
+2024,Biossido di Azoto,BG,Pognano,366,366,100.0
+2024,Biossido di Azoto,BS,Ponte Di Legno,366,366,100.0
+2024,Biossido di Azoto,SO,Ponte In Valtellina,366,366,100.0
+2024,Biossido di Azoto,BG,Ponte Nossa,366,366,100.0
+2024,Biossido di Azoto,BG,Ponte San Pietro,366,366,100.0
+2024,Biossido di Azoto,BG,Ponteranica,366,366,100.0
+2024,Biossido di Azoto,BG,Pontida,366,366,100.0
+2024,Biossido di Azoto,BG,Pontirolo Nuovo,366,366,100.0
+2024,Biossido di Azoto,SO,Postalesio,366,366,100.0
+2024,Biossido di Azoto,BG,Pradalunga,366,366,100.0
+2024,Biossido di Azoto,SO,Prata Camportaccio,366,366,100.0
+2024,Biossido di Azoto,BG,Predore,366,366,100.0
+2024,Biossido di Azoto,LC,Premana,366,366,100.0
+2024,Biossido di Azoto,BG,Premolo,366,366,100.0
+2024,Biossido di Azoto,BG,Presezzo,366,366,100.0
+2024,Biossido di Azoto,LC,Primaluna,366,366,100.0
+2024,Biossido di Azoto,BG,Pumenengo,366,366,100.0
+2024,Biossido di Azoto,BG,Ranica,366,366,100.0
+2024,Biossido di Azoto,BG,Ranzanico,366,366,100.0
+2024,Biossido di Azoto,SO,Rasura,366,366,100.0
+2024,Biossido di Azoto,MB,Renate,366,366,100.0
+2024,Biossido di Azoto,BG,Riva Di Solto,366,366,100.0
+2024,Biossido di Azoto,LC,Robbiate,366,366,100.0
+2024,Biossido di Azoto,LC,Rogeno,366,366,100.0
+2024,Biossido di Azoto,BG,Rogno,366,366,100.0
+2024,Biossido di Azoto,SO,Rogolo,366,366,100.0
+2024,Biossido di Azoto,BG,Romano Di Lombardia,366,366,100.0
+2024,Biossido di Azoto,MB,Roncello,366,366,100.0
+2024,Biossido di Azoto,MB,Ronco Briantino,366,366,100.0
+2024,Biossido di Azoto,BG,Roncobello,366,366,100.0
+2024,Biossido di Azoto,BG,Roncola,366,366,100.0
+2024,Biossido di Azoto,BG,Rota D'Imagna,366,366,100.0
+2024,Biossido di Azoto,BG,Rovetta,366,366,100.0
+2024,Biossido di Azoto,SO,Samolaco,366,366,100.0
+2024,Biossido di Azoto,SO,San Giacomo Filippo,366,366,100.0
+2024,Biossido di Azoto,BG,San Giovanni Bianco,366,366,100.0
+2024,Biossido di Azoto,BG,San Paolo D'Argon,366,366,100.0
+2024,Biossido di Azoto,BG,San Pellegrino Terme,366,366,100.0
+2024,Biossido di Azoto,BG,Sant'Omobono Terme,366,366,100.0
+2024,Biossido di Azoto,BG,Santa Brigida,366,366,100.0
+2024,Biossido di Azoto,LC,Santa Maria Hoè,366,366,100.0
+2024,Biossido di Azoto,BG,Sarnico,366,366,100.0
+2024,Biossido di Azoto,BS,Saviore Dell'Adamello,366,366,100.0
+2024,Biossido di Azoto,BG,Scanzorosciate,366,366,100.0
+2024,Biossido di Azoto,BG,Schilpario,366,366,100.0
+2024,Biossido di Azoto,BG,Sedrina,366,366,100.0
+2024,Biossido di Azoto,BS,Sellero,366,366,100.0
+2024,Biossido di Azoto,BG,Selvino,366,366,100.0
+2024,Biossido di Azoto,MB,Seregno,366,366,100.0
+2024,Biossido di Azoto,BG,Seriate,366,366,100.0
+2024,Biossido di Azoto,BG,Serina,366,366,100.0
+2024,Biossido di Azoto,SO,Sernio,366,366,100.0
+2024,Biossido di Azoto,MB,Seveso,366,366,100.0
+2024,Biossido di Azoto,LC,Sirone,366,366,100.0
+2024,Biossido di Azoto,LC,Sirtori,366,366,100.0
+2024,Biossido di Azoto,BG,Solto Collina,366,366,100.0
+2024,Biossido di Azoto,BG,Solza,366,366,100.0
+2024,Biossido di Azoto,SO,Sondalo,366,366,100.0
+2024,Biossido di Azoto,SO,Sondrio,366,366,100.0
+2024,Biossido di Azoto,BG,Songavazzo,366,366,100.0
+2024,Biossido di Azoto,BS,Sonico,366,366,100.0
+2024,Biossido di Azoto,CO,Sorico,366,366,100.0
+2024,Biossido di Azoto,BG,Sorisole,366,366,100.0
+2024,Biossido di Azoto,BG,Sotto Il Monte Giovanni Xxiii,366,366,100.0
+2024,Biossido di Azoto,BG,Sovere,366,366,100.0
+2024,Biossido di Azoto,MB,Sovico,366,366,100.0
+2024,Biossido di Azoto,BG,Spinone Al Lago,366,366,100.0
+2024,Biossido di Azoto,BG,Spirano,366,366,100.0
+2024,Biossido di Azoto,SO,Spriana,366,366,100.0
+2024,Biossido di Azoto,CO,Stazzona,366,366,100.0
+2024,Biossido di Azoto,BG,Stezzano,366,366,100.0
+2024,Biossido di Azoto,BG,Strozza,366,366,100.0
+2024,Biossido di Azoto,LC,Sueglio,366,366,100.0
+2024,Biossido di Azoto,LC,Suello,366,366,100.0
+2024,Biossido di Azoto,BG,Suisio,366,366,100.0
+2024,Biossido di Azoto,MB,Sulbiate,366,366,100.0
+2024,Biossido di Azoto,LC,Taceno,366,366,100.0
+2024,Biossido di Azoto,SO,Talamona,366,366,100.0
+2024,Biossido di Azoto,BG,Taleggio,366,366,100.0
+2024,Biossido di Azoto,SO,Tartano,366,366,100.0
+2024,Biossido di Azoto,BG,Tavernola Bergamasca,366,366,100.0
+2024,Biossido di Azoto,SO,Teglio,366,366,100.0
+2024,Biossido di Azoto,BG,Telgate,366,366,100.0
+2024,Biossido di Azoto,BS,Temù,366,366,100.0
+2024,Biossido di Azoto,BG,Terno D'Isola,366,366,100.0
+2024,Biossido di Azoto,SO,Tirano,366,366,100.0
+2024,Biossido di Azoto,BG,Torre Boldone,366,366,100.0
+2024,Biossido di Azoto,BG,Torre De' Roveri,366,366,100.0
+2024,Biossido di Azoto,SO,Torre Di Santa Maria,366,366,100.0
+2024,Biossido di Azoto,BG,Torre Pallavicina,366,366,100.0
+2024,Biossido di Azoto,SO,Tovo Di Sant'Agata,366,366,100.0
+2024,Biossido di Azoto,SO,Traona,366,366,100.0
+2024,Biossido di Azoto,BG,Trescore Balneario,366,366,100.0
+2024,Biossido di Azoto,SO,Tresivio,366,366,100.0
+2024,Biossido di Azoto,BG,Treviglio,366,366,100.0
+2024,Biossido di Azoto,BG,Treviolo,366,366,100.0
+2024,Biossido di Azoto,CO,Trezzone,366,366,100.0
+2024,Biossido di Azoto,MB,Triuggio,366,366,100.0
+2024,Biossido di Azoto,BG,Ubiale Clanezzo,366,366,100.0
+2024,Biossido di Azoto,BG,Urgnano,366,366,100.0
+2024,Biossido di Azoto,MB,Usmate Velate,366,366,100.0
+2024,Biossido di Azoto,BG,Val Brembilla,366,366,100.0
+2024,Biossido di Azoto,SO,Val Masino,366,366,100.0
+2024,Biossido di Azoto,BG,Valbondione,366,366,100.0
+2024,Biossido di Azoto,BG,Valbrembo,366,366,100.0
+2024,Biossido di Azoto,SO,Valdidentro,366,366,100.0
+2024,Biossido di Azoto,SO,Valdisotto,366,366,100.0
+2024,Biossido di Azoto,SO,Valfurva,366,366,100.0
+2024,Biossido di Azoto,BG,Valgoglio,366,366,100.0
+2024,Biossido di Azoto,LC,Valgreghentino,366,366,100.0
+2024,Biossido di Azoto,BG,Valleve,366,366,100.0
+2024,Biossido di Azoto,LC,Valmadrera,366,366,100.0
+2024,Biossido di Azoto,BG,Valnegra,366,366,100.0
+2024,Biossido di Azoto,BG,Valtorta,366,366,100.0
+2024,Biossido di Azoto,MB,Varedo,366,366,100.0
+2024,Biossido di Azoto,LC,Varenna,366,366,100.0
+2024,Biossido di Azoto,MB,Vedano Al Lambro,366,366,100.0
+2024,Biossido di Azoto,BG,Vedeseta,366,366,100.0
+2024,Biossido di Azoto,MB,Veduggio Con Colzano,366,366,100.0
+2024,Biossido di Azoto,MB,Verano Brianza,366,366,100.0
+2024,Biossido di Azoto,CO,Vercana,366,366,100.0
+2024,Biossido di Azoto,SO,Verceia,366,366,100.0
+2024,Biossido di Azoto,LC,Vercurago,366,366,100.0
+2024,Biossido di Azoto,BG,Verdellino,366,366,100.0
+2024,Biossido di Azoto,BG,Verdello,366,366,100.0
+2024,Biossido di Azoto,LC,Verderio,366,366,100.0
+2024,Biossido di Azoto,BG,Vertova,366,366,100.0
+2024,Biossido di Azoto,SO,Vervio,366,366,100.0
+2024,Biossido di Azoto,BS,Vezza D'Oglio,366,366,100.0
+2024,Biossido di Azoto,BG,Viadanica,366,366,100.0
+2024,Biossido di Azoto,BG,Vigano San Martino,366,366,100.0
+2024,Biossido di Azoto,LC,Viganò,366,366,100.0
+2024,Biossido di Azoto,BG,Vigolo,366,366,100.0
+2024,Biossido di Azoto,BG,Villa D'Adda,366,366,100.0
+2024,Biossido di Azoto,BG,Villa D'Almè,366,366,100.0
+2024,Biossido di Azoto,BG,Villa D'Ogna,366,366,100.0
+2024,Biossido di Azoto,SO,Villa Di Chiavenna,366,366,100.0
+2024,Biossido di Azoto,BG,Villa Di Serio,366,366,100.0
+2024,Biossido di Azoto,SO,Villa Di Tirano,366,366,100.0
+2024,Biossido di Azoto,MB,Villasanta,366,366,100.0
+2024,Biossido di Azoto,BG,Villongo,366,366,100.0
+2024,Biossido di Azoto,BG,Vilminore Di Scalve,366,366,100.0
+2024,Biossido di Azoto,MB,Vimercate,366,366,100.0
+2024,Biossido di Azoto,BS,Vione,366,366,100.0
+2024,Biossido di Azoto,BG,Zandobbio,366,366,100.0
+2024,Biossido di Azoto,BG,Zanica,366,366,100.0
+2024,Biossido di Azoto,BG,Zogno,366,366,100.0

@@ -15,7 +15,8 @@ giornaliere scaricati da ARPA Lombardia (prodotti da
 01_download_arpa.py), e produce per ogni stagione influenzale
 e per ogni parametro (PM10, PM2.5, NO2) un CSV con la
 concentrazione MEDIA SETTIMANALE aggregata a livello di ATS:
-    - ATS Bergamo  (provincia di Bergamo)
+    - ATS Bergamo  (provincia di Bergamo, BG)
+    - ATS Brianza  (province Monza-Brianza MB + Lecco LC) [NUOVO]
     - ATS Montagna (province SO + subset BS + subset CO)
 
 =============================================================
@@ -91,6 +92,20 @@ BIAS E LIMITAZIONI — LEGGERE PRIMA DI USARE I RISULTATI
    Settimane con meno di MIN_COMUNI_PER_ATS comuni validi
    vengono marcate come NaN nel CSV di output.
 
+6. FINESTRA AMBIENTALE PIÙ AMPIA DEI DATI SANITARI:
+   I dati ILI coprono W42→W16; i dati ARPA qui prodotti
+   coprono W40→W16. Le settimane W40 e W41 servono
+   esclusivamente come buffer per costruire variabili
+   laggiate (lag 1 = +7 gg, lag 2 = +14 gg) nelle
+   analisi di regressione. Non vanno usate come outcome.
+
+7. ATS BRIANZA — NOTA SPECIFICA:
+   MB e LC sono province molto diverse per caratteristiche
+   ambientali (MB: pianura densa, LC: lago/montagna). La
+   media ATS aggregata può nascondere eterogeneità interna.
+   Considerare di analizzare MB e LC separatamente in una
+   fase esplorativa prima di aggregarle.
+
 =============================================================
 REQUISITI
 =============================================================
@@ -123,6 +138,7 @@ OUTPUT_DIR = "seasons_output"
 
 ISTAT_DIR_MONTAGNA = "../ISTAT/ATS MONTAGNA"
 ISTAT_DIR_BERGAMO  = "../ISTAT/ATS BERGAMO"
+ISTAT_DIR_BRIANZA  = "../ISTAT/ATS BRIANZA"   # AGGIUNTO — struttura analoga a Bergamo
 
 # Percorso allo shapefile ISTAT dei comuni italiani.
 # Relativo alla cartella ILI/ARPA_COMUNI/ (da cui gira lo script).
@@ -142,6 +158,7 @@ USE_AREA_WEIGHTS = True
 # affidabile la media settimanale di una ATS.
 MIN_COMUNI_PER_ATS = {
     "ATS_Bergamo":  5,
+    "ATS_Brianza":  3,   # AGGIUNTO
     "ATS_Montagna": 3,
 }
 
@@ -163,20 +180,27 @@ PARAMETRI_MAP = {
     "Biossido di Azoto":          "NO2",
 }
 
-# ── Etichette ATS ────────────────────────────────────────────
-
+# ── Etichette ATS ─────────────────────────────────────────────
+#
+# Chiave  = valore della colonna 'ats' nel dataset ARPA
+#           (prodotto da 01_download_arpa.py)
+# Valore  = nome cartella di output e prefisso file CSV
+#
 ATS_LABELS = {
     "ATS_Bergamo":  "ATS_BERGAMO",
+    "ATS_Brianza":  "ATS_BRIANZA",    # AGGIUNTO
     "ATS_Montagna": "ATS_MONTAGNA",
 }
 
 # Mappatura ATS → codici provincia ISTAT (COD_PROV nel DBF).
-# ATS Montagna = None perché comprende subset di più province;
-# il filtraggio avviene sul nome comune già etichettato nel
-# dataset ARPA come 'ATS_Montagna'.
+# Usata per filtrare lo shapefile in carica_pesi_area().
+# None = filtraggio per nome comune (ATS Montagna: multi-provincia
+# con subset di comuni; ATS Brianza usa due province intere ma
+# il filtro per nome è più robusto dato che MB è provincia nuova).
 ATS_PROV_CODES = {
-    "ATS_Bergamo":  [16],   # BG
-    "ATS_Montagna": None,   # SO(14) + subset BS(17) + subset CO(13)
+    "ATS_Bergamo":  [16],       # BG
+    "ATS_Brianza":  [108, 97],  # MB (108) + LC (97) — AGGIUNTO
+    "ATS_Montagna": None,       # SO(14) + subset BS(17) + subset CO(13)
 }
 
 
@@ -294,15 +318,45 @@ def calcola_settimane_stagione(anno_inizio: int, anno_fine: int) -> pd.DataFrame
     """
     Costruisce la sequenza ordinata di settimane ISO di una stagione.
 
-    Definizione stagione influenzale:
-        W46 dell'anno_inizio → W15 dell'anno_fine (inclusi).
+    DEFINIZIONE DELLA FINESTRA TEMPORALE:
+        W40 dell'anno_inizio → W16 dell'anno_fine (inclusi).
+
+    PERCHÉ W40→W16 E NON W42→W16 (i dati sanitari ILI)?
+
+        I dati sanitari di sorveglianza ILI (accessi PS) sono
+        disponibili dalla W42 alla W16. La finestra ambientale
+        ARPA inizia 2 settimane prima (W40) per consentire
+        l'analisi delle correlazioni con lag fino a 14 giorni.
+
+        Motivazione epidemiologica:
+        Gli inquinanti atmosferici e i fattori meteorologici
+        possono anticipare l'aumento dei casi ILI di alcuni
+        giorni: l'esposizione a PM2.5/NO2 aumenta la
+        suscettibilità dell'epitelio respiratorio, ma l'onset
+        clinico e l'accesso al PS avvengono tipicamente con un
+        ritardo di 3-14 giorni (lag effect). Includere W40 e W41
+        permette di costruire variabili esplicative laggiate
+        (lag 1 = settimana precedente, lag 2 = due settimane
+        prima) senza perdere le prime settimane ILI nella regressione.
+
+        Esempio:
+            ILI W42 ~ PM2.5 W40  (lag=2 settimane ≈ 14 giorni)
+            ILI W42 ~ PM2.5 W41  (lag=1 settimana ≈  7 giorni)
+
+        ATTENZIONE — limitazione:
+        Con 5 stagioni e lag multipli, il numero di osservazioni
+        effettive per regressione è ridotto. Specificare sempre
+        il lag usato nei risultati e non confrontare coefficienti
+        ottenuti con lag diversi senza correzione per test multipli.
 
     Returns:
         pd.DataFrame con colonne:
             anno_iso, settimana_iso, week_label, ordine
     """
-    date_inizio = pd.Timestamp(f"{anno_inizio}-11-01")
-    date_fine   = pd.Timestamp(f"{anno_fine}-04-30")
+    # Usiamo date di buffer ampio (fine settembre → fine aprile)
+    # per catturare sicuramente W40 e W16, poi filtriamo per settimana ISO.
+    date_inizio = pd.Timestamp(f"{anno_inizio}-09-28")   # sempre prima di W40
+    date_fine   = pd.Timestamp(f"{anno_fine}-04-30")     # sempre dopo W16
 
     all_days = pd.date_range(date_inizio, date_fine, freq="D")
     df_days  = pd.DataFrame({"data": all_days})
@@ -313,8 +367,8 @@ def calcola_settimane_stagione(anno_inizio: int, anno_fine: int) -> pd.DataFrame
         + "/" + df_days["anno_iso"].astype(str)
     )
 
-    mask_inizio = (df_days["anno_iso"] == anno_inizio) & (df_days["settimana_iso"] >= 46)
-    mask_fine   = (df_days["anno_iso"] == anno_fine)   & (df_days["settimana_iso"] <= 15)
+    mask_inizio = (df_days["anno_iso"] == anno_inizio) & (df_days["settimana_iso"] >= 40)
+    mask_fine   = (df_days["anno_iso"] == anno_fine)   & (df_days["settimana_iso"] <= 16)
     df_stagione = df_days[mask_inizio | mask_fine].copy()
 
     df_settimane = (
@@ -335,12 +389,23 @@ def carica_pesi_popolazione(ats_label: str, anno: int) -> dict:
     Struttura attesa su disco:
         ATS BERGAMO/
             Popolazione residente_ATS_Bergamo_XXXX.csv
+        ATS BRIANZA/                                       [NUOVO]
+            Popolazione residente_ATS_Brianza_XXXX.csv
+            oppure due file separati per MB e LC:
+            MONZA/   → CSV con comuni MB
+            LECCO/   → CSV con comuni LC
         ATS MONTAGNA/
-            BRESCIA/   → CSV con comuni BS
-            COMO/      → CSV con comuni CO
-            SONDRIO/   → CSV con comuni SO
+            BRESCIA/ → CSV con comuni BS
+            COMO/    → CSV con comuni CO
+            SONDRIO/ → CSV con comuni SO
 
     Colonne attese nei CSV: 'Comune', 'Totale'
+
+    NOTA per ATS Brianza: lo script cerca prima un file unico
+    nella cartella ISTAT_DIR_BRIANZA (come per Bergamo), poi
+    tenta le sottocartelle MONZA/ e LECCO/ se il file unico
+    non esiste. Adattare la struttura cartelle alle proprie
+    convenzioni.
     """
     pesi = {}
 
@@ -350,7 +415,6 @@ def carica_pesi_popolazione(ats_label: str, anno: int) -> dict:
             print(f"  ⚠ Cartella ISTAT Bergamo non trovata: {folder}")
             return pesi
 
-        # Cerca il file che contiene l'anno nel nome
         fpath = None
         for fname in os.listdir(folder):
             if fname.endswith(".csv") and str(anno) in fname:
@@ -375,9 +439,83 @@ def carica_pesi_popolazione(ats_label: str, anno: int) -> dict:
         except Exception as e:
             print(f"  ⚠ Errore nel caricare ISTAT Bergamo: {e}")
 
+    elif ats_label == "ATS_Brianza":
+        # ── STRATEGIA DOPPIA: file unico oppure sottocartelle ──
+        #
+        # Opzione A: file unico in ISTAT_DIR_BRIANZA
+        #   Es. Popolazione residente_ATS_Brianza_2022.csv
+        # Opzione B: sottocartelle MONZA/ e LECCO/
+        #   (analoga alla struttura di ATS Montagna)
+        #
+        # Viene tentata prima l'opzione A, poi B.
+
+        folder = ISTAT_DIR_BRIANZA
+        if not os.path.isdir(folder):
+            print(f"  ⚠ Cartella ISTAT Brianza non trovata: {folder}")
+            return pesi
+
+        # Opzione A: file unico
+        fpath_unico = None
+        for fname in os.listdir(folder):
+            if fname.endswith(".csv") and str(anno) in fname:
+                fpath_unico = os.path.join(folder, fname)
+                break
+
+        if fpath_unico is not None:
+            try:
+                df_pop = pd.read_csv(fpath_unico)
+                if "Comune" not in df_pop.columns or "Totale" not in df_pop.columns:
+                    print(f"  ⚠ Colonne 'Comune'/'Totale' mancanti in {fpath_unico}")
+                else:
+                    for _, row in df_pop.iterrows():
+                        nome = str(row["Comune"]).strip().title()
+                        pop  = row["Totale"]
+                        if pd.notna(pop) and pop > 0:
+                            pesi[nome] = int(pop)
+                    print(f"    Pop-weights Brianza: {len(pesi)} comuni da "
+                          f"{os.path.basename(fpath_unico)}")
+                    return pesi
+            except Exception as e:
+                print(f"  ⚠ Errore nel caricare ISTAT Brianza (file unico): {e}")
+
+        # Opzione B: sottocartelle MONZA/ e LECCO/
+        sottocartelle = ["MONZA", "LECCO"]
+        for sub in sottocartelle:
+            folder_sub = os.path.join(folder, sub)
+            if not os.path.isdir(folder_sub):
+                print(f"  ⚠ Sottocartella non trovata: {folder_sub}")
+                continue
+
+            fpath = None
+            for fname in os.listdir(folder_sub):
+                if fname.endswith(".csv") and str(anno) in fname:
+                    fpath = os.path.join(folder_sub, fname)
+                    break
+
+            if fpath is None:
+                print(f"  ⚠ Nessun file ISTAT {sub} per anno {anno}")
+                continue
+
+            try:
+                df_pop = pd.read_csv(fpath)
+                if "Comune" not in df_pop.columns or "Totale" not in df_pop.columns:
+                    print(f"  ⚠ Colonne 'Comune'/'Totale' mancanti in {fpath}")
+                    continue
+                n_prima = len(pesi)
+                for _, row in df_pop.iterrows():
+                    nome = str(row["Comune"]).strip().title()
+                    pop  = row["Totale"]
+                    if pd.notna(pop) and pop > 0:
+                        pesi[nome] = int(pop)
+                print(f"    Pop-weights {sub}: {len(pesi) - n_prima} comuni da "
+                      f"{os.path.basename(fpath)}")
+            except Exception as e:
+                print(f"  ⚠ Errore nel caricare ISTAT {sub}: {e}")
+
+        print(f"    Pop-weights Brianza totale: {len(pesi)} comuni (MB+LC)")
+
     elif ats_label == "ATS_Montagna":
         # ATS Montagna ha tre sottocartelle: BRESCIA, COMO, SONDRIO
-        # Le leggiamo tutte e uniamo i dizionari
         sottocartelle = ["BRESCIA", "COMO", "SONDRIO"]
         tot_trovati = 0
 
@@ -387,7 +525,6 @@ def carica_pesi_popolazione(ats_label: str, anno: int) -> dict:
                 print(f"  ⚠ Sottocartella non trovata: {folder_sub}")
                 continue
 
-            # Cerca il file con l'anno nel nome
             fpath = None
             for fname in os.listdir(folder_sub):
                 if fname.endswith(".csv") and str(anno) in fname:
@@ -410,7 +547,8 @@ def carica_pesi_popolazione(ats_label: str, anno: int) -> dict:
                     if pd.notna(pop) and pop > 0:
                         pesi[nome] = int(pop)
                 tot_trovati += len(pesi) - n_prima
-                print(f"    Pop-weights {sub}: {len(pesi) - n_prima} comuni da {os.path.basename(fpath)}")
+                print(f"    Pop-weights {sub}: {len(pesi) - n_prima} comuni da "
+                      f"{os.path.basename(fpath)}")
             except Exception as e:
                 print(f"  ⚠ Errore nel caricare ISTAT {sub}: {e}")
 
@@ -455,12 +593,6 @@ def carica_pesi_area(ats_label: str, comuni_nel_dataset: list) -> dict:
     FORMULA USATA IN aggrega_settimana_ats():
         area_weight_media = Σ_c(valore_c × Area_c) / Σ_c(Area_c)
 
-    Equivalente all'equazione 8.6 di Gianquintieri (APHREH-ADSMap):
-        EX_BSA = Σ_c(EX_c · Area_c∩BSA) / Area_BSA
-    dove si assume che l'intera area di ogni comune rientri
-    nell'ATS (assunzione valida per ATS Bergamo = provincia BG
-    e per ATS Montagna con i comuni già etichettati nel dataset).
-
     STRATEGIA DI JOIN:
     Join su nome normalizzato (lower, strip, no apostrofi).
     Se un comune non viene trovato in modo esatto, si tenta
@@ -468,16 +600,15 @@ def carica_pesi_area(ats_label: str, comuni_nel_dataset: list) -> dict:
     viceversa). I comuni non trovati ricevono peso 0
     (esclusi dalla media) e vengono segnalati con un avviso.
 
-    NOTA SUL BIAS:
-    La ponderazione per area è meno appropriata della
-    ponderazione per popolazione per outcome di salute pubblica,
-    perché i grandi comuni montani (poca popolazione, molta area)
-    possono distorcere la media. Confrontare sempre le due
-    colonne (area_weight_media vs pop_weight_media) per
-    quantificare questo effetto.
+    NOTA SU ATS BRIANZA:
+    MB (cod. 108) e LC (cod. 97) sono province con densità e
+    caratteristiche ambientali molto diverse (MB pianura vs
+    LC lago/montagna). La media area-ponderata può risultare
+    più informativa della media semplice per catturare questa
+    differenza. Confrontare con pop_weight_media.
 
     Args:
-        ats_label:          'ATS_Bergamo' o 'ATS_Montagna'
+        ats_label:          'ATS_Bergamo', 'ATS_Brianza' o 'ATS_Montagna'
         comuni_nel_dataset: lista nomi comuni dal dataset ARPA
 
     Returns:
@@ -506,8 +637,6 @@ def carica_pesi_area(ats_label: str, comuni_nel_dataset: list) -> dict:
         try:
             gdf = gpd.read_file(shp_path, encoding='utf-8')
 
-            # Se geopandas non carica gli attributi dal DBF,
-            # li legge separatamente con dbfread
             required = ['COMUNE', 'Shape_Area']
             missing_cols = [c for c in required if c not in gdf.columns]
             if missing_cols:
@@ -658,8 +787,7 @@ def aggrega_settimana_ats(
     #   area_weight_media = Σ_c(valore_c × Area_c) / Σ_c(Area_c)
     #
     # I comuni senza area nel dizionario ricevono peso 0
-    # e sono esclusi dalla media (avviso già stampato da
-    # carica_pesi_area() a inizio stagione, non ripetiamo qui).
+    # e sono esclusi dalla media.
     #
     area_weight_media = np.nan
     if USE_AREA_WEIGHTS and pesi_area:
@@ -779,7 +907,6 @@ def processa_stagione_ats_parametro(
 
     df_out = pd.DataFrame(righe)
 
-    # Colonne in ordine logico per il CSV
     cols_base = [
         "stagione", "ats", "parametro",
         "anno_iso", "settimana_iso", "week_label", "ordine",
@@ -803,6 +930,7 @@ def processa_stagione_ats_parametro(
 def main():
     print("\n" + "=" * 65)
     print("02_Seasons.py — Aggregazione Stagionale ARPA per ATS")
+    print("ATS: Bergamo | Brianza (MB+LC) | Montagna (SO+BS+CO)")
     print("=" * 65)
 
     # ── Verifica cartella input ──────────────────────────────
@@ -822,9 +950,10 @@ def main():
 
     # ── Creazione cartelle di output ─────────────────────────
     out_bg = os.path.join(OUTPUT_DIR, "ATS_BERGAMO")
+    out_br = os.path.join(OUTPUT_DIR, "ATS_BRIANZA")    # AGGIUNTO
     out_mt = os.path.join(OUTPUT_DIR, "ATS_MONTAGNA")
     out_cb = os.path.join(OUTPUT_DIR, "COMBINED")
-    for folder in [out_bg, out_mt, out_cb]:
+    for folder in [out_bg, out_br, out_mt, out_cb]:
         os.makedirs(folder, exist_ok=True)
 
     # ── Caricamento dati ARPA ────────────────────────────────
@@ -850,15 +979,21 @@ def main():
     print("STEP 2: Riepilogo disponibilità dati per ATS")
     print("─" * 65)
 
-    for ats_lbl in ["ATS_Bergamo", "ATS_Montagna"]:
+    for ats_lbl in ["ATS_Bergamo", "ATS_Brianza", "ATS_Montagna"]:
         df_ats = df_arpa[df_arpa["ats"] == ats_lbl]
         if df_ats.empty:
             print(f"  ⚠ {ats_lbl}: NESSUN DATO TROVATO")
             continue
         print(f"\n  {ats_lbl}:")
         print(f"    Righe totali: {len(df_ats):,}")
-        print(f"    Periodo:      {df_ats['data'].min().date()} → {df_ats['data'].max().date()}")
+        print(f"    Periodo:      {df_ats['data'].min().date()} → "
+              f"{df_ats['data'].max().date()}")
         print(f"    Comuni unici: {df_ats['comune'].nunique()}")
+        # Dettaglio per provincia (utile per Brianza: MB vs LC)
+        if "provincia" in df_ats.columns:
+            per_prov = df_ats.groupby("provincia")["comune"].nunique()
+            for prov, n in per_prov.items():
+                print(f"      {prov}: {n} comuni")
         for param in sorted(df_ats["parametro"].unique()):
             n = df_ats[df_ats["parametro"] == param]["comune"].nunique()
             print(f"    {param}: {n} comuni")
@@ -868,12 +1003,12 @@ def main():
     print("STEP 3: Aggregazione stagionale")
     print("─" * 65)
 
-    all_results_bg = []
-    all_results_mt = []
+    # Dizionario: ats_label → lista risultati stagionali
+    all_results = {ats: [] for ats in ATS_LABELS}
 
     for stagione_label, (anno_inizio, anno_fine) in STAGIONI.items():
         print(f"\n  ── Stagione {stagione_label} "
-              f"(W46/{anno_inizio} → W15/{anno_fine}) ──")
+              f"(W40/{anno_inizio} → W16/{anno_fine}) ──")
 
         df_cal = calcola_settimane_stagione(anno_inizio, anno_fine)
         print(f"     Settimane previste: {len(df_cal)} "
@@ -881,7 +1016,12 @@ def main():
               f"alla W{df_cal['settimana_iso'].iloc[-1]:02d}/{df_cal['anno_iso'].iloc[-1]})")
 
         for ats_label, ats_dir_label in ATS_LABELS.items():
-            out_folder = out_bg if "BERGAMO" in ats_dir_label else out_mt
+            # Seleziona la cartella di output per questa ATS
+            out_folder = {
+                "ATS_BERGAMO":  out_bg,
+                "ATS_BRIANZA":  out_br,
+                "ATS_MONTAGNA": out_mt,
+            }[ats_dir_label]
 
             for param_full, param_short in PARAMETRI_MAP.items():
 
@@ -904,26 +1044,22 @@ def main():
                 fpath = os.path.join(out_folder, fname)
                 df_stagione.to_csv(fpath, index=False, float_format="%.4f")
 
-                if "BERGAMO" in ats_dir_label:
-                    all_results_bg.append(df_stagione)
-                else:
-                    all_results_mt.append(df_stagione)
+                all_results[ats_label].append(df_stagione)
 
     # ── File COMBINED ────────────────────────────────────────
     print("\n" + "─" * 65)
     print("STEP 4: Creazione file COMBINED")
     print("─" * 65)
 
-    for label, all_results in [("ATS_Bergamo", all_results_bg),
-                                ("ATS_Montagna", all_results_mt)]:
-        if not all_results:
+    for ats_label, risultati in all_results.items():
+        if not risultati:
             continue
-        df_combined = pd.concat(all_results, ignore_index=True)
+        df_combined = pd.concat(risultati, ignore_index=True)
         df_combined = df_combined.sort_values(
             ["parametro", "stagione", "ordine"]
         ).reset_index(drop=True)
 
-        lbl_short = label.replace("ATS_", "").lower()
+        lbl_short = ats_label.replace("ATS_", "").lower()
         fname = f"tutti_parametri_{lbl_short}.csv"
         fpath = os.path.join(out_cb, fname)
         df_combined.to_csv(fpath, index=False, float_format="%.4f")
@@ -936,6 +1072,7 @@ def main():
     print(f"\nOutput salvato in: {os.path.abspath(OUTPUT_DIR)}/")
 
     for folder, label in [(out_bg, "ATS_BERGAMO"),
+                          (out_br, "ATS_BRIANZA"),
                           (out_mt, "ATS_MONTAGNA"),
                           (out_cb, "COMBINED")]:
         files = sorted(os.listdir(folder)) if os.path.isdir(folder) else []
@@ -950,7 +1087,7 @@ def main():
     print("─" * 65)
     print("""
   - stagione:          etichetta stagione (es. '22-23')
-  - ats:               'ATS_Bergamo' o 'ATS_Montagna'
+  - ats:               'ATS_Bergamo', 'ATS_Brianza' o 'ATS_Montagna'
   - parametro:         'PM10', 'PM25', 'NO2'
   - anno_iso:          anno ISO della settimana
   - settimana_iso:     numero settimana ISO (1-53)
@@ -972,6 +1109,15 @@ def main():
   - Righe con n_comuni < MIN_COMUNI_PER_ATS → media_comunale = NaN.
   - Confronta media_comunale vs area_weight_media per quantificare
     l'eterogeneità spaziale dell'esposizione nell'ATS.
+  - ATS BRIANZA: valutare se MB e LC mostrano pattern divergenti
+    prima di usare la media aggregata nelle analisi finali.
+  - FINESTRA TEMPORALE: W40-W16 (ARPA) vs W42-W16 (ILI sanitari).
+    W40 e W41 sono buffer per analisi laggiate; non usarle come
+    outcome. Per il join diretto con ILI filtrare da W42 in poi.
+  - LAG ANALYSIS: per costruire lag 2 settimane:
+      df_lag = df_arpa.copy()
+      df_lag['ordine'] = df_lag['ordine'] + 2
+      df_merged = df_ili.merge(df_lag, on=['stagione','ordine'])
   - BIAS ECOLOGICO: inferenze solo a livello ATS, mai individuale.
   """)
 
